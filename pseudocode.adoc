@@ -1,0 +1,10 @@
+= Pseudocode: General overview of the program's work
+
+- Define the Rubik's cube (exact method tentative, might use a compile-time constant)
+- Fill the cube's arrays with the colors. Front is green, top is white, the cube should be filled in a solved state.
+- Ask the user for a scramble such as one that you can get from https://cstimer.net
+- Scramble the cube's array using the user's moves
+- Implement (both?) Beginner's Method and CFOP for solving the cube (and ask the user which method they want to be used)
+- Solve the cube using the method, logging every move.
+- Print the log
+# Get a GitHub repository and share it with Hasnain 22003 and figure out how to make the project work easily in an IDE, then use git for changes and distribute the tasks on GitHub.
