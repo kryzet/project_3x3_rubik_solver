@@ -31,11 +31,11 @@ void resetCube();
 bool isSolved();
 
 void scramble(char front[ROW][COLUMN],
-             char back[ROW][COLUMN],
-             char top[ROW][COLUMN],
-             char bottom[ROW][COLUMN],
-             char leftSide[ROW][COLUMN],
-             char rightSide[ROW][COLUMN]);
+	char back[ROW][COLUMN],
+	char top[ROW][COLUMN],
+	char bottom[ROW][COLUMN],
+	char leftSide[ROW][COLUMN],
+	char rightSide[ROW][COLUMN]);
 
 
 // TODO: Write the functions for rotating the cube's faces (gotta decide
@@ -43,35 +43,35 @@ void scramble(char front[ROW][COLUMN],
 
 int main()
 {
-    /* TODO (Hassan--still haven't decided on a username after quite a while on
-    GitHub :D): Declare the face arrays with a compile-time constant for the
-    number of pieces per face.
-    */
-    
+	/* TODO (Hassan--still haven't decided on a username after quite a while on
+	GitHub :D): Declare the face arrays with a compile-time constant for the
+	number of pieces per face.
+	*/
 
-    // TODO (22003): Fill the faces with colors
 
-    for (int i = 0; i < ROW ; ++i ){
-        for (int j = 0; j < COLUMN; ++j){
-            front[i][j] = 'G';
-            back[i][j] = 'W';
-            top[i][j] = 'Y';
-            bottom[i][j] = 'R';
-            leftSide[i][j] = 'O';
-            rightSide[i][j] = 'B';
-        }
-    }
-        
-    /* Ask for the scramble and use it to simulate a scramble of the virtual
-    Rubik's cube */
-    
-    cout << "This program solves a Rubik's cube given a scramble of moves and "
-        << "provides the" << endl << "steps to solve the cube. Please enter "
-        << "the scramble below." << endl;
-    
-    scramble(front, back, top, bottom, leftSide, rightSide);
+	// TODO (22003): Fill the faces with colors
 
-    
+	for (int i = 0; i < ROW; ++i) {
+		for (int j = 0; j < COLUMN; ++j) {
+			front[i][j] = 'G';
+			back[i][j] = 'W';
+			top[i][j] = 'Y';
+			bottom[i][j] = 'R';
+			leftSide[i][j] = 'O';
+			rightSide[i][j] = 'B';
+		}
+	}
+
+	/* Ask for the scramble and use it to simulate a scramble of the virtual
+	Rubik's cube */
+
+	cout << "This program solves a Rubik's cube given a scramble of moves and "
+		<< "provides the" << endl << "steps to solve the cube. Please enter "
+		<< "the scramble below." << endl;
+
+	scramble(front, back, top, bottom, leftSide, rightSide);
+
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
@@ -86,66 +86,66 @@ int main()
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
 void scramble(char front[ROW][COLUMN],
-             char back[ROW][COLUMN],
-             char top[ROW][COLUMN],
-             char bottom[ROW][COLUMN],
-             char leftSide[ROW][COLUMN],
-              char rightSide[ROW][COLUMN]){
-    
+	char back[ROW][COLUMN],
+	char top[ROW][COLUMN],
+	char bottom[ROW][COLUMN],
+	char leftSide[ROW][COLUMN],
+	char rightSide[ROW][COLUMN]) {
+
 }
 
 void rotateFaceClockwise(char face[ROW][COLUMN]) {
-    char temp[ROW][COLUMN];
-    
-    // Copy the original face
-    for(int i = 0; i < ROW; i++) {
-        for(int j = 0; j < COLUMN; j++) {
-            temp[i][j] = face[i][j];
-        }
-    }
-    
-    // Rotate 90 degrees clockwise
-    for(int i = 0; i < ROW; i++) {
-        for(int j = 0; j < COLUMN; j++) {
-            face[j][COLUMN-1-i] = temp[i][j];
-        }
-    }
+	char temp[ROW][COLUMN];
+
+	// Copy the original face
+	for (int i = 0; i < ROW; i++) {
+		for (int j = 0; j < COLUMN; j++) {
+			temp[i][j] = face[i][j];
+		}
+	}
+
+	// Rotate 90 degrees clockwise
+	for (int i = 0; i < ROW; i++) {
+		for (int j = 0; j < COLUMN; j++) {
+			face[j][COLUMN - 1 - i] = temp[i][j];
+		}
+	}
 }
 
 void rotateFaceCounterClockwise(char face[ROW][COLUMN]) {
-    char temp[ROW][COLUMN];
-    
-    // Copy the original face
-    for(int i = 0; i < ROW; i++) {
-        for(int j = 0; j < COLUMN; j++) {
-            temp[i][j] = face[i][j];
-        }
-    }
-    
-    // Rotate 90 degrees counter-clockwise
-    for(int i = 0; i < ROW; i++) {
-        for(int j = 0; j < COLUMN; j++) {
-            face[ROW-1-j][i] = temp[i][j];
-        }
-    }
+	char temp[ROW][COLUMN];
+
+	// Copy the original face
+	for (int i = 0; i < ROW; i++) {
+		for (int j = 0; j < COLUMN; j++) {
+			temp[i][j] = face[i][j];
+		}
+	}
+
+	// Rotate 90 degrees counter-clockwise
+	for (int i = 0; i < ROW; i++) {
+		for (int j = 0; j < COLUMN; j++) {
+			face[ROW - 1 - j][i] = temp[i][j];
+		}
+	}
 }
 
 bool isValidMove(const string& move) {
-    // Basic moves: F, B, R, L, U, D
-    // Prime moves: F', B', R', L', U', D'
-    // Double moves: F2, B2, R2, L2, U2, D2
-    
-    if(move.length() > 2) return false;
-    
-    char face = move[0];
-    if(face != 'F' && face != 'B' && face != 'R' &&
-       face != 'L' && face != 'U' && face != 'D') {
-        return false;
-    }
-    
-    if(move.length() == 2 && move[1] != '\'' && move[1] != '2') {
-        return false;
-    }
-    
-    return true;
+	// Basic moves: F, B, R, L, U, D
+	// Prime moves: F', B', R', L', U', D'
+	// Double moves: F2, B2, R2, L2, U2, D2
+
+	if (move.length() > 2) return false;
+
+	char face = move[0];
+	if (face != 'F' && face != 'B' && face != 'R' &&
+		face != 'L' && face != 'U' && face != 'D') {
+		return false;
+	}
+
+	if (move.length() == 2 && move[1] != '\'' && move[1] != '2') {
+		return false;
+	}
+
+	return true;
 }
