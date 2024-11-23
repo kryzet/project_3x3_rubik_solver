@@ -71,6 +71,8 @@ int main()
 
 	scramble(front, back, top, bottom, leftSide, rightSide);
 
+	solveOll();
+	displayCube();
 
 	solvePll();
 	displayCube();
