@@ -86,11 +86,12 @@ int main()
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
 void scramble(char front[ROW][COLUMN],
-	char back[ROW][COLUMN],
-	char top[ROW][COLUMN],
-	char bottom[ROW][COLUMN],
-	char leftSide[ROW][COLUMN],
-	char rightSide[ROW][COLUMN]) {
+			  char back[ROW][COLUMN],
+			  char top[ROW][COLUMN],
+			  char bottom[ROW][COLUMN],
+			  char leftSide[ROW][COLUMN],
+			  char rightSide[ROW][COLUMN]) {
+	string moves;
 
 	// Get the scramble moves from the user
 	cout << "Enter the scramble: ";
