@@ -70,6 +70,10 @@ int main()
 		<< "the scramble below." << endl;
 
 	scramble(front, back, top, bottom, leftSide, rightSide);
+	displayCube();
+
+	solveF2l();
+	displayCube();
 
 	solveOll();
 	displayCube();
