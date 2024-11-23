@@ -72,6 +72,10 @@ int main()
 	scramble(front, back, top, bottom, leftSide, rightSide);
 
 
+	solvePll();
+	displayCube();
+
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
