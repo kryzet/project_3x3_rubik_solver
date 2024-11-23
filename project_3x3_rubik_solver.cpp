@@ -1,4 +1,4 @@
-﻿// project_3x3_rubik_solver1.cpp : Defines the entry point for the application.
+﻿// project_3x3_rubik_solver.cpp : Defines the entry point for the application.
 //
 
 #include "project_3x3_rubik_solver.h"
@@ -7,12 +7,12 @@ using namespace std;
 
 constexpr size_t ROW = 3, COLUMN = 3;
 
-char front[ROW][COLUMN],
-back[ROW][COLUMN],
-top[ROW][COLUMN],
-bottom[ROW][COLUMN],
-leftSide[ROW][COLUMN],
-rightSide[ROW][COLUMN];
+char f_front[ROW][COLUMN],
+f_back[ROW][COLUMN],
+f_top[ROW][COLUMN],
+f_bottom[ROW][COLUMN],
+f_left[ROW][COLUMN],
+f_right[ROW][COLUMN];
 
 //functions
 void printFace(char face[ROW][COLUMN]);
@@ -30,12 +30,12 @@ void solvePll();
 void resetCube();
 bool isSolved();
 
-void scramble(char front[ROW][COLUMN],
-	char back[ROW][COLUMN],
-	char top[ROW][COLUMN],
-	char bottom[ROW][COLUMN],
-	char leftSide[ROW][COLUMN],
-	char rightSide[ROW][COLUMN]);
+void scramble(char f_front[ROW][COLUMN],
+	char f_back[ROW][COLUMN],
+	char f_top[ROW][COLUMN],
+	char f_bottom[ROW][COLUMN],
+	char f_left[ROW][COLUMN],
+	char f_right[ROW][COLUMN]);
 
 
 // TODO: Write the functions for rotating the cube's faces (gotta decide
@@ -53,12 +53,12 @@ int main()
 
 	for (int i = 0; i < ROW; ++i) {
 		for (int j = 0; j < COLUMN; ++j) {
-			front[i][j] = 'G';
-			back[i][j] = 'W';
-			top[i][j] = 'Y';
-			bottom[i][j] = 'R';
-			leftSide[i][j] = 'O';
-			rightSide[i][j] = 'B';
+			f_front[i][j] = 'G';
+			f_back[i][j] = 'W';
+			f_top[i][j] = 'Y';
+			f_bottom[i][j] = 'R';
+			f_left[i][j] = 'O';
+			f_right[i][j] = 'B';
 		}
 	}
 
@@ -71,7 +71,7 @@ int main()
 		<< "provides the" << endl << "steps to solve the cube. Please enter "
 		<< "the scramble below." << endl;
 
-	scramble(front, back, top, bottom, leftSide, rightSide);
+	scramble(f_front, f_back, f_top, f_bottom, f_left, f_right);
 	displayCube();
 
 	solveF2l();
@@ -97,12 +97,12 @@ int main()
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
-void scramble(char front[ROW][COLUMN],
-			  char back[ROW][COLUMN],
-			  char top[ROW][COLUMN],
-			  char bottom[ROW][COLUMN],
-			  char leftSide[ROW][COLUMN],
-			  char rightSide[ROW][COLUMN]) {
+void scramble(char f_front[ROW][COLUMN],
+			  char f_back[ROW][COLUMN],
+			  char f_top[ROW][COLUMN],
+			  char f_bottom[ROW][COLUMN],
+			  char f_left[ROW][COLUMN],
+			  char f_right[ROW][COLUMN]) {
 	string moves;
 
 	// Get the scramble moves from the user
@@ -142,107 +142,107 @@ void applyMove(const string& move) {
 	char temp[ROW];
 
 	if (move == "F") {
-		rotateFaceClockwise(front);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[ROW - 1][i];
-		for (int i = 0; i < ROW; ++i) top[ROW - 1][i] = leftSide[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) leftSide[i][COLUMN - 1] = bottom[0][ROW - 1 - i];
-		for (int i = 0; i < ROW; ++i) bottom[0][i] = rightSide[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) rightSide[i][0] = temp[i];
+		rotateFaceClockwise(f_front);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[ROW - 1][i];
+		for (int i = 0; i < ROW; ++i) f_top[ROW - 1][i] = f_left[ROW - 1 - i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_left[i][COLUMN - 1] = f_bottom[0][ROW - 1 - i];
+		for (int i = 0; i < ROW; ++i) f_bottom[0][i] = f_right[ROW - 1 - i][0];
+		for (int i = 0; i < ROW; ++i) f_right[i][0] = temp[i];
 	} else if (move == "F'") {
-		rotateFaceCounterClockwise(front);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[ROW - 1][i];
-		for (int i = 0; i < ROW; ++i) top[ROW - 1][i] = rightSide[i][0];
-		for (int i = 0; i < ROW; ++i) rightSide[i][0] = bottom[0][ROW - 1 - i];
-		for (int i = 0; i < ROW; ++i) bottom[0][i] = leftSide[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) leftSide[i][COLUMN - 1] = temp[ROW - 1 - i];
+		rotateFaceCounterClockwise(f_front);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[ROW - 1][i];
+		for (int i = 0; i < ROW; ++i) f_top[ROW - 1][i] = f_right[i][0];
+		for (int i = 0; i < ROW; ++i) f_right[i][0] = f_bottom[0][ROW - 1 - i];
+		for (int i = 0; i < ROW; ++i) f_bottom[0][i] = f_left[ROW - 1 - i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_left[i][COLUMN - 1] = temp[ROW - 1 - i];
 	} else if (move == "F2") {
-		rotateFaceClockwise(front);
-		rotateFaceClockwise(front);
+		rotateFaceClockwise(f_front);
+		rotateFaceClockwise(f_front);
 	} else if (move == "B") {
-		rotateFaceClockwise(back);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[0][i];
-		for (int i = 0; i < ROW; ++i) top[0][i] = rightSide[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) rightSide[i][COLUMN - 1] = bottom[ROW - 1][ROW - 1 - i];
-		for (int i = 0; i < ROW; ++i) bottom[ROW - 1][i] = leftSide[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) leftSide[i][0] = temp[ROW - 1 - i];
+		rotateFaceClockwise(f_back);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[0][i];
+		for (int i = 0; i < ROW; ++i) f_top[0][i] = f_right[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_right[i][COLUMN - 1] = f_bottom[ROW - 1][ROW - 1 - i];
+		for (int i = 0; i < ROW; ++i) f_bottom[ROW - 1][i] = f_left[ROW - 1 - i][0];
+		for (int i = 0; i < ROW; ++i) f_left[i][0] = temp[ROW - 1 - i];
 	} else if (move == "B'") {
-		rotateFaceCounterClockwise(back);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[0][i];
-		for (int i = 0; i < ROW; ++i) top[0][i] = leftSide[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) leftSide[i][0] = bottom[ROW - 1][i];
-		for (int i = 0; i < ROW; ++i) bottom[ROW - 1][i] = rightSide[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) rightSide[i][COLUMN - 1] = temp[ROW - 1 - i];
+		rotateFaceCounterClockwise(f_back);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[0][i];
+		for (int i = 0; i < ROW; ++i) f_top[0][i] = f_left[ROW - 1 - i][0];
+		for (int i = 0; i < ROW; ++i) f_left[i][0] = f_bottom[ROW - 1][i];
+		for (int i = 0; i < ROW; ++i) f_bottom[ROW - 1][i] = f_right[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_right[i][COLUMN - 1] = temp[ROW - 1 - i];
 	} else if (move == "B2") {
-		rotateFaceClockwise(back);
-		rotateFaceClockwise(back);
+		rotateFaceClockwise(f_back);
+		rotateFaceClockwise(f_back);
 	} else if (move == "R") {
-		rotateFaceClockwise(rightSide);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) top[i][COLUMN - 1] = front[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) front[i][COLUMN - 1] = bottom[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) bottom[i][COLUMN - 1] = back[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) back[i][0] = temp[ROW - 1 - i];
+		rotateFaceClockwise(f_right);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_top[i][COLUMN - 1] = f_front[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_front[i][COLUMN - 1] = f_bottom[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_bottom[i][COLUMN - 1] = f_back[ROW - 1 - i][0];
+		for (int i = 0; i < ROW; ++i) f_back[i][0] = temp[ROW - 1 - i];
 	} else if (move == "R'") {
-		rotateFaceCounterClockwise(rightSide);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) top[i][COLUMN - 1] = back[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) back[i][0] = bottom[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) bottom[i][COLUMN - 1] = front[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) front[i][COLUMN - 1] = temp[i];
+		rotateFaceCounterClockwise(f_right);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_top[i][COLUMN - 1] = f_back[ROW - 1 - i][0];
+		for (int i = 0; i < ROW; ++i) f_back[i][0] = f_bottom[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_bottom[i][COLUMN - 1] = f_front[i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_front[i][COLUMN - 1] = temp[i];
 	} else if (move == "R2") {
-		rotateFaceClockwise(rightSide);
-		rotateFaceClockwise(rightSide);
+		rotateFaceClockwise(f_right);
+		rotateFaceClockwise(f_right);
 	} else if (move == "L") {
-		rotateFaceClockwise(leftSide);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[i][0];
-		for (int i = 0; i < ROW; ++i) top[i][0] = back[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) back[i][COLUMN - 1] = bottom[i][0];
-		for (int i = 0; i < ROW; ++i) bottom[i][0] = front[i][0];
-		for (int i = 0; i < ROW; ++i) front[i][0] = temp[i];
+		rotateFaceClockwise(f_left);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][0];
+		for (int i = 0; i < ROW; ++i) f_top[i][0] = f_back[ROW - 1 - i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_back[i][COLUMN - 1] = f_bottom[i][0];
+		for (int i = 0; i < ROW; ++i) f_bottom[i][0] = f_front[i][0];
+		for (int i = 0; i < ROW; ++i) f_front[i][0] = temp[i];
 	} else if (move == "L'") {
-		rotateFaceCounterClockwise(leftSide);
-		for (int i = 0; i < ROW; ++i) temp[i] = top[i][0];
-		for (int i = 0; i < ROW; ++i) top[i][0] = front[i][0];
-		for (int i = 0; i < ROW; ++i) front[i][0] = bottom[i][0];
-		for (int i = 0; i < ROW; ++i) bottom[i][0] = back[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) back[i][COLUMN - 1] = temp[ROW - 1 - i];
+		rotateFaceCounterClockwise(f_left);
+		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][0];
+		for (int i = 0; i < ROW; ++i) f_top[i][0] = f_front[i][0];
+		for (int i = 0; i < ROW; ++i) f_front[i][0] = f_bottom[i][0];
+		for (int i = 0; i < ROW; ++i) f_bottom[i][0] = f_back[ROW - 1 - i][COLUMN - 1];
+		for (int i = 0; i < ROW; ++i) f_back[i][COLUMN - 1] = temp[ROW - 1 - i];
 	} else if (move == "L2") {
-		rotateFaceClockwise(leftSide);
-		rotateFaceClockwise(leftSide);
+		rotateFaceClockwise(f_left);
+		rotateFaceClockwise(f_left);
 	} else if (move == "U") {
-		rotateFaceClockwise(top);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = front[0][i];
-		for (int i = 0; i < COLUMN; ++i) front[0][i] = rightSide[0][i];
-		for (int i = 0; i < COLUMN; ++i) rightSide[0][i] = back[0][i];
-		for (int i = 0; i < COLUMN; ++i) back[0][i] = leftSide[0][i];
-		for (int i = 0; i < COLUMN; ++i) leftSide[0][i] = temp[i];
+		rotateFaceClockwise(f_top);
+		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_front[0][i] = f_right[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_right[0][i] = f_back[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_back[0][i] = f_left[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_left[0][i] = temp[i];
 	} else if (move == "U'") {
-		rotateFaceCounterClockwise(top);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = front[0][i];
-		for (int i = 0; i < COLUMN; ++i) front[0][i] = leftSide[0][i];
-		for (int i = 0; i < COLUMN; ++i) leftSide[0][i] = back[0][i];
-		for (int i = 0; i < COLUMN; ++i) back[0][i] = rightSide[0][i];
-		for (int i = 0; i < COLUMN; ++i) rightSide[0][i] = temp[i];
+		rotateFaceCounterClockwise(f_top);
+		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_front[0][i] = f_left[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_left[0][i] = f_back[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_back[0][i] = f_right[0][i];
+		for (int i = 0; i < COLUMN; ++i) f_right[0][i] = temp[i];
 	} else if (move == "U2") {
-		rotateFaceClockwise(top);
-		rotateFaceClockwise(top);
+		rotateFaceClockwise(f_top);
+		rotateFaceClockwise(f_top);
 	} else if (move == "D") {
-		rotateFaceClockwise(bottom);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = front[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) front[ROW - 1][i] = leftSide[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) leftSide[ROW - 1][i] = back[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) back[ROW - 1][i] = rightSide[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) rightSide[ROW - 1][i] = temp[i];
+		rotateFaceClockwise(f_bottom);
+		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_front[ROW - 1][i] = f_left[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_left[ROW - 1][i] = f_back[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_back[ROW - 1][i] = f_right[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_right[ROW - 1][i] = temp[i];
 	} else if (move == "D'") {
-		rotateFaceCounterClockwise(bottom);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = front[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) front[ROW - 1][i] = rightSide[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) rightSide[ROW - 1][i] = back[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) back[ROW - 1][i] = leftSide[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) leftSide[ROW - 1][i] = temp[i];
+		rotateFaceCounterClockwise(f_bottom);
+		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_front[ROW - 1][i] = f_right[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_right[ROW - 1][i] = f_back[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_back[ROW - 1][i] = f_left[ROW - 1][i];
+		for (int i = 0; i < COLUMN; ++i) f_left[ROW - 1][i] = temp[i];
 	} else if (move == "D2") {
-		rotateFaceClockwise(bottom);
-		rotateFaceClockwise(bottom);
+		rotateFaceClockwise(f_bottom);
+		rotateFaceClockwise(f_bottom);
 	}
 }
 
