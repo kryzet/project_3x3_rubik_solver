@@ -320,3 +320,7 @@ void solvePll() {
 	cout << "Solving PLL..." << endl;
 }
 
+void displayCube() {
+	//add code to display cube
+	cout << "Displaying Cube..." << endl;
+}
