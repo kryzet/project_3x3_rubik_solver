@@ -304,3 +304,19 @@ bool isValidMove(const string& move) {
 
 	return true;
 }
+
+void solveF2l() {
+	// Add logic to solve the F2L step
+	cout << "Solving F2L..." << endl;
+}
+
+void solveOll() {
+	// Add logic to solve the OLL step
+	cout << "Solving OLL..." << endl;
+}
+
+void solvePll() {
+	// Add logic to solve the PLL step
+	cout << "Solving PLL..." << endl;
+}
+
