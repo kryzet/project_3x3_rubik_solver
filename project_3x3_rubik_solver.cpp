@@ -35,7 +35,8 @@ void solvePll();
 void resetCube();
 bool isSolved();
 
-//moves
+
+// Regular moves
 void moveU();
 void moveD();
 void moveF();
@@ -43,7 +44,7 @@ void moveB();
 void moveR();
 void moveL();
 
-//Prime moves
+// Prime moves
 void moveUPrime();
 void moveDPrime();
 void moveFPrime();
@@ -51,7 +52,7 @@ void moveBPrime();
 void moveRPrime();
 void moveLPrime();
 
-//double moves
+// Double moves
 void moveU2();
 void moveD2();
 void moveF2();
@@ -59,8 +60,7 @@ void moveB2();
 void moveL2();
 void moveR2();
 
-
-//Algorithms
+// Algorithms
 void sexyMove();
 void ReverseSexyMove();
 void sledgehammerMove();
