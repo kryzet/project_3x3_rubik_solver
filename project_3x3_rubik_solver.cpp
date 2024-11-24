@@ -500,12 +500,11 @@ bool isPairInTopLayer(int edgeFace, int cornerFace) {
 }
 
 bool isPairAligned(int edgeFace, int cornerFace) {
-    // Check if the edge and corner are aligned with their target position
-    char edgeColor = cube[edgeFace][0][1];
-    char cornerColor = cube[cornerFace][0][0];
-    char targetColor = cube[edgeFace][1][1]; // Center piece color
+    char edgeTarget = cube[edgeFace][1][1];
+    char cornerTarget = cube[cornerFace][1][1];
 
-    return edgeColor == targetColor && cornerColor == targetColor;
+    return (cube[TOP][edgeFace][1] == edgeTarget &&
+            cube[TOP][cornerFace][2] == cornerTarget);
 }
 
 
