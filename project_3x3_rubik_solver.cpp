@@ -66,6 +66,7 @@ int main()
 {
 	/* Ask for the scramble and use it to simulate a scramble of the virtual
 	Rubik's cube */
+	cout << "Welcome to Rubik Solver!" << endl;
 	displayCube();
 
 	cout << "This program solves a Rubik's cube given a scramble of moves and "
