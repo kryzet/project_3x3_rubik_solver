@@ -28,9 +28,11 @@ bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
 void displayCube();
+// TODO (kryzet): Implement these functions
 void solveWhiteCross();
-void solveF2l();
 void solveOll();
+// TODO (22003): Implement these functions
+void solveF2l();
 void solvePll();
 void resetCube();
 bool isSolved();
