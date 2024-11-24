@@ -161,7 +161,7 @@ void applyMove(const string& move) {
         return;
     }
 
-    char temp[N_ROWS];
+    //char temp[N_ROWS];
 
     char face = move[0];
     bool is_prime = false, is_double = false;
