@@ -490,12 +490,13 @@ void solveF2lPair(int pairIndex) {
 }
 
 bool isPairInTopLayer(int edgeFace, int cornerFace) {
-    // Check if both pieces are in the top layer and match the expected colors
-    char edgeColor = cube[0][2][1]; // Edge piece on top face
-    char cornerColor = cube[0][2][2]; // Corner piece on top face
+    // Check if both pieces are in the top layer and belong together
+    char edgeColor = cube[TOP][1][edgeFace];
+    char cornerColor = cube[TOP][cornerFace][cornerFace];
 
-    return (edgeColor == 'W' && cornerColor == 'W') ||
-           (edgeColor == 'Y' && cornerColor == 'Y');
+    // Verify if the colors are consistent with the F2L pair
+    return (edgeColor == cube[edgeFace][1][1] &&
+            cornerColor == cube[cornerFace][1][1]);
 }
 
 bool isPairAligned(int edgeFace, int cornerFace) {
@@ -564,7 +565,6 @@ void performF2LAlgorithm3() {
 }
 
 void solvePll() {
-
 
 }
 
