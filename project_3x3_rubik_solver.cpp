@@ -9,12 +9,12 @@ using namespace std;
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3;
 char cube[N_FACES][N_ROWS][N_COLS] = {
-	{{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},  // Top
-	{{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},  // Left
-	{{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},  // Front
-	{{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},  // Right
-	{{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},  // Back
-	{{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}   // Bottom
+    {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},  // Top
+    {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},  // Left
+    {{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},  // Front
+    {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},  // Right
+    {{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},  // Back
+    {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}   // Bottom
 };
 
 // functions
@@ -57,28 +57,28 @@ void exterior_face(bool top_face);
 
 int main()
 {
-	/* Ask for the scramble and use it to simulate a scramble of the virtual
-	Rubik's cube */
-	cout << "Welcome to Rubik Solver!" << endl;
-	displayCube();
+    /* Ask for the scramble and use it to simulate a scramble of the virtual
+    Rubik's cube */
+    cout << "Welcome to Rubik Solver!" << endl;
+    displayCube();
 
-	cout << "This program solves a Rubik's cube given a scramble of moves and "
-		<< "provides the" << endl << "steps to solve the cube. Please enter "
-		<< "the scramble below." << endl;
+    cout << "This program solves a Rubik's cube given a scramble of moves and "
+        << "provides the" << endl << "steps to solve the cube. Please enter "
+        << "the scramble below." << endl;
 
-	scramble();
-	displayCube();
+    scramble();
+    displayCube();
 
-	solveF2l();
-	displayCube();
+    solveF2l();
+    displayCube();
 
-	solveOll();
-	displayCube();
+    solveOll();
+    displayCube();
 
-	solvePll();
-	displayCube();
+    solvePll();
+    displayCube();
 
-	return 0;
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
@@ -93,295 +93,298 @@ int main()
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
 void scramble() {
-	// Get the scramble moves from the user
-	cout << "Enter the scramble: ";
-	string moves; getline(cin, moves);
+    // Get the scramble moves from the user
+    cout << "Enter the scramble: ";
+    string moves; getline(cin, moves);
 
-	// Parse and apply the moves
-	string move = "";
-	for (char c : moves) {
-		if (c == ' ') {
-			if (!move.empty() && isValidMove(move)) {
-				applyMove(move);
-			}
-			move = ""; // Reset the move
-		}
-		else {
-			move += c; // Build the move character by character
-		}
-	}
+    // Parse and apply the moves
+    string move = "";
+    for (char c : moves) {
+        if (c == ' ') {
+            if (!move.empty() && isValidMove(move)) {
+                applyMove(move);
+            }
+            move = ""; // Reset the move
+        }
+        else {
+            move += c; // Build the move character by character
+        }
+    }
 
-	// Apply the last move if valid
-		applyMove(move);
-	}
+    // Apply the last move if valid
+        applyMove(move);
+    }
 
 void parseAndApplyMoves(const string& moves) {
-	string move = "";
-	for (char c : moves) {
-		if (c == ' ') {
-				applyMove(move);
-			move = ""; // Reset the move
-		}
-		else {
-			move += c; // Build the move character by character
-		}
-	}
+    string move = "";
+    for (char c : moves) {
+        if (c == ' ') {
+                applyMove(move);
+            move = ""; // Reset the move
+        }
+        else {
+            move += c; // Build the move character by character
+        }
+    }
 
-	// Apply the last move if valid
-	if (!move.empty() && isValidMove(move)) {
-		applyMove(move);
-	}
+    // Apply the last move if valid
+    if (!move.empty() && isValidMove(move)) {
+        applyMove(move);
+    }
 }
 
 void applyMove(const string& move) {
-	if (!isValidMove(move) || move.empty()) {
-		cout << "Invalid move: " << move << endl;
-		return;
-	}
+    if (!isValidMove(move) || move.empty()) {
+        cout << "Invalid move: " << move << endl;
+        return;
+    }
 
-	char temp[N_ROWS];
+    char temp[N_ROWS];
 
-	char face = move[0];
-	bool is_prime = false, is_double = false;
-	if (2 == move.length()) {
-		is_prime = move[1] == '\'';
-		is_double = move[1] == '2';
-	}
+    char face = move[0];
+    bool is_prime = false, is_double = false;
+    if (2 == move.length()) {
+        is_prime = move[1] == '\'';
+        is_double = move[1] == '2';
+    }
 
     /* Calculates the number of moves to be made based on whether a prime move
     and a double move is requested */
-	const size_t TIMES = [&is_double, &is_prime]() {
-		size_t times = 1;
-		if (is_double) times *= 2;
+    const size_t TIMES = [&is_double, &is_prime]() {
+        size_t times = 1;
+        if (is_double) times *= 2;
         if (is_prime) times *= 3;  /* 3 regular moves are equivalent to a prime
                                    move */
-		while (times >= 4) times -= 4;
-		return times;
-		}();
+        while (times >= 4) times -= 4;
+        return times;
+        }();
     // Function pointer. Will point to the function that needs to be run.
-	void (*func)() = nullptr;
-	switch (face) {
-	case 'U':
+    void (*func)() = nullptr;
+    switch (face) {
+    case 'U':
         func = moveU;
-		break;
-	case 'D':
+        break;
+    case 'D':
         func = moveD;
-		break;
-	case 'F':
+        break;
+    case 'F':
         func = moveF;
-		break;
-	case 'B':
+        break;
+    case 'B':
         func = moveB;
-		break;
-	case 'L':
+        break;
+    case 'L':
         func = moveL;
-		break;
-	case 'R':
+        break;
+    case 'R':
         func = moveR;
-		break;
-	}
+        break;
+    }
     for (size_t i = 0; i < TIMES; ++i)
         func();
 }
 
 bool isValidMove(const string& MOVE) {
-	// Basic moves: F, B, R, L, U, D
-	// Prime moves: F', B', R', L', U', D'
-	// Double moves: F2, B2, R2, L2, U2, D2
+    // Basic moves: F, B, R, L, U, D
+    // Prime moves: F', B', R', L', U', D'
+    // Double moves: F2, B2, R2, L2, U2, D2
 
-	if (MOVE.length() > 2) return false;
+    if (MOVE.length() > 2) return false;
 
-	const char FACE = MOVE[0];
-	constexpr char VALID_FACES[] = { 'U', 'L', 'F', 'R', 'B', 'D' };
-	const char* FACES_BEGINNING = begin(VALID_FACES),
-		* FACES_END = end(VALID_FACES);
-	if (find(FACES_BEGINNING, FACES_END, FACE) == FACES_END)
-		return false;
+    const char FACE = MOVE[0];
+    constexpr char VALID_FACES[] = { 'U', 'L', 'F', 'R', 'B', 'D' };
+    const char* FACES_BEGINNING = begin(VALID_FACES),
+        * FACES_END = end(VALID_FACES);
+    if (find(FACES_BEGINNING, FACES_END, FACE) == FACES_END)
+        return false;
 
-	if (MOVE.length() == 2) {
-		const char DIRECTIVE = MOVE[1];
-		constexpr char VALID_DIRECTIVES[] = { '\'', '2' };
-		const char* DIRECTIVES_BEGINNING = begin(VALID_DIRECTIVES),
-			* DIRECTIVES_END = end(VALID_DIRECTIVES);
-		if (find(DIRECTIVES_BEGINNING, DIRECTIVES_END, DIRECTIVE) == DIRECTIVES_END) {
-			return false;
-		}
-	}
+    if (MOVE.length() == 2) {
+        const char DIRECTIVE = MOVE[1];
+        constexpr char VALID_DIRECTIVES[] = { '\'', '2' };
+        const char* DIRECTIVES_BEGINNING = begin(VALID_DIRECTIVES),
+            * DIRECTIVES_END = end(VALID_DIRECTIVES);
+        if (find(DIRECTIVES_BEGINNING, DIRECTIVES_END, DIRECTIVE)
+            == DIRECTIVES_END) {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 
 void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
-	char temp[N_ROWS][N_COLS];
+    char temp[N_ROWS][N_COLS];
 
-	// Copy the original face
-	for (int i = 0; i < N_ROWS; i++) {
-		for (int j = 0; j < N_COLS; j++) {
-			temp[i][j] = face[i][j];
-		}
-	}
+    // Copy the original face
+    for (int i = 0; i < N_ROWS; i++) {
+        for (int j = 0; j < N_COLS; j++) {
+            temp[i][j] = face[i][j];
+        }
+    }
 
-	// Rotate 90 degrees clockwise
-	for (int i = 0; i < N_ROWS; i++) {
-		for (int j = 0; j < N_COLS; j++) {
-			face[j][N_COLS - 1 - i] = temp[i][j];
-		}
-	}
+    // Rotate 90 degrees clockwise
+    for (int i = 0; i < N_ROWS; i++) {
+        for (int j = 0; j < N_COLS; j++) {
+            face[j][N_COLS - 1 - i] = temp[i][j];
+        }
+    }
 }
 
 
 void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
-	char temp[N_ROWS][N_COLS];
+    char temp[N_ROWS][N_COLS];
 
-	// Copy the original face
-	for (int i = 0; i < N_ROWS; i++) {
-		for (int j = 0; j < N_COLS; j++) {
-			temp[i][j] = face[i][j];
-		}
-	}
+    // Copy the original face
+    for (int i = 0; i < N_ROWS; i++) {
+        for (int j = 0; j < N_COLS; j++) {
+            temp[i][j] = face[i][j];
+        }
+    }
 
-	// Rotate 90 degrees counter-clockwise
-	for (int i = 0; i < N_ROWS; i++) {
-		for (int j = 0; j < N_COLS; j++) {
-			face[N_ROWS - 1 - j][i] = temp[i][j];
-		}
-	}
+    // Rotate 90 degrees counter-clockwise
+    for (int i = 0; i < N_ROWS; i++) {
+        for (int j = 0; j < N_COLS; j++) {
+            face[N_ROWS - 1 - j][i] = temp[i][j];
+        }
+    }
 }
 
 
 void solveF2l() {
-	// Add logic to solve the F2L step
-	cout << "Solving F2L..." << endl;
+    // Add logic to solve the F2L step
+    cout << "Solving F2L..." << endl;
 }
 
 void solveOll() {
-	// Add logic to solve the OLL step
-	cout << "Solving OLL..." << endl;
+    // Add logic to solve the OLL step
+    cout << "Solving OLL..." << endl;
 }
 
 void solvePll() {
-	// Add logic to solve the PLL step
-	cout << "Solving PLL..." << endl;
+    // Add logic to solve the PLL step
+    cout << "Solving PLL..." << endl;
 }
 
 
 void displayCube() {
-	// Print the top face
-	exterior_face(true);
+    // Print the top face
+    exterior_face(true);
 
-	// Print the middle faces
-	constexpr size_t N_MIDDLE_FACES = N_FACES - 1;
-	for (int row = 0; row < N_ROWS; row++) {
-		for (size_t face = 1; face < N_MIDDLE_FACES; ++face)
-			for (int col = 0; col < N_COLS; ++col)
-				cout << cube[face][row][col] << ' ';
-		cout << endl;
-	}
+    // Print the middle faces
+    constexpr size_t N_MIDDLE_FACES = N_FACES - 1;
+    for (int row = 0; row < N_ROWS; row++) {
+        for (size_t face = 1; face < N_MIDDLE_FACES; ++face)
+            for (int col = 0; col < N_COLS; ++col)
+                cout << cube[face][row][col] << ' ';
+        cout << endl;
+    }
 
-	// Print the bottom face
-	exterior_face(false);
+    // Print the bottom face
+    exterior_face(false);
 }
 
 void exterior_face(bool top_face) {
-	size_t face = 0;
-	if (!top_face) face = 5;
-	for (size_t row = 0; row < N_ROWS; ++row) {
-		cout << "      ";
-		for (size_t col = 0; col < N_COLS; ++col) {
-			cout << cube[face][row][col] << ' ';
-		}
-		cout << endl;
-	}
+    size_t face = 0;
+    if (!top_face) face = 5;
+    for (size_t row = 0; row < N_ROWS; ++row) {
+        cout << "      ";
+        for (size_t col = 0; col < N_COLS; ++col) {
+            cout << cube[face][row][col] << ' ';
+        }
+        cout << endl;
+    }
 }
 
 //moves
 void moveU() {
-	char temp[N_COLS];
-	for (int i = 0; i < N_COLS; i++) {
-		temp[i] = cube[2][0][i];
-	}
-	for (int i = 0; i < N_COLS; i++) {
-		cube[2][0][i] = cube[3][0][i];
-		cube[3][0][i] = cube[4][0][i];
-		cube[4][0][i] = cube[1][0][i];
-		cube[1][0][i] = temp[i];
-	}
-	rotateFaceClockwise(cube[0]);
+    char temp[N_COLS];
+    for (int i = 0; i < N_COLS; i++) {
+        temp[i] = cube[2][0][i];
+    }
+    for (int i = 0; i < N_COLS; i++) {
+        cube[2][0][i] = cube[3][0][i];
+        cube[3][0][i] = cube[4][0][i];
+        cube[4][0][i] = cube[1][0][i];
+        cube[1][0][i] = temp[i];
+    }
+    rotateFaceClockwise(cube[0]);
 }
 
 void moveD() {
-	char temp[N_COLS];
-	for (int i = 0; i < N_COLS; i++) {
-		temp[i] = cube[2][2][i];
-	}
-	for (int i = 0; i < N_COLS; i++) {
-		cube[2][2][i] = cube[1][2][i];
-		cube[1][2][i] = cube[4][2][i];
-		cube[4][2][i] = cube[3][2][i];
-		cube[3][2][i] = temp[i];
-	}
-	rotateFaceClockwise(cube[5]);
+    char temp[N_COLS];
+    for (int i = 0; i < N_COLS; i++) {
+        temp[i] = cube[2][2][i];
+    }
+    for (int i = 0; i < N_COLS; i++) {
+        cube[2][2][i] = cube[1][2][i];
+        cube[1][2][i] = cube[4][2][i];
+        cube[4][2][i] = cube[3][2][i];
+        cube[3][2][i] = temp[i];
+    }
+    rotateFaceClockwise(cube[5]);
 }
 
 void moveF() {
-	char temp[N_COLS];
-	for (int i = 0; i < N_COLS; i++) {
-		temp[i] = cube[0][2][i];
-	}
-	for (int i = 0; i < N_COLS; i++) {
-		cube[0][2][i] = cube[1][2 - i][2];
-		cube[1][2 - i][2] = cube[5][0][2 - i];
-		cube[5][0][2 - i] = cube[3][i][0];
-		cube[3][i][0] = temp[i];
-	}
-	rotateFaceClockwise(cube[2]);
+    char temp[N_COLS];
+    for (int i = 0; i < N_COLS; i++) {
+        temp[i] = cube[0][2][i];
+    }
+    for (int i = 0; i < N_COLS; i++) {
+        cube[0][2][i] = cube[1][2 - i][2];
+        cube[1][2 - i][2] = cube[5][0][2 - i];
+        cube[5][0][2 - i] = cube[3][i][0];
+        cube[3][i][0] = temp[i];
+    }
+    rotateFaceClockwise(cube[2]);
 }
 
 void moveB() {
-	char temp[N_COLS];
-	for (int i = 0; i < N_COLS; i++) {
-		temp[i] = cube[0][0][i];
-	}
-	for (int i = 0; i < N_COLS; i++) {
-		cube[0][0][i] = cube[3][i][2];
-		cube[3][i][2] = cube[5][2][2 - i];
-		cube[5][2][2 - i] = cube[1][2 - i][0];
-		cube[1][2 - i][0] = temp[i];
-	}
-	rotateFaceClockwise(cube[4]);
+    char temp[N_COLS];
+    for (int i = 0; i < N_COLS; i++) {
+        temp[i] = cube[0][0][i];
+    }
+    for (int i = 0; i < N_COLS; i++) {
+        cube[0][0][i] = cube[3][i][2];
+        cube[3][i][2] = cube[5][2][2 - i];
+        cube[5][2][2 - i] = cube[1][2 - i][0];
+        cube[1][2 - i][0] = temp[i];
+    }
+    rotateFaceClockwise(cube[4]);
 }
 
 void moveL() {
-	char temp[N_COLS];
-	for (int i = 0; i < N_COLS; i++) {
-		temp[i] = cube[0][i][0];
-	}
-	for (int i = 0; i < N_COLS; i++) {
-		cube[0][i][0] = cube[4][2 - i][2];
-		cube[4][2 - i][2] = cube[5][i][0];
-		cube[5][i][0] = cube[2][i][0];
-		cube[2][i][0] = temp[i];
-	}
-	rotateFaceClockwise(cube[1]);
+    char temp[N_COLS];
+    for (int i = 0; i < N_COLS; i++) {
+        temp[i] = cube[0][i][0];
+    }
+    for (int i = 0; i < N_COLS; i++) {
+        cube[0][i][0] = cube[4][2 - i][2];
+        cube[4][2 - i][2] = cube[5][i][0];
+        cube[5][i][0] = cube[2][i][0];
+        cube[2][i][0] = temp[i];
+    }
+    rotateFaceClockwise(cube[1]);
 }
 
 void moveR() {
-	char temp[N_COLS];
-	for (int i = 0; i < N_COLS; i++) {
-		temp[i] = cube[0][i][2];
-	}
-	for (int i = 0; i < N_COLS; i++) {
-		cube[0][i][2] = cube[2][i][2];
-		cube[2][i][2] = cube[5][i][2];
-		cube[5][i][2] = cube[4][2 - i][0];
-		cube[4][2 - i][0] = temp[i];
-	}
-	rotateFaceClockwise(cube[3]);
+    char temp[N_COLS];
+    for (int i = 0; i < N_COLS; i++) {
+        temp[i] = cube[0][i][2];
+    }
+    for (int i = 0; i < N_COLS; i++) {
+        cube[0][i][2] = cube[2][i][2];
+        cube[2][i][2] = cube[5][i][2];
+        cube[5][i][2] = cube[4][2 - i][0];
+        cube[4][2 - i][0] = temp[i];
+    }
+    rotateFaceClockwise(cube[3]);
 }
 
 // Prime moves
-void moveUPrime() { moveU(); moveU(); moveU(); } // instead of going back once it just rotates 3 times clockwise
+void moveUPrime() { moveU(); moveU(); moveU(); } // instead of going back once
+                                                 // it just rotates 3 times
+                                                 // clockwise
 void moveDPrime() { moveD(); moveD(); moveD(); }
 void moveFPrime() { moveF(); moveF(); moveF(); }
 void moveBPrime() { moveB(); moveB(); moveB(); }
@@ -398,13 +401,13 @@ void moveR2() { moveR(); moveR(); }
 
 // Algorithm sequences
 void sexyMove() {
-	moveR(); moveU(); moveRPrime(); moveUPrime();
+    moveR(); moveU(); moveRPrime(); moveUPrime();
 }
 
 void reverseSexyMove() {
-	moveUPrime(); moveRPrime(); moveU(); moveR();
+    moveUPrime(); moveRPrime(); moveU(); moveR();
 }
 
 void sledgehammerMove() {
-	moveRPrime(); moveFPrime(); moveR(); moveF();
+    moveRPrime(); moveFPrime(); moveR(); moveF();
 }
