@@ -406,3 +406,17 @@ void moveF2() { moveF(); moveF(); }
 void moveB2() { moveB(); moveB(); }
 void moveL2() { moveL(); moveL(); }
 void moveR2() { moveR(); moveR(); }
+
+//Algorithms
+// Algorithm sequences
+void sexyMove() {
+	moveR(); moveU(); moveRPrime(); moveUPrime();
+}
+
+void reverseSexyMove() {
+	moveUPrime(); moveRPrime(); moveU(); moveR();
+}
+
+void sledgehammerMove() {
+	moveRPrime(); moveFPrime(); moveR(); moveF();
+}
