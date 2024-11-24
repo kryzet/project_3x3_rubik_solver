@@ -7,6 +7,10 @@ using namespace std;
 
 constexpr size_t ROW = 3, COLUMN = 3;
 
+/* TODO (Hassan--still haven't decided on a username after quite a while on
+GitHub :D): Declare the face arrays with a compile-time constant for the
+number of pieces per face.
+*/
 char f_front[ROW][COLUMN],
 f_back[ROW][COLUMN],
 f_top[ROW][COLUMN],
@@ -43,14 +47,7 @@ void scramble(char f_front[ROW][COLUMN],
 
 int main()
 {
-	/* TODO (Hassan--still haven't decided on a username after quite a while on
-	GitHub :D): Declare the face arrays with a compile-time constant for the
-	number of pieces per face.
-	*/
-
-
 	// TODO (22003): Fill the faces with colors
-
 	for (int i = 0; i < ROW; ++i) {
 		for (int j = 0; j < COLUMN; ++j) {
 			f_front[i][j] = 'G';
