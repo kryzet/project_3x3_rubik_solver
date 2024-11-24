@@ -565,7 +565,6 @@ void performF2LAlgorithm3() {
 
 void solvePll() {
 
-
 }
 
 bool isSolved() {
