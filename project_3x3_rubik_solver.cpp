@@ -6,20 +6,15 @@
 using namespace std;
 
 constexpr size_t N_FACE = 6, N_ROW = 3, N_COL = 3;
+constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3;
 
-/* TODO (Hassan--still haven't decided on a username after quite a while on
-GitHub :D): Declare the face arrays with a compile-time constant for the
-number of pieces per face.
-*/
-char cube[N_FACE][N_ROW][N_COL];
-
-constexpr char VALID_COLORS[N_FACE] = { 'W', 'O', 'G', 'R', 'B', 'Y' };
-
-//functions
-void printFace(char face[N_ROW][N_COL]);
+// functions
+void printFace(char face[N_ROWS][N_COLS]);
 void rotateTopFaceEdges();
-void rotateFaceClockwise(char face[N_ROW][N_COL]);
-void rotateFaceCounterClockwise(char face[N_ROW][N_COL]);
+
+// TODO: Write the functions for rotating the cube's faces
+void rotateFaceClockwise(char face[N_ROWS][N_COLS]);
+void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
@@ -31,35 +26,20 @@ void solvePll();
 void resetCube();
 bool isSolved();
 
-void scramble(char f_front[N_ROW][N_COL],
-	char f_back[N_ROW][N_COL],
-	char f_top[N_ROW][N_COL],
-	char f_bottom[N_ROW][N_COL],
-	char f_left[N_ROW][N_COL],
-	char f_right[N_ROW][N_COL]);
-
-
-// TODO: Write the functions for rotating the cube's faces (gotta decide
-// whether we will keep using six separate arrays :P)
+void scramble();
+void exterior_face(bool top_face);
 
 int main()
 {
-	// TODO (22003): Fill the faces with colors
-	for (size_t face = 0; face < N_FACE; ++face)
-		for (int row = 0; row < N_ROW; ++row)
-			for (int col = 0; col < N_COL; ++col)
-				cube[face][row][col] = VALID_COLORS[face];
-
 	/* Ask for the scramble and use it to simulate a scramble of the virtual
 	Rubik's cube */
 	displayCube();
-
 
 	cout << "This program solves a Rubik's cube given a scramble of moves and "
 		<< "provides the" << endl << "steps to solve the cube. Please enter "
 		<< "the scramble below." << endl;
 
-	scramble(f_front, f_back, f_top, f_bottom, f_left, f_right);
+	scramble();
 	displayCube();
 
 	solveF2l();
@@ -85,12 +65,7 @@ int main()
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
-void scramble(char f_front[N_ROW][N_COL],
-	char f_back[N_ROW][N_COL],
-	char f_top[N_ROW][N_COL],
-	char f_bottom[N_ROW][N_COL],
-	char f_left[N_ROW][N_COL],
-	char f_right[N_ROW][N_COL]) {
+void scramble() {
 	// Get the scramble moves from the user
 	cout << "Enter the scramble: ";
 	string moves; getline(cin, moves);
@@ -268,38 +243,38 @@ void applyMove(const string& move) {
 
 
 
-void rotateFaceClockwise(char face[N_ROW][N_COL]) {
-	char temp[N_ROW][N_COL];
+void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
+	char temp[N_ROWS][N_COLS];
 
 	// Copy the original face
-	for (int i = 0; i < N_ROW; i++) {
-		for (int j = 0; j < N_COL; j++) {
+	for (int i = 0; i < N_ROWS; i++) {
+		for (int j = 0; j < N_COLS; j++) {
 			temp[i][j] = face[i][j];
 		}
 	}
 
 	// Rotate 90 degrees clockwise
-	for (int i = 0; i < N_ROW; i++) {
-		for (int j = 0; j < N_COL; j++) {
-			face[j][N_COL - 1 - i] = temp[i][j];
+	for (int i = 0; i < N_ROWS; i++) {
+		for (int j = 0; j < N_COLS; j++) {
+			face[j][N_COLS - 1 - i] = temp[i][j];
 		}
 	}
 }
 
-void rotateFaceCounterClockwise(char face[N_ROW][N_COL]) {
-	char temp[N_ROW][N_COL];
+void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
+	char temp[N_ROWS][N_COLS];
 
 	// Copy the original face
-	for (int i = 0; i < N_ROW; i++) {
-		for (int j = 0; j < N_COL; j++) {
+	for (int i = 0; i < N_ROWS; i++) {
+		for (int j = 0; j < N_COLS; j++) {
 			temp[i][j] = face[i][j];
 		}
 	}
 
 	// Rotate 90 degrees counter-clockwise
-	for (int i = 0; i < N_ROW; i++) {
-		for (int j = 0; j < N_COL; j++) {
-			face[N_ROW - 1 - j][i] = temp[i][j];
+	for (int i = 0; i < N_ROWS; i++) {
+		for (int j = 0; j < N_COLS; j++) {
+			face[N_ROWS - 1 - j][i] = temp[i][j];
 		}
 	}
 }
