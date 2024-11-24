@@ -573,7 +573,9 @@ void performF2LAlgorithm3() {
 }
 
 void solvePll() {
+
  cout << "Solving Pll..." << endl;
+
 }
 
 bool isSolved() {
