@@ -50,12 +50,12 @@ int main()
 	// TODO (22003): Fill the faces with colors
 	for (int i = 0; i < ROW; ++i) {
 		for (int j = 0; j < COLUMN; ++j) {
-			f_front[i][j] = 'G';
-			f_back[i][j] = 'W';
-			f_top[i][j] = 'Y';
-			f_bottom[i][j] = 'R';
+			f_top[i][j] = 'W';
 			f_left[i][j] = 'O';
-			f_right[i][j] = 'B';
+			f_front[i][j] = 'G';
+			f_right[i][j] = 'R';
+			f_back[i][j] = 'B';
+			f_bottom[i][j] = 'Y';
 		}
 	}
 
@@ -108,7 +108,23 @@ void scramble(char f_front[ROW][COLUMN],
 	cout << "Scramble moves: " << moves << endl;
 
 	// Parse and apply the moves
-	parseAndApplyMoves(moves);
+	string move = "";
+	for (char c : moves) {
+		if (c == ' ') {
+			if (!move.empty() && isValidMove(move)) {
+				applyMove(move);
+}
+			move = ""; // Reset the move
+		}
+		else {
+			move += c; // Build the move character by character
+		}
+	}
+
+	// Apply the last move if valid
+	if (!move.empty() && isValidMove(move)) {
+		applyMove(move);
+	}
 }
 
 void parseAndApplyMoves(const string& moves) {
