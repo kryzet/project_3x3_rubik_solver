@@ -532,13 +532,17 @@ void orientPair(int edgeFace, int cornerFace) {
 }
 
 void insertF2lPair(int edgeFace, int cornerFace) {
-    // Once the edge-corner pair is oriented, we can insert it into the first two layers
-    // Use a basic F2L algorithm for insertion
-    moveU();
-    moveR();
-    moveRPrime();
-    moveUPrime();
+    // Insert using the appropriate sequence based on the position
+    if (cube[edgeFace][1][2] == 'W' && cube[cornerFace][1][2] == 'W') {
+        // Both in the right orientation
+        moveR(); moveU(); moveRPrime();
+    } else {
+        // Handle misaligned insertions
+        moveUPrime();
+        performF2LAlgorithm2();
+    }
 }
+
 
 void performF2LAlgorithm1() {
     // Algorithm 1: Insert edge-corner pair into F2L (simple orientation correction)
