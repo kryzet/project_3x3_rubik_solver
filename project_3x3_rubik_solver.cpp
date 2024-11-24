@@ -2,6 +2,7 @@
 //
 
 #include "project_3x3_rubik_solver.h"
+#include <algorithm>
 
 using namespace std;
 
