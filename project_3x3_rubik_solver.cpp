@@ -162,8 +162,6 @@ void applyMove(const string& move) {
 	// TODO (22003): Account for F2' and similar
 	/* TODO (22003): Try to find patterns and modularize the code to reduce
 	copy-pasting and slight modifications */
-	/* TODO (22003): Refactor the code to work with one 3D array instead of six
-	2D arrays */
 	char face = move[0];
 	const bool IS_PRIME = (move.length() == 2 && move[1] == '\''),
 		IS_DOUBLE = (move.length() == 2 && move[1] == '2');
