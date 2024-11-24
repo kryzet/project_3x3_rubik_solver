@@ -117,7 +117,7 @@ void scramble() {
 		if (c == ' ') {
 			if (!move.empty() && isValidMove(move)) {
 				applyMove(move);
-}
+			}
 			move = ""; // Reset the move
 		}
 		else {
@@ -169,35 +169,35 @@ void applyMove(const string& move) {
 	bool isDouble = (move.length() == 2 && move[1] == '2');
 
 	switch (face) {
-		case 'U':
-			if (isPrime) moveUPrime();
-			else if (isDouble) moveU2();
-			else moveU();
+	case 'U':
+		if (isPrime) moveUPrime();
+		else if (isDouble) moveU2();
+		else moveU();
 		break;
-		case 'D':
-			if (isPrime) moveDPrime();
-			else if (isDouble) moveD2();
-			else moveD();
+	case 'D':
+		if (isPrime) moveDPrime();
+		else if (isDouble) moveD2();
+		else moveD();
 		break;
-		case 'F':
-			if (isPrime) moveFPrime();
-			else if (isDouble) moveF2();
-			else moveF();
+	case 'F':
+		if (isPrime) moveFPrime();
+		else if (isDouble) moveF2();
+		else moveF();
 		break;
-		case 'B':
-			if (isPrime) moveBPrime();
-			else if (isDouble) moveB2();
-			else moveB();
+	case 'B':
+		if (isPrime) moveBPrime();
+		else if (isDouble) moveB2();
+		else moveB();
 		break;
-		case 'L':
-			if (isPrime) moveLPrime();
-			else if (isDouble) moveL2();
-			else moveL();
+	case 'L':
+		if (isPrime) moveLPrime();
+		else if (isDouble) moveL2();
+		else moveL();
 		break;
-		case 'R':
-			if (isPrime) moveRPrime();
-			else if (isDouble) moveR2();
-			else moveR();
+	case 'R':
+		if (isPrime) moveRPrime();
+		else if (isDouble) moveR2();
+		else moveR();
 		break;
 	}
 }
@@ -223,8 +223,8 @@ bool isValidMove(const string& MOVE) {
 			* DIRECTIVES_END = end(VALID_DIRECTIVES);
 		if (find(DIRECTIVES_BEGINNING, DIRECTIVES_END, DIRECTIVE) == DIRECTIVES_END) {
 			return false;
+		}
 	}
-}
 
 	return true;
 }
@@ -265,7 +265,7 @@ void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
 			face[N_ROWS - 1 - j][i] = temp[i][j];
 		}
 	}
-	}
+}
 
 
 void solveF2l() {
@@ -315,96 +315,96 @@ void exterior_face(bool top_face) {
 
 //moves
 void moveU() {
-    char temp[N_COLS];
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[2][0][i];
-    }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[2][0][i] = cube[3][0][i];
-        cube[3][0][i] = cube[4][0][i];
-        cube[4][0][i] = cube[1][0][i];
-        cube[1][0][i] = temp[i];
-    }
-    rotateFaceClockwise(cube[0]);
+	char temp[N_COLS];
+	for (int i = 0; i < N_COLS; i++) {
+		temp[i] = cube[2][0][i];
+	}
+	for (int i = 0; i < N_COLS; i++) {
+		cube[2][0][i] = cube[3][0][i];
+		cube[3][0][i] = cube[4][0][i];
+		cube[4][0][i] = cube[1][0][i];
+		cube[1][0][i] = temp[i];
+	}
+	rotateFaceClockwise(cube[0]);
 }
 
 void moveD() {
-    char temp[N_COLS];
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[2][2][i];
-    }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[2][2][i] = cube[1][2][i];
-        cube[1][2][i] = cube[4][2][i];
-        cube[4][2][i] = cube[3][2][i];
-        cube[3][2][i] = temp[i];
-    }
-    rotateFaceClockwise(cube[5]);
+	char temp[N_COLS];
+	for (int i = 0; i < N_COLS; i++) {
+		temp[i] = cube[2][2][i];
+	}
+	for (int i = 0; i < N_COLS; i++) {
+		cube[2][2][i] = cube[1][2][i];
+		cube[1][2][i] = cube[4][2][i];
+		cube[4][2][i] = cube[3][2][i];
+		cube[3][2][i] = temp[i];
+	}
+	rotateFaceClockwise(cube[5]);
 }
 
 void moveF() {
-    char temp[N_COLS];
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][2][i];
-    }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[0][2][i] = cube[1][2-i][2];
-        cube[1][2-i][2] = cube[5][0][2-i];
-        cube[5][0][2-i] = cube[3][i][0];
-        cube[3][i][0] = temp[i];
-    }
-    rotateFaceClockwise(cube[2]);
+	char temp[N_COLS];
+	for (int i = 0; i < N_COLS; i++) {
+		temp[i] = cube[0][2][i];
+	}
+	for (int i = 0; i < N_COLS; i++) {
+		cube[0][2][i] = cube[1][2 - i][2];
+		cube[1][2 - i][2] = cube[5][0][2 - i];
+		cube[5][0][2 - i] = cube[3][i][0];
+		cube[3][i][0] = temp[i];
+	}
+	rotateFaceClockwise(cube[2]);
 }
 
 void moveB() {
-    char temp[N_COLS];
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][0][i];
-    }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[0][0][i] = cube[3][i][2];
-        cube[3][i][2] = cube[5][2][2-i];
-        cube[5][2][2-i] = cube[1][2-i][0];
-        cube[1][2-i][0] = temp[i];
-    }
-    rotateFaceClockwise(cube[4]);
+	char temp[N_COLS];
+	for (int i = 0; i < N_COLS; i++) {
+		temp[i] = cube[0][0][i];
+	}
+	for (int i = 0; i < N_COLS; i++) {
+		cube[0][0][i] = cube[3][i][2];
+		cube[3][i][2] = cube[5][2][2 - i];
+		cube[5][2][2 - i] = cube[1][2 - i][0];
+		cube[1][2 - i][0] = temp[i];
+	}
+	rotateFaceClockwise(cube[4]);
 }
 
 void moveL() {
-    char temp[N_COLS];
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][i][0];
-    }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[0][i][0] = cube[4][2-i][2];
-        cube[4][2-i][2] = cube[5][i][0];
-        cube[5][i][0] = cube[2][i][0];
-        cube[2][i][0] = temp[i];
-    }
-    rotateFaceClockwise(cube[1]);
+	char temp[N_COLS];
+	for (int i = 0; i < N_COLS; i++) {
+		temp[i] = cube[0][i][0];
+	}
+	for (int i = 0; i < N_COLS; i++) {
+		cube[0][i][0] = cube[4][2 - i][2];
+		cube[4][2 - i][2] = cube[5][i][0];
+		cube[5][i][0] = cube[2][i][0];
+		cube[2][i][0] = temp[i];
+	}
+	rotateFaceClockwise(cube[1]);
 }
 
 void moveR() {
-    char temp[N_COLS];
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][i][2];
-    }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[0][i][2] = cube[2][i][2];
-        cube[2][i][2] = cube[5][i][2];
-        cube[5][i][2] = cube[4][2-i][0];
-        cube[4][2-i][0] = temp[i];
-    }
-    rotateFaceClockwise(cube[3]);
+	char temp[N_COLS];
+	for (int i = 0; i < N_COLS; i++) {
+		temp[i] = cube[0][i][2];
+	}
+	for (int i = 0; i < N_COLS; i++) {
+		cube[0][i][2] = cube[2][i][2];
+		cube[2][i][2] = cube[5][i][2];
+		cube[5][i][2] = cube[4][2 - i][0];
+		cube[4][2 - i][0] = temp[i];
+	}
+	rotateFaceClockwise(cube[3]);
 }
 
 //Prime moves
-void moveUPrime() { for(int i = 0; i < 3; i++) moveU(); } // instead of going back once it just rotates 3 times clockwise
-void moveDPrime() { for(int i = 0; i < 3; i++) moveD(); }
-void moveFPrime() { for(int i = 0; i < 3; i++) moveF(); }
-void moveBPrime() { for(int i = 0; i < 3; i++) moveB(); }
-void moveRPrime() { for(int i = 0; i < 3; i++) moveR(); }
-void moveLPrime() { for(int i = 0; i < 3; i++) moveL(); }
+void moveUPrime() { for (int i = 0; i < 3; i++) moveU(); } // instead of going back once it just rotates 3 times clockwise
+void moveDPrime() { for (int i = 0; i < 3; i++) moveD(); }
+void moveFPrime() { for (int i = 0; i < 3; i++) moveF(); }
+void moveBPrime() { for (int i = 0; i < 3; i++) moveB(); }
+void moveRPrime() { for (int i = 0; i < 3; i++) moveR(); }
+void moveLPrime() { for (int i = 0; i < 3; i++) moveL(); }
 
 //Double moves
 void moveU2() { moveU(); moveU(); } //repeats move twice
