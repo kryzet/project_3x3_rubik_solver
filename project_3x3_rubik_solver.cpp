@@ -157,7 +157,7 @@ void applyMove(const string& move) {
 		return times;
 		}();
     // Function pointer. Will point to the function that needs to be run.
-    void *func;
+	void (*func)() = nullptr;
 	switch (face) {
 	case 'U':
         func = moveU;
@@ -179,7 +179,7 @@ void applyMove(const string& move) {
 		break;
 	}
     for (size_t i = 0; i < TIMES; ++i)
-        func;
+        func();
 }
 
 bool isValidMove(const string& MOVE) {
