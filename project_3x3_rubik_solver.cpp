@@ -159,9 +159,6 @@ void applyMove(const string& move) {
 
 	char temp[N_ROWS];
 
-	// TODO (22003): Account for F2' and similar
-	/* TODO (22003): Try to find patterns and modularize the code to reduce
-	copy-pasting and slight modifications */
 	char face = move[0];
 	const bool IS_PRIME = (move.length() == 2 && move[1] == '\''),
 		IS_DOUBLE = (move.length() == 2 && move[1] == '2');
