@@ -292,19 +292,9 @@ void solveWhiteCross() {
     // Position the edges... somehow...
 }
 
-void solveF2l() {
-    // Add logic to solve the F2L step
-    cout << "Solving F2L..." << endl;
-}
-
 void solveOll() {
     // Add logic to solve the OLL step
     cout << "Solving OLL..." << endl;
-}
-
-void solvePll() {
-    // Add logic to solve the PLL step
-    cout << "Solving PLL..." << endl;
 }
 
 
@@ -523,7 +513,7 @@ void orientPair(int edgeFace, int cornerFace) {
         performF2LAlgorithm3();
     }
     // Step 2: If the edge-corner pair is misaligned (in a different orientation), apply another algorithm
-    else if (cube[edgeFace][0][2] == 'W' && cube[cornerFace][2][0] == 'W') {
+    if (cube[edgeFace][0][2] == 'W' && cube[cornerFace][2][0] == 'W') {
         performF2LAlgorithm2();
     }
     // Step 3: Apply an algorithm to handle all other cases
@@ -596,4 +586,3 @@ bool isSolved() {
     }
     return true;
 }
-
