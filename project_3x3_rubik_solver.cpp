@@ -144,15 +144,18 @@ void applyMove(const string& move) {
 	char temp[N_ROWS];
 
 	char face = move[0];
-	const bool IS_PRIME = (move.length() == 2 && move[1] == '\''),
-		IS_DOUBLE = (move.length() == 2 && move[1] == '2');
+	bool is_prime = false, is_double = false;
+	if (2 == move.length()) {
+		is_prime = move[1] == '\'';
+		is_double = move[1] == '2';
+	}
 
     /* Calculates the number of moves to be made based on whether a prime move
     and a double move is requested */
-	const size_t TIMES = [&IS_DOUBLE, &IS_PRIME]() {
+	const size_t TIMES = [&is_double, &is_prime]() {
 		size_t times = 1;
-		if (IS_DOUBLE) times *= 2;
-        if (IS_PRIME) times *= 3;  /* 3 regular moves are equivalent to a prime
+		if (is_double) times *= 2;
+        if (is_prime) times *= 3;  /* 3 regular moves are equivalent to a prime
                                    move */
 		while (times >= 4) times -= 4;
 		return times;
