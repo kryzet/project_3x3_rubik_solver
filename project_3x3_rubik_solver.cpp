@@ -59,6 +59,13 @@ void moveB2();
 void moveL2();
 void moveR2();
 
+
+//Algorithms
+void sexyMove();
+void ReverseSexyMove();
+void sledgehammerMove();
+
+
 void scramble();
 void exterior_face(bool top_face);
 
