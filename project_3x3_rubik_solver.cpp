@@ -312,13 +312,20 @@ bool isValidMove(const string& MOVE) {
 	if (MOVE.length() > 2) return false;
 
 	const char FACE = MOVE[0];
-	if (face != 'F' && face != 'B' && face != 'R' &&
-		face != 'L' && face != 'U' && face != 'D') {
+	constexpr char VALID_FACES[] = { 'U', 'L', 'F', 'R', 'B', 'D' };
+	const char *FACES_BEGINNING = begin(VALID_FACES),
+		*FACES_END = end(VALID_FACES);
+	if (find(FACES_BEGINNING, FACES_END, FACE) == FACES_END)
+		return false;
+
+	if (MOVE.length() == 2) {
+		const char DIRECTIVE = MOVE[1];
+		constexpr char VALID_DIRECTIVES[] = { '\'', '2' };
+		const char* DIRECTIVES_BEGINNING = begin(VALID_DIRECTIVES),
+			*DIRECTIVES_END = end(VALID_DIRECTIVES);
+		if (find(DIRECTIVES_BEGINNING, DIRECTIVES_END, DIRECTIVE) == DIRECTIVES_END) {
 		return false;
 	}
-
-	if (move.length() == 2 && move[1] != '\'' && move[1] != '2') {
-		return false;
 	}
 
 	return true;
