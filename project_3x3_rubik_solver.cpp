@@ -273,6 +273,7 @@ void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
 }
 
 
+
 void solveWhiteCross() {
     // Find white edges
     constexpr size_t N_EDGE_ROWS = 2, N_WHITE_EDGES = 4;
