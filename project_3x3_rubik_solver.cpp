@@ -5,8 +5,17 @@
 
 using namespace std;
 
-constexpr size_t N_FACE = 6, N_ROW = 3, N_COL = 3;
+/* Declare the face arrays with a compile-time constant for the
+number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3;
+char cube[N_FACES][N_ROWS][N_COLS] = {
+	{{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},  // Top
+	{{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},  // Left
+	{{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},  // Front
+	{{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},  // Right
+	{{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},  // Back
+	{{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}   // Bottom
+};
 
 // functions
 void printFace(char face[N_ROWS][N_COLS]);
