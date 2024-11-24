@@ -563,6 +563,11 @@ void performF2LAlgorithm3() {
     moveR();
 }
 
+void solvePll() {
+
+
+}
+
 bool isSolved() {
     // Check each face
     for (int face = 0; face < N_FACES; face++) {
