@@ -125,7 +125,7 @@ void applyMove(const string& move) {
 		return;
 	}
 
-	char temp[N_ROW];
+	char temp[N_ROWS];
 
 	if (move == "F") {
 		rotateFaceClockwise(f_front);
