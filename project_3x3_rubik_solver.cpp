@@ -411,3 +411,133 @@ void reverseSexyMove() {
 void sledgehammerMove() {
     moveRPrime(); moveFPrime(); moveR(); moveF();
 }
+
+void solveF2l() {
+    cout << "Solving F2L..." << endl;
+
+    // We need to loop through the 4 slots of the top layer (where the edge-corner pairs are)
+    for (int i = 0; i < 4; ++i) {
+        // Solve the edge-corner pair at the specified position
+        solveF2lPair(i);
+    }
+}
+
+void solveF2lPair(int pairIndex) {
+    // Normalize pairIndex to be within 0-3
+    pairIndex = pairIndex % 4;
+
+    bool pairFound = false;
+    int attempts = 0;
+    const int MAX_ATTEMPTS = 16; // Prevent infinite loops
+
+    while (!pairFound && attempts < MAX_ATTEMPTS) {
+        if (isPairInTopLayer(pairIndex, (pairIndex + 1) % 4)) {
+            if (isPairAligned(pairIndex, (pairIndex + 1) % 4)) {
+                insertF2lPair(pairIndex, (pairIndex + 1) % 4);
+                pairFound = true;
+            } else {
+                orientPair(pairIndex, (pairIndex + 1) % 4);
+            }
+        } else {
+            moveU();
+        }
+        attempts++;
+    }
+
+    if (!pairFound) {
+        cout << "Warning: Could not solve F2L pair " << pairIndex << " within reasonable attempts" << endl;
+    }
+}
+
+bool isPairInTopLayer(int edgeFace, int cornerFace) {
+    // Check if both pieces are in the top layer and match the expected colors
+    char edgeColor = cube[0][2][1]; // Edge piece on top face
+    char cornerColor = cube[0][2][2]; // Corner piece on top face
+
+    return (edgeColor == 'W' && cornerColor == 'W') ||
+           (edgeColor == 'Y' && cornerColor == 'Y');
+}
+
+bool isPairAligned(int edgeFace, int cornerFace) {
+    // Check if the edge and corner are aligned with their target position
+    char edgeColor = cube[edgeFace][0][1];
+    char cornerColor = cube[cornerFace][0][0];
+    char targetColor = cube[edgeFace][1][1]; // Center piece color
+
+    return edgeColor == targetColor && cornerColor == targetColor;
+}
+
+
+void orientPair(int edgeFace, int cornerFace) {
+    // This function is for orienting the pair into the correct position using the following algorithms
+
+    // Step 1: If the edge is misaligned, bring the edge to the correct position
+    // Algorithm 1 (used to orient the pair when the edge is at the top layer but needs to be rotated):
+    if (cube[edgeFace][2][1] == 'W' && cube[cornerFace][2][1] == 'W') {
+        performF2LAlgorithm1();
+    }
+    // Step 2: If the edge-corner pair is misaligned (in a different orientation), apply another algorithm
+    else if (cube[edgeFace][0][2] == 'W' && cube[cornerFace][2][0] == 'W') {
+        performF2LAlgorithm2();
+    }
+    // Step 3: Apply an algorithm to handle all other cases
+    else {
+        performF2LAlgorithm3();
+    }
+}
+
+void insertF2lPair(int edgeFace, int cornerFace) {
+    // Once the edge-corner pair is oriented, we can insert it into the first two layers
+    // Use a basic F2L algorithm for insertion
+    moveU();
+    moveR();
+    moveRPrime();
+    moveUPrime();
+}
+
+void performF2LAlgorithm1() {
+    // Algorithm 1: Insert edge-corner pair into F2L (simple orientation correction)
+    moveR();
+    moveU();
+    moveRPrime();
+    moveUPrime();
+}
+
+void performF2LAlgorithm2() {
+    // Algorithm 2: Another way to orient and insert the edge-corner pair
+    moveU();
+    moveR();
+    moveUPrime();
+    moveRPrime();
+    moveUPrime();
+}
+
+void performF2LAlgorithm3() {
+    // Algorithm 3: A different algorithm to orient and insert the pair
+    moveRPrime();
+    moveUPrime();
+    moveR();
+    moveU();
+    moveRPrime();
+    moveUPrime();
+    moveR();
+}
+
+bool isSolved() {
+    // Check each face
+    for (int face = 0; face < N_FACES; face++) {
+        // Get the center color of the current face
+        char centerColor = cube[face][1][1];
+
+        // Check if all pieces on this face match the center color
+        for (int row = 0; row < N_ROWS; row++) {
+            for (int col = 0; col < N_COLS; col++) {
+                if (cube[face][row][col] != centerColor) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
