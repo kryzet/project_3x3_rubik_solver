@@ -509,12 +509,17 @@ bool isPairAligned(int edgeFace, int cornerFace) {
 
 
 void orientPair(int edgeFace, int cornerFace) {
-    // This function is for orienting the pair into the correct position using the following algorithms
-
-    // Step 1: If the edge is misaligned, bring the edge to the correct position
-    // Algorithm 1 (used to orient the pair when the edge is at the top layer but needs to be rotated):
-    if (cube[edgeFace][2][1] == 'W' && cube[cornerFace][2][1] == 'W') {
+    if (cube[edgeFace][0][1] == 'W') {
+        // Edge is flipped
+        moveU();
         performF2LAlgorithm1();
+    } else if (cube[cornerFace][0][0] == 'W') {
+        // Corner needs rotation
+        moveUPrime();
+        performF2LAlgorithm2();
+    } else {
+        // General misalignment case
+        performF2LAlgorithm3();
     }
     // Step 2: If the edge-corner pair is misaligned (in a different orientation), apply another algorithm
     else if (cube[edgeFace][0][2] == 'W' && cube[cornerFace][2][0] == 'W') {
