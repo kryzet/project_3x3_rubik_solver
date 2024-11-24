@@ -16,10 +16,10 @@ char cube[N_FACE][N_ROW][N_COL];
 constexpr char VALID_COLORS[N_FACE] = { 'W', 'O', 'G', 'R', 'B', 'Y' };
 
 //functions
-void printFace(char face[ROW][COLUMN]);
+void printFace(char face[N_ROW][N_COL]);
 void rotateTopFaceEdges();
-void rotateFaceClockwise(char face[ROW][COLUMN]);
-void rotateFaceCounterClockwise(char face[ROW][COLUMN]);
+void rotateFaceClockwise(char face[N_ROW][N_COL]);
+void rotateFaceCounterClockwise(char face[N_ROW][N_COL]);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
@@ -31,12 +31,12 @@ void solvePll();
 void resetCube();
 bool isSolved();
 
-void scramble(char f_front[ROW][COLUMN],
-	char f_back[ROW][COLUMN],
-	char f_top[ROW][COLUMN],
-	char f_bottom[ROW][COLUMN],
-	char f_left[ROW][COLUMN],
-	char f_right[ROW][COLUMN]);
+void scramble(char f_front[N_ROW][N_COL],
+	char f_back[N_ROW][N_COL],
+	char f_top[N_ROW][N_COL],
+	char f_bottom[N_ROW][N_COL],
+	char f_left[N_ROW][N_COL],
+	char f_right[N_ROW][N_COL]);
 
 
 // TODO: Write the functions for rotating the cube's faces (gotta decide
@@ -85,18 +85,15 @@ int main()
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
-void scramble(char f_front[ROW][COLUMN],
-			  char f_back[ROW][COLUMN],
-			  char f_top[ROW][COLUMN],
-			  char f_bottom[ROW][COLUMN],
-			  char f_left[ROW][COLUMN],
-			  char f_right[ROW][COLUMN]) {
-	string moves;
-
+void scramble(char f_front[N_ROW][N_COL],
+	char f_back[N_ROW][N_COL],
+	char f_top[N_ROW][N_COL],
+	char f_bottom[N_ROW][N_COL],
+	char f_left[N_ROW][N_COL],
+	char f_right[N_ROW][N_COL]) {
 	// Get the scramble moves from the user
 	cout << "Enter the scramble: ";
-	getline(cin, moves);
-	cout << "Scramble moves: " << moves << endl;
+	string moves; getline(cin, moves);
 
 	// Parse and apply the moves
 	string move = "";
@@ -144,41 +141,43 @@ void applyMove(const string& move) {
 		return;
 	}
 
-	char temp[ROW];
+	char temp[N_ROW];
 
 	if (move == "F") {
 		rotateFaceClockwise(f_front);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[ROW - 1][i];
-		for (int i = 0; i < ROW; ++i) f_top[ROW - 1][i] = f_left[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_left[i][COLUMN - 1] = f_bottom[0][ROW - 1 - i];
-		for (int i = 0; i < ROW; ++i) f_bottom[0][i] = f_right[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) f_right[i][0] = temp[i];
-	} else if (move == "F'") {
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[N_ROW - 1][i];
+		for (int i = 0; i < N_ROW; ++i) f_top[N_ROW - 1][i] = f_left[N_ROW - 1 - i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_left[i][N_COL - 1] = f_bottom[0][N_ROW - 1 - i];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[0][i] = f_right[N_ROW - 1 - i][0];
+		for (int i = 0; i < N_ROW; ++i) f_right[i][0] = temp[i];
+	}
+	else if (move == "F'") {
 		rotateFaceCounterClockwise(f_front);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[ROW - 1][i];
-		for (int i = 0; i < ROW; ++i) f_top[ROW - 1][i] = f_right[i][0];
-		for (int i = 0; i < ROW; ++i) f_right[i][0] = f_bottom[0][ROW - 1 - i];
-		for (int i = 0; i < ROW; ++i) f_bottom[0][i] = f_left[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_left[i][COLUMN - 1] = temp[ROW - 1 - i];
-	} else if (move == "F2") {
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[N_ROW - 1][i];
+		for (int i = 0; i < N_ROW; ++i) f_top[N_ROW - 1][i] = f_right[i][0];
+		for (int i = 0; i < N_ROW; ++i) f_right[i][0] = f_bottom[0][N_ROW - 1 - i];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[0][i] = f_left[N_ROW - 1 - i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_left[i][N_COL - 1] = temp[N_ROW - 1 - i];
+	}
+	else if (move == "F2") {
 		rotateFaceClockwise(f_front);
 		rotateFaceClockwise(f_front);
 	}
 	else if (move == "B") {
 		rotateFaceClockwise(f_back);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[0][i];
-		for (int i = 0; i < ROW; ++i) f_top[0][i] = f_right[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_right[i][COLUMN - 1] = f_bottom[ROW - 1][ROW - 1 - i];
-		for (int i = 0; i < ROW; ++i) f_bottom[ROW - 1][i] = f_left[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) f_left[i][0] = temp[ROW - 1 - i];
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[0][i];
+		for (int i = 0; i < N_ROW; ++i) f_top[0][i] = f_right[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_right[i][N_COL - 1] = f_bottom[N_ROW - 1][N_ROW - 1 - i];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[N_ROW - 1][i] = f_left[N_ROW - 1 - i][0];
+		for (int i = 0; i < N_ROW; ++i) f_left[i][0] = temp[N_ROW - 1 - i];
 	}
 	else if (move == "B'") {
 		rotateFaceCounterClockwise(f_back);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[0][i];
-		for (int i = 0; i < ROW; ++i) f_top[0][i] = f_left[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) f_left[i][0] = f_bottom[ROW - 1][i];
-		for (int i = 0; i < ROW; ++i) f_bottom[ROW - 1][i] = f_right[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_right[i][COLUMN - 1] = temp[ROW - 1 - i];
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[0][i];
+		for (int i = 0; i < N_ROW; ++i) f_top[0][i] = f_left[N_ROW - 1 - i][0];
+		for (int i = 0; i < N_ROW; ++i) f_left[i][0] = f_bottom[N_ROW - 1][i];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[N_ROW - 1][i] = f_right[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_right[i][N_COL - 1] = temp[N_ROW - 1 - i];
 	}
 	else if (move == "B2") {
 		rotateFaceClockwise(f_back);
@@ -186,19 +185,19 @@ void applyMove(const string& move) {
 	}
 	else if (move == "R") {
 		rotateFaceClockwise(f_right);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_top[i][COLUMN - 1] = f_front[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_front[i][COLUMN - 1] = f_bottom[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_bottom[i][COLUMN - 1] = f_back[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) f_back[i][0] = temp[ROW - 1 - i];
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_top[i][N_COL - 1] = f_front[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_front[i][N_COL - 1] = f_bottom[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[i][N_COL - 1] = f_back[N_ROW - 1 - i][0];
+		for (int i = 0; i < N_ROW; ++i) f_back[i][0] = temp[N_ROW - 1 - i];
 	}
 	else if (move == "R'") {
 		rotateFaceCounterClockwise(f_right);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_top[i][COLUMN - 1] = f_back[ROW - 1 - i][0];
-		for (int i = 0; i < ROW; ++i) f_back[i][0] = f_bottom[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_bottom[i][COLUMN - 1] = f_front[i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_front[i][COLUMN - 1] = temp[i];
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_top[i][N_COL - 1] = f_back[N_ROW - 1 - i][0];
+		for (int i = 0; i < N_ROW; ++i) f_back[i][0] = f_bottom[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[i][N_COL - 1] = f_front[i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_front[i][N_COL - 1] = temp[i];
 	}
 	else if (move == "R2") {
 		rotateFaceClockwise(f_right);
@@ -206,19 +205,19 @@ void applyMove(const string& move) {
 	}
 	else if (move == "L") {
 		rotateFaceClockwise(f_left);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][0];
-		for (int i = 0; i < ROW; ++i) f_top[i][0] = f_back[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_back[i][COLUMN - 1] = f_bottom[i][0];
-		for (int i = 0; i < ROW; ++i) f_bottom[i][0] = f_front[i][0];
-		for (int i = 0; i < ROW; ++i) f_front[i][0] = temp[i];
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][0];
+		for (int i = 0; i < N_ROW; ++i) f_top[i][0] = f_back[N_ROW - 1 - i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_back[i][N_COL - 1] = f_bottom[i][0];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[i][0] = f_front[i][0];
+		for (int i = 0; i < N_ROW; ++i) f_front[i][0] = temp[i];
 	}
 	else if (move == "L'") {
 		rotateFaceCounterClockwise(f_left);
-		for (int i = 0; i < ROW; ++i) temp[i] = f_top[i][0];
-		for (int i = 0; i < ROW; ++i) f_top[i][0] = f_front[i][0];
-		for (int i = 0; i < ROW; ++i) f_front[i][0] = f_bottom[i][0];
-		for (int i = 0; i < ROW; ++i) f_bottom[i][0] = f_back[ROW - 1 - i][COLUMN - 1];
-		for (int i = 0; i < ROW; ++i) f_back[i][COLUMN - 1] = temp[ROW - 1 - i];
+		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][0];
+		for (int i = 0; i < N_ROW; ++i) f_top[i][0] = f_front[i][0];
+		for (int i = 0; i < N_ROW; ++i) f_front[i][0] = f_bottom[i][0];
+		for (int i = 0; i < N_ROW; ++i) f_bottom[i][0] = f_back[N_ROW - 1 - i][N_COL - 1];
+		for (int i = 0; i < N_ROW; ++i) f_back[i][N_COL - 1] = temp[N_ROW - 1 - i];
 	}
 	else if (move == "L2") {
 		rotateFaceClockwise(f_left);
@@ -226,19 +225,19 @@ void applyMove(const string& move) {
 	}
 	else if (move == "U") {
 		rotateFaceClockwise(f_top);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_front[0][i] = f_right[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_right[0][i] = f_back[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_back[0][i] = f_left[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_left[0][i] = temp[i];
+		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[0][i];
+		for (int i = 0; i < N_COL; ++i) f_front[0][i] = f_right[0][i];
+		for (int i = 0; i < N_COL; ++i) f_right[0][i] = f_back[0][i];
+		for (int i = 0; i < N_COL; ++i) f_back[0][i] = f_left[0][i];
+		for (int i = 0; i < N_COL; ++i) f_left[0][i] = temp[i];
 	}
 	else if (move == "U'") {
 		rotateFaceCounterClockwise(f_top);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_front[0][i] = f_left[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_left[0][i] = f_back[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_back[0][i] = f_right[0][i];
-		for (int i = 0; i < COLUMN; ++i) f_right[0][i] = temp[i];
+		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[0][i];
+		for (int i = 0; i < N_COL; ++i) f_front[0][i] = f_left[0][i];
+		for (int i = 0; i < N_COL; ++i) f_left[0][i] = f_back[0][i];
+		for (int i = 0; i < N_COL; ++i) f_back[0][i] = f_right[0][i];
+		for (int i = 0; i < N_COL; ++i) f_right[0][i] = temp[i];
 	}
 	else if (move == "U2") {
 		rotateFaceClockwise(f_top);
@@ -246,19 +245,19 @@ void applyMove(const string& move) {
 	}
 	else if (move == "D") {
 		rotateFaceClockwise(f_bottom);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_front[ROW - 1][i] = f_left[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_left[ROW - 1][i] = f_back[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_back[ROW - 1][i] = f_right[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_right[ROW - 1][i] = temp[i];
+		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_front[N_ROW - 1][i] = f_left[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_left[N_ROW - 1][i] = f_back[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_back[N_ROW - 1][i] = f_right[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_right[N_ROW - 1][i] = temp[i];
 	}
 	else if (move == "D'") {
 		rotateFaceCounterClockwise(f_bottom);
-		for (int i = 0; i < COLUMN; ++i) temp[i] = f_front[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_front[ROW - 1][i] = f_right[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_right[ROW - 1][i] = f_back[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_back[ROW - 1][i] = f_left[ROW - 1][i];
-		for (int i = 0; i < COLUMN; ++i) f_left[ROW - 1][i] = temp[i];
+		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_front[N_ROW - 1][i] = f_right[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_right[N_ROW - 1][i] = f_back[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_back[N_ROW - 1][i] = f_left[N_ROW - 1][i];
+		for (int i = 0; i < N_COL; ++i) f_left[N_ROW - 1][i] = temp[i];
 	}
 	else if (move == "D2") {
 		rotateFaceClockwise(f_bottom);
@@ -269,50 +268,50 @@ void applyMove(const string& move) {
 
 
 
-void rotateFaceClockwise(char face[ROW][COLUMN]) {
-	char temp[ROW][COLUMN];
+void rotateFaceClockwise(char face[N_ROW][N_COL]) {
+	char temp[N_ROW][N_COL];
 
 	// Copy the original face
-	for (int i = 0; i < ROW; i++) {
-		for (int j = 0; j < COLUMN; j++) {
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
 			temp[i][j] = face[i][j];
 		}
 	}
 
 	// Rotate 90 degrees clockwise
-	for (int i = 0; i < ROW; i++) {
-		for (int j = 0; j < COLUMN; j++) {
-			face[j][COLUMN - 1 - i] = temp[i][j];
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
+			face[j][N_COL - 1 - i] = temp[i][j];
 		}
 	}
 }
 
-void rotateFaceCounterClockwise(char face[ROW][COLUMN]) {
-	char temp[ROW][COLUMN];
+void rotateFaceCounterClockwise(char face[N_ROW][N_COL]) {
+	char temp[N_ROW][N_COL];
 
 	// Copy the original face
-	for (int i = 0; i < ROW; i++) {
-		for (int j = 0; j < COLUMN; j++) {
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
 			temp[i][j] = face[i][j];
 		}
 	}
 
 	// Rotate 90 degrees counter-clockwise
-	for (int i = 0; i < ROW; i++) {
-		for (int j = 0; j < COLUMN; j++) {
-			face[ROW - 1 - j][i] = temp[i][j];
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
+			face[N_ROW - 1 - j][i] = temp[i][j];
 		}
 	}
 }
 
-bool isValidMove(const string& move) {
+bool isValidMove(const string& MOVE) {
 	// Basic moves: F, B, R, L, U, D
 	// Prime moves: F', B', R', L', U', D'
 	// Double moves: F2, B2, R2, L2, U2, D2
 
-	if (move.length() > 2) return false;
+	if (MOVE.length() > 2) return false;
 
-	char face = move[0];
+	const char FACE = MOVE[0];
 	if (face != 'F' && face != 'B' && face != 'R' &&
 		face != 'L' && face != 'U' && face != 'D') {
 		return false;
