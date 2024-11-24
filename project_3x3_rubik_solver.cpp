@@ -127,9 +127,9 @@ void applyMove(const string& move) {
 
 	char temp[N_ROWS];
 
-	if (move == "F") {
-		rotateFaceClockwise(f_front);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[N_ROW - 1][i];
+	// TODO (22003): Account for F2' and similar
+	/* TODO (22003): Try to find patterns and modularize the code to reduce
+	copy-pasting and slight modifications */
 		for (int i = 0; i < N_ROW; ++i) f_top[N_ROW - 1][i] = f_left[N_ROW - 1 - i][N_COL - 1];
 		for (int i = 0; i < N_ROW; ++i) f_left[i][N_COL - 1] = f_bottom[0][N_ROW - 1 - i];
 		for (int i = 0; i < N_ROW; ++i) f_bottom[0][i] = f_right[N_ROW - 1 - i][0];
