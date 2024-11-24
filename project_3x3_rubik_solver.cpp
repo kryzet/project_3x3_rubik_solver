@@ -165,38 +165,45 @@ void applyMove(const string& move) {
 	/* TODO (22003): Refactor the code to work with one 3D array instead of six
 	2D arrays */
 	char face = move[0];
-	bool isPrime = (move.length() == 2 && move[1] == '\'');
-	bool isDouble = (move.length() == 2 && move[1] == '2');
+	const bool IS_PRIME = (move.length() == 2 && move[1] == '\''),
+		IS_DOUBLE = (move.length() == 2 && move[1] == '2');
 
+	const size_t TIMES = [&IS_DOUBLE, &IS_PRIME]() {
+		size_t times = 1;
+		if (IS_DOUBLE) times *= 2;
+		if (IS_PRIME) times *= 3;
+		while (times >= 4) times -= 4;
+		return times;
+		}();
 	switch (face) {
 	case 'U':
-		if (isPrime) moveUPrime();
-		else if (isDouble) moveU2();
+		if (IS_PRIME) moveUPrime();
+		else if (IS_DOUBLE) moveU2();
 		else moveU();
 		break;
 	case 'D':
-		if (isPrime) moveDPrime();
-		else if (isDouble) moveD2();
+		if (IS_PRIME) moveDPrime();
+		else if (IS_DOUBLE) moveD2();
 		else moveD();
 		break;
 	case 'F':
-		if (isPrime) moveFPrime();
-		else if (isDouble) moveF2();
+		if (IS_PRIME) moveFPrime();
+		else if (IS_DOUBLE) moveF2();
 		else moveF();
 		break;
 	case 'B':
-		if (isPrime) moveBPrime();
-		else if (isDouble) moveB2();
+		if (IS_PRIME) moveBPrime();
+		else if (IS_DOUBLE) moveB2();
 		else moveB();
 		break;
 	case 'L':
-		if (isPrime) moveLPrime();
-		else if (isDouble) moveL2();
+		if (IS_PRIME) moveLPrime();
+		else if (IS_DOUBLE) moveL2();
 		else moveL();
 		break;
 	case 'R':
-		if (isPrime) moveRPrime();
-		else if (isDouble) moveR2();
+		if (IS_PRIME) moveRPrime();
+		else if (IS_DOUBLE) moveR2();
 		else moveR();
 		break;
 	}
