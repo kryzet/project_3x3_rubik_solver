@@ -135,121 +135,33 @@ void applyMove(const string& move) {
 		for (int i = 0; i < N_ROW; ++i) f_bottom[0][i] = f_right[N_ROW - 1 - i][0];
 		for (int i = 0; i < N_ROW; ++i) f_right[i][0] = temp[i];
 	}
-	else if (move == "F'") {
-		rotateFaceCounterClockwise(f_front);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[N_ROW - 1][i];
-		for (int i = 0; i < N_ROW; ++i) f_top[N_ROW - 1][i] = f_right[i][0];
-		for (int i = 0; i < N_ROW; ++i) f_right[i][0] = f_bottom[0][N_ROW - 1 - i];
-		for (int i = 0; i < N_ROW; ++i) f_bottom[0][i] = f_left[N_ROW - 1 - i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_left[i][N_COL - 1] = temp[N_ROW - 1 - i];
-	}
-	else if (move == "F2") {
-		rotateFaceClockwise(f_front);
-		rotateFaceClockwise(f_front);
-	}
-	else if (move == "B") {
-		rotateFaceClockwise(f_back);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[0][i];
-		for (int i = 0; i < N_ROW; ++i) f_top[0][i] = f_right[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_right[i][N_COL - 1] = f_bottom[N_ROW - 1][N_ROW - 1 - i];
-		for (int i = 0; i < N_ROW; ++i) f_bottom[N_ROW - 1][i] = f_left[N_ROW - 1 - i][0];
-		for (int i = 0; i < N_ROW; ++i) f_left[i][0] = temp[N_ROW - 1 - i];
-	}
-	else if (move == "B'") {
-		rotateFaceCounterClockwise(f_back);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[0][i];
-		for (int i = 0; i < N_ROW; ++i) f_top[0][i] = f_left[N_ROW - 1 - i][0];
-		for (int i = 0; i < N_ROW; ++i) f_left[i][0] = f_bottom[N_ROW - 1][i];
-		for (int i = 0; i < N_ROW; ++i) f_bottom[N_ROW - 1][i] = f_right[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_right[i][N_COL - 1] = temp[N_ROW - 1 - i];
-	}
-	else if (move == "B2") {
-		rotateFaceClockwise(f_back);
-		rotateFaceClockwise(f_back);
-	}
-	else if (move == "R") {
-		rotateFaceClockwise(f_right);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_top[i][N_COL - 1] = f_front[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_front[i][N_COL - 1] = f_bottom[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_bottom[i][N_COL - 1] = f_back[N_ROW - 1 - i][0];
-		for (int i = 0; i < N_ROW; ++i) f_back[i][0] = temp[N_ROW - 1 - i];
-	}
-	else if (move == "R'") {
-		rotateFaceCounterClockwise(f_right);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_top[i][N_COL - 1] = f_back[N_ROW - 1 - i][0];
-		for (int i = 0; i < N_ROW; ++i) f_back[i][0] = f_bottom[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_bottom[i][N_COL - 1] = f_front[i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_front[i][N_COL - 1] = temp[i];
-	}
-	else if (move == "R2") {
-		rotateFaceClockwise(f_right);
-		rotateFaceClockwise(f_right);
-	}
-	else if (move == "L") {
-		rotateFaceClockwise(f_left);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][0];
-		for (int i = 0; i < N_ROW; ++i) f_top[i][0] = f_back[N_ROW - 1 - i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_back[i][N_COL - 1] = f_bottom[i][0];
-		for (int i = 0; i < N_ROW; ++i) f_bottom[i][0] = f_front[i][0];
-		for (int i = 0; i < N_ROW; ++i) f_front[i][0] = temp[i];
-	}
-	else if (move == "L'") {
-		rotateFaceCounterClockwise(f_left);
-		for (int i = 0; i < N_ROW; ++i) temp[i] = f_top[i][0];
-		for (int i = 0; i < N_ROW; ++i) f_top[i][0] = f_front[i][0];
-		for (int i = 0; i < N_ROW; ++i) f_front[i][0] = f_bottom[i][0];
-		for (int i = 0; i < N_ROW; ++i) f_bottom[i][0] = f_back[N_ROW - 1 - i][N_COL - 1];
-		for (int i = 0; i < N_ROW; ++i) f_back[i][N_COL - 1] = temp[N_ROW - 1 - i];
-	}
-	else if (move == "L2") {
-		rotateFaceClockwise(f_left);
-		rotateFaceClockwise(f_left);
-	}
-	else if (move == "U") {
-		rotateFaceClockwise(f_top);
-		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[0][i];
-		for (int i = 0; i < N_COL; ++i) f_front[0][i] = f_right[0][i];
-		for (int i = 0; i < N_COL; ++i) f_right[0][i] = f_back[0][i];
-		for (int i = 0; i < N_COL; ++i) f_back[0][i] = f_left[0][i];
-		for (int i = 0; i < N_COL; ++i) f_left[0][i] = temp[i];
-	}
-	else if (move == "U'") {
-		rotateFaceCounterClockwise(f_top);
-		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[0][i];
-		for (int i = 0; i < N_COL; ++i) f_front[0][i] = f_left[0][i];
-		for (int i = 0; i < N_COL; ++i) f_left[0][i] = f_back[0][i];
-		for (int i = 0; i < N_COL; ++i) f_back[0][i] = f_right[0][i];
-		for (int i = 0; i < N_COL; ++i) f_right[0][i] = temp[i];
-	}
-	else if (move == "U2") {
-		rotateFaceClockwise(f_top);
-		rotateFaceClockwise(f_top);
-	}
-	else if (move == "D") {
-		rotateFaceClockwise(f_bottom);
-		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_front[N_ROW - 1][i] = f_left[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_left[N_ROW - 1][i] = f_back[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_back[N_ROW - 1][i] = f_right[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_right[N_ROW - 1][i] = temp[i];
-	}
-	else if (move == "D'") {
-		rotateFaceCounterClockwise(f_bottom);
-		for (int i = 0; i < N_COL; ++i) temp[i] = f_front[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_front[N_ROW - 1][i] = f_right[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_right[N_ROW - 1][i] = f_back[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_back[N_ROW - 1][i] = f_left[N_ROW - 1][i];
-		for (int i = 0; i < N_COL; ++i) f_left[N_ROW - 1][i] = temp[i];
-	}
-	else if (move == "D2") {
-		rotateFaceClockwise(f_bottom);
-		rotateFaceClockwise(f_bottom);
+
+bool isValidMove(const string& MOVE) {
+	// Basic moves: F, B, R, L, U, D
+	// Prime moves: F', B', R', L', U', D'
+	// Double moves: F2, B2, R2, L2, U2, D2
+
+	if (MOVE.length() > 2) return false;
+
+	const char FACE = MOVE[0];
+	constexpr char VALID_FACES[] = { 'U', 'L', 'F', 'R', 'B', 'D' };
+	const char* FACES_BEGINNING = begin(VALID_FACES),
+		* FACES_END = end(VALID_FACES);
+	if (find(FACES_BEGINNING, FACES_END, FACE) == FACES_END)
+		return false;
+
+	if (MOVE.length() == 2) {
+		const char DIRECTIVE = MOVE[1];
+		constexpr char VALID_DIRECTIVES[] = { '\'', '2' };
+		const char* DIRECTIVES_BEGINNING = begin(VALID_DIRECTIVES),
+			* DIRECTIVES_END = end(VALID_DIRECTIVES);
+		if (find(DIRECTIVES_BEGINNING, DIRECTIVES_END, DIRECTIVE) == DIRECTIVES_END) {
+			return false;
 	}
 }
 
-
+	return true;
+}
 
 
 void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
@@ -270,6 +182,7 @@ void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
 	}
 }
 
+
 void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
 	char temp[N_ROWS][N_COLS];
 
@@ -286,34 +199,8 @@ void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
 			face[N_ROWS - 1 - j][i] = temp[i][j];
 		}
 	}
-}
-
-bool isValidMove(const string& MOVE) {
-	// Basic moves: F, B, R, L, U, D
-	// Prime moves: F', B', R', L', U', D'
-	// Double moves: F2, B2, R2, L2, U2, D2
-
-	if (MOVE.length() > 2) return false;
-
-	const char FACE = MOVE[0];
-	constexpr char VALID_FACES[] = { 'U', 'L', 'F', 'R', 'B', 'D' };
-	const char *FACES_BEGINNING = begin(VALID_FACES),
-		*FACES_END = end(VALID_FACES);
-	if (find(FACES_BEGINNING, FACES_END, FACE) == FACES_END)
-		return false;
-
-	if (MOVE.length() == 2) {
-		const char DIRECTIVE = MOVE[1];
-		constexpr char VALID_DIRECTIVES[] = { '\'', '2' };
-		const char* DIRECTIVES_BEGINNING = begin(VALID_DIRECTIVES),
-			*DIRECTIVES_END = end(VALID_DIRECTIVES);
-		if (find(DIRECTIVES_BEGINNING, DIRECTIVES_END, DIRECTIVE) == DIRECTIVES_END) {
-		return false;
-	}
 	}
 
-	return true;
-}
 
 void solveF2l() {
 	// Add logic to solve the F2L step
@@ -329,6 +216,7 @@ void solvePll() {
 	// Add logic to solve the PLL step
 	cout << "Solving PLL..." << endl;
 }
+
 
 void displayCube() {
 	// Print the top face
@@ -346,7 +234,6 @@ void displayCube() {
 	// Print the bottom face
 	exterior_face(false);
 }
-
 
 void exterior_face(bool top_face) {
 	size_t face = 0;
