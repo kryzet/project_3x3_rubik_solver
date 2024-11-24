@@ -163,45 +163,40 @@ void applyMove(const string& move) {
 	const bool IS_PRIME = (move.length() == 2 && move[1] == '\''),
 		IS_DOUBLE = (move.length() == 2 && move[1] == '2');
 
+    /* Calculates the number of moves to be made based on whether a prime move
+    and a double move is requested */
 	const size_t TIMES = [&IS_DOUBLE, &IS_PRIME]() {
 		size_t times = 1;
 		if (IS_DOUBLE) times *= 2;
-		if (IS_PRIME) times *= 3;
+        if (IS_PRIME) times *= 3;  /* 3 regular moves are equivalent to a prime
+                                   move */
 		while (times >= 4) times -= 4;
 		return times;
 		}();
+    // Function pointer. Will point to the function that needs to be run.
+    void *func;
 	switch (face) {
 	case 'U':
-		if (IS_PRIME) moveUPrime();
-		else if (IS_DOUBLE) moveU2();
-		else moveU();
+        func = moveU;
 		break;
 	case 'D':
-		if (IS_PRIME) moveDPrime();
-		else if (IS_DOUBLE) moveD2();
-		else moveD();
+        func = moveD;
 		break;
 	case 'F':
-		if (IS_PRIME) moveFPrime();
-		else if (IS_DOUBLE) moveF2();
-		else moveF();
+        func = moveF;
 		break;
 	case 'B':
-		if (IS_PRIME) moveBPrime();
-		else if (IS_DOUBLE) moveB2();
-		else moveB();
+        func = moveB;
 		break;
 	case 'L':
-		if (IS_PRIME) moveLPrime();
-		else if (IS_DOUBLE) moveL2();
-		else moveL();
+        func = moveL;
 		break;
 	case 'R':
-		if (IS_PRIME) moveRPrime();
-		else if (IS_DOUBLE) moveR2();
-		else moveR();
+        func = moveR;
 		break;
 	}
+    for (size_t i = 0; i < TIMES; ++i)
+        func;
 }
 
 bool isValidMove(const string& MOVE) {
