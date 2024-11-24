@@ -7,14 +7,15 @@ using namespace std;
 
 /* Declare the face arrays with a compile-time constant for the
 number of pieces per face. */
-constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3;
+constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
+TOP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, BOTTOM = 5;
 char cube[N_FACES][N_ROWS][N_COLS] = {
-    {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},  // Top
-    {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},  // Left
-    {{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},  // Front
-    {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},  // Right
-    {{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},  // Back
-    {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}   // Bottom
+    {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},
+    {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
+    {{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
+    {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},
+    {{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
+    {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}
 };
 
 // functions
@@ -300,85 +301,85 @@ void exterior_face(bool top_face) {
 void moveU() {
     char temp[N_COLS];
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[2][0][i];
+        temp[i] = cube[FRONT][0][i];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[2][0][i] = cube[3][0][i];
-        cube[3][0][i] = cube[4][0][i];
-        cube[4][0][i] = cube[1][0][i];
-        cube[1][0][i] = temp[i];
+        cube[FRONT][0][i] = cube[RIGHT][0][i];
+        cube[RIGHT][0][i] = cube[BACK][0][i];
+        cube[BACK][0][i] = cube[LEFT][0][i];
+        cube[LEFT][0][i] = temp[i];
     }
-    rotateFaceClockwise(cube[0]);
+    rotateFaceClockwise(cube[TOP]);
 }
 
 void moveD() {
     char temp[N_COLS];
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[2][2][i];
+        temp[i] = cube[FRONT][2][i];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[2][2][i] = cube[1][2][i];
-        cube[1][2][i] = cube[4][2][i];
-        cube[4][2][i] = cube[3][2][i];
-        cube[3][2][i] = temp[i];
+        cube[FRONT][2][i] = cube[LEFT][2][i];
+        cube[LEFT][2][i] = cube[BACK][2][i];
+        cube[BACK][2][i] = cube[RIGHT][2][i];
+        cube[RIGHT][2][i] = temp[i];
     }
-    rotateFaceClockwise(cube[5]);
+    rotateFaceClockwise(cube[BOTTOM]);
 }
 
 void moveF() {
     char temp[N_COLS];
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][2][i];
+        temp[i] = cube[TOP][2][i];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[0][2][i] = cube[1][2 - i][2];
-        cube[1][2 - i][2] = cube[5][0][2 - i];
-        cube[5][0][2 - i] = cube[3][i][0];
-        cube[3][i][0] = temp[i];
+        cube[TOP][2][i] = cube[LEFT][2 - i][2];
+        cube[LEFT][2 - i][2] = cube[BOTTOM][0][2 - i];
+        cube[BOTTOM][0][2 - i] = cube[RIGHT][i][0];
+        cube[RIGHT][i][0] = temp[i];
     }
-    rotateFaceClockwise(cube[2]);
+    rotateFaceClockwise(cube[FRONT]);
 }
 
 void moveB() {
     char temp[N_COLS];
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][0][i];
+        temp[i] = cube[TOP][0][i];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[0][0][i] = cube[3][i][2];
-        cube[3][i][2] = cube[5][2][2 - i];
-        cube[5][2][2 - i] = cube[1][2 - i][0];
-        cube[1][2 - i][0] = temp[i];
+        cube[TOP][0][i] = cube[RIGHT][i][2];
+        cube[RIGHT][i][2] = cube[BOTTOM][2][2 - i];
+        cube[BOTTOM][2][2 - i] = cube[LEFT][2 - i][0];
+        cube[LEFT][2 - i][0] = temp[i];
     }
-    rotateFaceClockwise(cube[4]);
+    rotateFaceClockwise(cube[BACK]);
 }
 
 void moveL() {
     char temp[N_COLS];
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][i][0];
+        temp[i] = cube[TOP][i][0];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[0][i][0] = cube[4][2 - i][2];
-        cube[4][2 - i][2] = cube[5][i][0];
-        cube[5][i][0] = cube[2][i][0];
-        cube[2][i][0] = temp[i];
+        cube[TOP][i][0] = cube[BACK][2 - i][2];
+        cube[BACK][2 - i][2] = cube[BOTTOM][i][0];
+        cube[BOTTOM][i][0] = cube[FRONT][i][0];
+        cube[FRONT][i][0] = temp[i];
     }
-    rotateFaceClockwise(cube[1]);
+    rotateFaceClockwise(cube[LEFT]);
 }
 
 void moveR() {
     char temp[N_COLS];
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[0][i][2];
+        temp[i] = cube[TOP][i][2];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[0][i][2] = cube[2][i][2];
-        cube[2][i][2] = cube[5][i][2];
-        cube[5][i][2] = cube[4][2 - i][0];
-        cube[4][2 - i][0] = temp[i];
+        cube[TOP][i][2] = cube[FRONT][i][2];
+        cube[FRONT][i][2] = cube[BOTTOM][i][2];
+        cube[BOTTOM][i][2] = cube[BACK][2 - i][0];
+        cube[BACK][2 - i][0] = temp[i];
     }
-    rotateFaceClockwise(cube[3]);
+    rotateFaceClockwise(cube[RIGHT]);
 }
 
 // Prime moves
