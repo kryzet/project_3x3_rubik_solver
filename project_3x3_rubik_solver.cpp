@@ -110,18 +110,14 @@ void scramble() {
 	}
 
 	// Apply the last move if valid
-	if (!move.empty() && isValidMove(move)) {
 		applyMove(move);
 	}
-}
 
 void parseAndApplyMoves(const string& moves) {
 	string move = "";
 	for (char c : moves) {
 		if (c == ' ') {
-			if (!move.empty() && isValidMove(move)) {
 				applyMove(move);
-			}
 			move = ""; // Reset the move
 		}
 		else {
@@ -136,7 +132,7 @@ void parseAndApplyMoves(const string& moves) {
 }
 
 void applyMove(const string& move) {
-	if (!isValidMove(move)) {
+	if (!isValidMove(move) || move.empty()) {
 		cout << "Invalid move: " << move << endl;
 		return;
 	}
