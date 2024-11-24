@@ -132,8 +132,41 @@ void applyMove(const string& move) {
 	copy-pasting and slight modifications */
 	/* TODO (22003): Refactor the code to work with one 3D array instead of six
 	2D arrays */
-		for (int i = 0; i < N_ROW; ++i) f_bottom[0][i] = f_right[N_ROW - 1 - i][0];
-		for (int i = 0; i < N_ROW; ++i) f_right[i][0] = temp[i];
+	char face = move[0];
+	bool isPrime = (move.length() == 2 && move[1] == '\'');
+	bool isDouble = (move.length() == 2 && move[1] == '2');
+
+	switch (face) {
+		case 'U':
+			if (isPrime) moveUPrime();
+			else if (isDouble) moveU2();
+			else moveU();
+		break;
+		case 'D':
+			if (isPrime) moveDPrime();
+			else if (isDouble) moveD2();
+			else moveD();
+		break;
+		case 'F':
+			if (isPrime) moveFPrime();
+			else if (isDouble) moveF2();
+			else moveF();
+		break;
+		case 'B':
+			if (isPrime) moveBPrime();
+			else if (isDouble) moveB2();
+			else moveB();
+		break;
+		case 'L':
+			if (isPrime) moveLPrime();
+			else if (isDouble) moveL2();
+			else moveL();
+		break;
+		case 'R':
+			if (isPrime) moveRPrime();
+			else if (isDouble) moveR2();
+			else moveR();
+		break;
 	}
 
 bool isValidMove(const string& MOVE) {
