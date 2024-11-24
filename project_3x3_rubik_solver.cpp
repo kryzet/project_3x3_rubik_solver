@@ -35,6 +35,30 @@ void solvePll();
 void resetCube();
 bool isSolved();
 
+//moves
+void moveU();
+void moveD();
+void moveF();
+void moveB();
+void moveR();
+void moveL();
+
+//Prime moves
+void moveUPrime();
+void moveDPrime();
+void moveFPrime();
+void moveBPrime();
+void moveRPrime();
+void moveLPrime();
+
+//double moves
+void moveU2();
+void moveD2();
+void moveF2();
+void moveB2();
+void moveL2();
+void moveR2();
+
 void scramble();
 void exterior_face(bool top_face);
 
