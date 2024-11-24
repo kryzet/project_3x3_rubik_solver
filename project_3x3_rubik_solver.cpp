@@ -44,22 +44,6 @@ void moveB();
 void moveR();
 void moveL();
 
-// Prime moves
-void moveUPrime();
-void moveDPrime();
-void moveFPrime();
-void moveBPrime();
-void moveRPrime();
-void moveLPrime();
-
-// Double moves
-void moveU2();
-void moveD2();
-void moveF2();
-void moveB2();
-void moveL2();
-void moveR2();
-
 // Algorithms
 void sexyMove();
 void ReverseSexyMove();
@@ -395,7 +379,7 @@ void moveR() {
 	rotateFaceClockwise(cube[3]);
 }
 
-//Prime moves
+// Prime moves
 void moveUPrime() { moveU(); moveU(); moveU(); } // instead of going back once it just rotates 3 times clockwise
 void moveDPrime() { moveD(); moveD(); moveD(); }
 void moveFPrime() { moveF(); moveF(); moveF(); }
@@ -403,7 +387,7 @@ void moveBPrime() { moveB(); moveB(); moveB(); }
 void moveRPrime() { moveR(); moveR(); moveR(); }
 void moveLPrime() { moveL(); moveL(); moveL(); }
 
-//Double moves
+// Double moves
 void moveU2() { moveU(); moveU(); } //repeats move twice
 void moveD2() { moveD(); moveD(); }
 void moveF2() { moveF(); moveF(); }
@@ -411,7 +395,6 @@ void moveB2() { moveB(); moveB(); }
 void moveL2() { moveL(); moveL(); }
 void moveR2() { moveR(); moveR(); }
 
-//Algorithms
 // Algorithm sequences
 void sexyMove() {
 	moveR(); moveU(); moveRPrime(); moveUPrime();
