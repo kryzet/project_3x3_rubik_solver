@@ -5,18 +5,15 @@
 
 using namespace std;
 
-constexpr size_t ROW = 3, COLUMN = 3;
+constexpr size_t N_FACE = 6, N_ROW = 3, N_COL = 3;
 
 /* TODO (Hassan--still haven't decided on a username after quite a while on
 GitHub :D): Declare the face arrays with a compile-time constant for the
 number of pieces per face.
 */
-char f_front[ROW][COLUMN],
-f_back[ROW][COLUMN],
-f_top[ROW][COLUMN],
-f_bottom[ROW][COLUMN],
-f_left[ROW][COLUMN],
-f_right[ROW][COLUMN];
+char cube[N_FACE][N_ROW][N_COL];
+
+constexpr char VALID_COLORS[N_FACE] = { 'W', 'O', 'G', 'R', 'B', 'Y' };
 
 //functions
 void printFace(char face[ROW][COLUMN]);
@@ -48,16 +45,10 @@ void scramble(char f_front[ROW][COLUMN],
 int main()
 {
 	// TODO (22003): Fill the faces with colors
-	for (int i = 0; i < ROW; ++i) {
-		for (int j = 0; j < COLUMN; ++j) {
-			f_top[i][j] = 'W';
-			f_left[i][j] = 'O';
-			f_front[i][j] = 'G';
-			f_right[i][j] = 'R';
-			f_back[i][j] = 'B';
-			f_bottom[i][j] = 'Y';
-		}
-	}
+	for (size_t face = 0; face < N_FACE; ++face)
+		for (int row = 0; row < N_ROW; ++row)
+			for (int col = 0; col < N_COL; ++col)
+				cube[face][row][col] = VALID_COLORS[face];
 
 	/* Ask for the scramble and use it to simulate a scramble of the virtual
 	Rubik's cube */
