@@ -396,12 +396,12 @@ void moveR() {
 }
 
 //Prime moves
-void moveUPrime() { for (int i = 0; i < 3; i++) moveU(); } // instead of going back once it just rotates 3 times clockwise
-void moveDPrime() { for (int i = 0; i < 3; i++) moveD(); }
-void moveFPrime() { for (int i = 0; i < 3; i++) moveF(); }
-void moveBPrime() { for (int i = 0; i < 3; i++) moveB(); }
-void moveRPrime() { for (int i = 0; i < 3; i++) moveR(); }
-void moveLPrime() { for (int i = 0; i < 3; i++) moveL(); }
+void moveUPrime() { moveU(); moveU(); moveU(); } // instead of going back once it just rotates 3 times clockwise
+void moveDPrime() { moveD(); moveD(); moveD(); }
+void moveFPrime() { moveF(); moveF(); moveF(); }
+void moveBPrime() { moveB(); moveB(); moveB(); }
+void moveRPrime() { moveR(); moveR(); moveR(); }
+void moveLPrime() { moveL(); moveL(); moveL(); }
 
 //Double moves
 void moveU2() { moveU(); moveU(); } //repeats move twice
