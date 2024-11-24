@@ -322,6 +322,31 @@ void solvePll() {
 }
 
 void displayCube() {
-	//add code to display cube
-	cout << "Displaying Cube..." << endl;
+	// Print the top face
+	exterior_face(true);
+
+	// Print the middle faces
+	constexpr size_t N_MIDDLE_FACES = N_FACES - 1;
+	for (int row = 0; row < N_ROWS; row++) {
+		for (size_t face = 1; face < N_MIDDLE_FACES; ++face)
+			for (int col = 0; col < N_COLS; ++col)
+				cout << cube[face][row][col] << ' ';
+		cout << endl;
+	}
+
+	// Print the bottom face
+	exterior_face(false);
+}
+
+
+void exterior_face(bool top_face) {
+	size_t face = 0;
+	if (!top_face) face = 5;
+	for (size_t row = 0; row < N_ROWS; ++row) {
+		cout << "      ";
+		for (size_t col = 0; col < N_COLS; ++col) {
+			cout << cube[face][row][col] << ' ';
+		}
+		cout << endl;
+	}
 }
