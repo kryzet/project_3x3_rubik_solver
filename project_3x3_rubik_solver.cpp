@@ -78,6 +78,12 @@ int main()
     solvePll();
     displayCube();
 
+    if (isSolved()) {
+        cout << "The Rubik's Cube is solved!" << endl;
+    } else {
+        cout << "The Rubik's Cube is not solved yet." << endl;
+    }
+
     return 0;
 }
 
