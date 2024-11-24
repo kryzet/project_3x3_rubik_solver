@@ -50,6 +50,20 @@ void moveL();
 void sexyMove();
 void ReverseSexyMove();
 void sledgehammerMove();
+void cornerPermutation();
+void edgePermutation();
+void rightCornerAlgorithm();
+void leftCornerAlgorithm();
+void adjacentEdgesAlgorithm();
+void oppositeEdgesAlgorithm();
+void solveF2lPair(int pairIndex);
+bool isPairInTopLayer(int edgeFace, int cornerFace);
+bool isPairAligned(int edgeFace, int cornerFace);
+void orientPair(int edgeFace, int cornerFace);
+void insertF2lPair(int edgeFace, int cornerFace);
+void performF2LAlgorithm1();
+void performF2LAlgorithm2();
+void performF2LAlgorithm3();
 
 
 void scramble();
