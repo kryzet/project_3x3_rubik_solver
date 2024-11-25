@@ -89,9 +89,6 @@ void displayMenu() {
 			<< "=============================================" << endl
 			<< "Enter your choice (1-8): ";
 		cin >> choice;
-		/* Ignore as many characters as can be put in a stream until a newline
-		is encountered */
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		if (cin.fail()) {
 			// Clear the error flag and ignore the rest of the line
 			cin.clear();  // Clear the error flag
