@@ -193,8 +193,6 @@ void applyMove(const string& move) {
 		return;
 	}
 
-	//char temp[N_ROWS];
-
 	char face = move[0];
 	bool is_prime = false, is_double = false;
 	if (2 == move.length()) {
@@ -318,6 +316,8 @@ void solveWhiteCross() {
 				white_edge_positions[white_edge_n][2] = 1;
 				++white_edge_n;
 			}
+			constexpr 
+			if (face)
 		}
 }
 
