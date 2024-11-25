@@ -587,9 +587,29 @@ void solveYellowEdges() {
 }
 
 void positionYellowCorners() {
-    // Position yellow corners correctly
-    while (!isYellowCornersPositioned()) {
-        // U R U' L' U R' U' L
+    const int MAX_ATTEMPTS = 20; // Increased attempts
+    int attempts = 0;
+
+    cout << "Positioning Yellow Corners..." << endl;
+    while (!isYellowCornersPositioned() && attempts < MAX_ATTEMPTS) {
+        cout << "Current Corner Positioning Attempt: " << attempts + 1 << endl;
+
+        // Diagnostic print of current corner positions
+        cout << "Current Corner Positions:" << endl;
+        cout << "Front Corners: "
+             << cube[FRONT][0][0] << " " << cube[FRONT][0][2]
+             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+        cout << "Right Corners: "
+             << cube[RIGHT][0][0] << " " << cube[RIGHT][0][2]
+             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+        cout << "Back Corners: "
+             << cube[BACK][0][0] << " " << cube[BACK][0][2]
+             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+        cout << "Left Corners: "
+             << cube[LEFT][0][0] << " " << cube[LEFT][0][2]
+             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+
+        // Positioning algorithm
         moveU();
         moveR();
         moveUPrime();
@@ -598,7 +618,12 @@ void positionYellowCorners() {
         moveRPrime();
         moveUPrime();
         moveL();
+
+        attempts++;
     }
+
+    cout << "Yellow Corners Positioning: "
+         << (isYellowCornersPositioned() ? "Solved" : "Not Solved") << endl;
 }
 
 
