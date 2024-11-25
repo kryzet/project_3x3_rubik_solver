@@ -339,7 +339,7 @@ void solveWhiteCross() {
     // Form a daisy
     for (white_edge_n = 0; white_edge_n < N_WHITE_EDGES; ++white_edge_n) {
             string move;
-        if (white_edge[]);
+        //if (white_edge[]);
         //switch (rows) {
         //case 2:
         //    switch (face) {
