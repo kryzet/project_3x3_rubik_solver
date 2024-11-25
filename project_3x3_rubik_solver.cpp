@@ -632,6 +632,24 @@ void orientYellowCorners() {
     }
 }
 
+// Additional helper functions for last layer
+bool isYellowCrossShape() {
+    return (cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y' &&
+            cube[TOP][1][2] == 'Y' && cube[TOP][2][1] == 'Y');
+}
+
+bool isYellowLineShape() {
+    return ((cube[TOP][0][1] == 'Y' && cube[TOP][2][1] == 'Y' && cube[TOP][1][0] != 'Y' && cube[TOP][1][2] != 'Y') ||
+            (cube[TOP][1][0] == 'Y' && cube[TOP][1][2] == 'Y' && cube[TOP][0][1] != 'Y' && cube[TOP][2][1] != 'Y'));
+}
+
+bool isYellowLShape() {
+    return ((cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y') ||
+            (cube[TOP][1][0] == 'Y' && cube[TOP][2][1] == 'Y') ||
+            (cube[TOP][2][1] == 'Y' && cube[TOP][1][2] == 'Y') ||
+            (cube[TOP][1][2] == 'Y' && cube[TOP][0][1] == 'Y'));
+}
+
 // Final Layer function which includes all functions to be used in final layer
 void solveLastLayer() {
     solveYellowCross(); // Solve yellow cross
