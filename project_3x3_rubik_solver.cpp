@@ -693,8 +693,10 @@ void solveLastLayer() {
     orientYellowCorners();
 
     // Final adjustment of U face if needed
-    while (cube[FRONT][0][1] != cube[FRONT][1][1]) {
+    int attempts = 0;
+    while (cube[FRONT][0][1] != cube[FRONT][1][1] && attempts < 4) {
         moveU();
+        attempts++;
     }
 }
 
