@@ -612,16 +612,18 @@ bool areYellowCornersPositioned() {
 }
 
 void orientYellowCorners() {
-        // Orient yellow corners
-        for (int corner = 0; corner < 4; corner++) {
-                // Repeat until corner is oriented correctly
-               while (cube[TOP][2][2] != 'Y') {
-                        // R U R' U' (sexy move)
-                        rightyAlg();
-                    }
-                moveD(); // Move to next corner
-           }
+    // Function to orient yellow corners correctly
+    for (int i = 0; i < 4; i++) {
+        while (cube[TOP][2][0] != 'Y') {
+            // R' D' R D
+            moveRPrime();
+            moveDPrime();
+            moveR();
+            moveD();
+        }
+        moveU();
     }
+}
 
 // Final Layer function which includes all functions to be used in final layer
 void solveLastLayer() {
