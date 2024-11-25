@@ -90,7 +90,17 @@ void displayMenu() {
 		cout << "===========================================================\n";
 		cout << "Enter your choice (1-8): ";
 		cin >> choice;
-		cin.ignore();
+		/* Ignore as many characters as can be put in a stream until a newline
+		is encountered */
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		if (cin.fail()) {
+			// Clear the error flag and ignore the rest of the line
+			cin.clear();  // Clear the error flag
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignore the rest of the invalid input
+			cout << "Invalid input! Please enter a number between 1 and 8.\n";
+			continue;  // Skip to the next iteration of the loop
+		}
+
 		// Handle user input
 		switch (choice) {
 			case 1:
