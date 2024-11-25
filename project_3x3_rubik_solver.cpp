@@ -232,7 +232,6 @@ void applyMove(const string& move) {
 		break;
 	case 'R':
 		func = moveR;
-		break;
 	}
 	for (size_t i = 0; i < TIMES; ++i)
 		func();
@@ -310,9 +309,9 @@ void solveWhiteCross() {
 	// Find white edges
 	constexpr size_t N_EDGE_ROWS = 2, N_WHITE_EDGES = 4;
 	size_t white_edge_positions[N_WHITE_EDGES][3], white_edge_n = 0;
-	for (size_t face = 0; face < N_FACES; ++face)
+	for (size_t face = 0; white_edge_n < N_WHITE_EDGES
+		&& face < N_FACES; ++face)
 		for (size_t rows = 0; rows < N_EDGE_ROWS; ++rows) {
-			if (N_WHITE_EDGES == white_edge_n) continue;
 			if ('W' == cube[face][rows][1]) {
 				white_edge_positions[white_edge_n][0] = face;
 				white_edge_positions[white_edge_n][1] = rows;
@@ -320,8 +319,6 @@ void solveWhiteCross() {
 				++white_edge_n;
 			}
 		}
-
-	// Position the edges... somehow...
 }
 
 void solveOll() {
