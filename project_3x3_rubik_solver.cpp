@@ -575,11 +575,18 @@ void solveYellowEdges() {
 void positionYellowCorners() {
     // Position yellow corners correctly
     while (!areYellowCornersPositioned()) {
-      // Use an algorithm to position corners
-      // Example: R U R' U' R U R' U' (this moves corners around)
-                rightyAlg(); // This is a placeholder; use the appropriate algorithm
-           }
+        // U R U' L' U R' U' L
+        moveU();
+        moveR();
+        moveUPrime();
+        moveLPrime();
+        moveU();
+        moveRPrime();
+        moveUPrime();
+        moveL();
     }
+}
+
 
 void alignYellowCorners() {
     // Orient yellow corners
