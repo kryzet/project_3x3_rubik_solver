@@ -643,19 +643,36 @@ void alignYellowCorners() {
 }
 
 void orientYellowEdges() {
-    int attempts =0;
-    while (!isYellowEdgesOriented()) {
-        // Find correctly oriented edge
-        bool found = false;
+    const int MAX_ATTEMPTS = 20; // Increased attempts
+    int attempts = 0;
+
+    cout << "Orienting Yellow Edges..." << endl;
+    while (!isYellowEdgesOriented() && attempts < MAX_ATTEMPTS) {
+        cout << "Current Edge Orientation Attempt: " << attempts + 1 << endl;
+
+        // Diagnostic print of current edge orientations
+        cout << "Current Edge Orientations:" << endl;
+        cout << "Front Edge: " << cube[FRONT][0][1]
+             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+        cout << "Right Edge: " << cube[RIGHT][0][1]
+             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+        cout << "Back Edge: " << cube[BACK][0][1]
+             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+        cout << "Left Edge: " << cube[LEFT][0][1]
+             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+
+        // Find a correctly oriented edge
+        bool foundOrientedEdge = false;
         for (int i = 0; i < 4; i++) {
             if (cube[FRONT][0][1] == cube[FRONT][1][1]) {
-                found = true;
+                foundOrientedEdge = true;
                 break;
             }
             moveU();
+            cout << "Rotating U to find oriented edge" << endl;
         }
 
-        // R U R' U R U2 R' algorithm
+        // Edge orientation algorithm
         moveR();
         moveU();
         moveRPrime();
@@ -666,6 +683,9 @@ void orientYellowEdges() {
 
         attempts++;
     }
+
+    cout << "Yellow Edges Orientation: "
+         << (isYellowEdgesOriented() ? "Solved" : "Not Solved") << endl;
 }
 
 bool isYellowEdgesOriented() {
