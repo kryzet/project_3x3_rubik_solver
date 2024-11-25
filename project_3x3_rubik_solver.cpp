@@ -514,6 +514,10 @@ void sexyMove() {
     moveR(); moveU(); moveRPrime(); moveUPrime();
 }
 
+void leftyAlg() {
+    moveL(); moveUPrime(); moveLPrime(); moveU();
+}
+
 void reverseSexyMove() {
     moveUPrime(); moveRPrime(); moveU(); moveR();
 }
