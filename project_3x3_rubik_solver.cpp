@@ -102,7 +102,7 @@ void displayMenu() {
             case 4:
             displayCube();
             break;
-        case 6:
+        case 5:
             if (isSolved()) {
                 cout << "The Rubik's Cube is solved!\n";
             }
@@ -110,17 +110,17 @@ void displayMenu() {
                 cout << "The Rubik's Cube is not solved yet.\n";
             }
             break;
-        case 7:
+        case 6:
             resetCube();
             cout << "The cube has been reset.\n";
             break;
-        case 8:
+        case 7:
             cout << "Exiting the program. Goodbye!\n";
             break;
         default:
             cout << "Invalid choice! Please enter a number between 1 and 8.\n";
         }
-    } while (choice != 8);  // Loop until the user chooses to exit
+    } while (choice != 7);  // Loop until the user chooses to exit
 }
 
 int main()
