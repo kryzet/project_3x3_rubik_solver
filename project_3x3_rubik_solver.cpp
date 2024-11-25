@@ -156,8 +156,10 @@ int main()
 
 void scramble() {
     // Get the scramble moves from the user
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear any leftover newline
     cout << "Enter the scramble: ";
-    string moves; getline(cin, moves);
+    string moves;
+    getline(cin, moves);
 
     // Parse and apply the moves
     string move = "";
