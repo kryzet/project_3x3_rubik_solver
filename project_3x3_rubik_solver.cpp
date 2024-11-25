@@ -66,6 +66,14 @@ void performF2LAlgorithm1();
 void performF2LAlgorithm2();
 void performF2LAlgorithm3();
 void performF2LAlgorithm4();
+void checkAndSolveF2LPair(int slotNumber);
+bool isCornerEdgePairCorrect(int slotNumber);
+void rotateToSlot(int slotNumber);
+void insertPairIntoSlot(int slotNumber);
+bool arePiecesInTopLayer(int slotNumber);
+void bringPiecesToTop(int slotNumber);
+void alignPiecesInTopLayer(int slotNumber);
+bool arePiecesAlignedForInsertion(int slotNumber);
 
 
 void scramble();
