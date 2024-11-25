@@ -39,6 +39,7 @@ void solveMiddleLayer();
 void solveLastLayer();// This will include all functions for solving last layer
 void solveYellowCross();
 void solveYellowCorners();
+void solveYellowEdges();
 void positionYellowCorners();
 void orientYellowCorners();
 bool isYellowEdgesOriented();
