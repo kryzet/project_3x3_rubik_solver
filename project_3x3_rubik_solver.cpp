@@ -715,6 +715,14 @@ bool isYellowCornersPositioned() {
     return true;
 }
 
+bool isAllCornersOriented() {
+    // Check if all corners on the top face are yellow
+    return (cube[TOP][0][0] == 'Y' &&
+            cube[TOP][0][2] == 'Y' &&
+            cube[TOP][2][0] == 'Y' &&
+            cube[TOP][2][2] == 'Y');
+}
+
 void orientYellowCorners() {
     // Repeat for each corner
     for (int corner = 0; corner < 4; corner++) {
