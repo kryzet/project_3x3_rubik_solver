@@ -36,8 +36,13 @@ void solveWhiteCross();
 void solveWhiteCorners();
 void solveMiddleLayer();
 // TODO (22003): Implement these functions
-void solveOll();
-void solvePll();
+void solveLastLayer();// This will include all functions for solving last layer
+void solveYellowCross();
+void solveYellowCorners();
+void positionYellowCorners();
+void orientYellowCorners();
+bool isYellowEdgesOriented();
+bool areYellowCornersPositioned();
 
 
 // Regular moves
