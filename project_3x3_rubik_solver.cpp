@@ -334,7 +334,7 @@ void solveWhiteCross() {
 					move += "B";
 				}
 				move += " ";
-				[[fallthrough]];
+				break;
 			case 1:
 				switch (face) {
 				case LEFT:
@@ -344,10 +344,16 @@ void solveWhiteCross() {
 					move += "R";
 					break;
 				case RIGHT:
-					move += "";
+					move += "B";
+					break;
+				case BACK:
+					move += "L";
 					break;
 				}
 				move += " ";
+				break;
+			case 0:
+				break;
 			}
 		}
 }
