@@ -66,6 +66,7 @@ void insertF2lPair(int edgeFace, int cornerFace);
 void performF2LAlgorithm1();
 void performF2LAlgorithm2();
 void performF2LAlgorithm3();
+void performF2LAlgorithm4();
 
 
 void scramble();
@@ -561,29 +562,33 @@ bool isPairAligned(int edgeFace, int cornerFace) {
 
 
 void orientPair(int edgeFace, int cornerFace) {
-	if (cube[edgeFace][0][1] == 'W') {
-		// Edge is flipped
-		moveU();
-		performF2LAlgorithm1();
+	// Identify the orientation and relative position of the edge and corner
+	// Case 1: Edge on top, corner directly above
+	if (cube[edgeFace][0][1] == 'W' && cube[cornerFace][0][0] == 'W') {
+		performF2LAlgorithm1(); // U R U' R' U' F' U F
 	}
-	else if (cube[cornerFace][0][0] == 'W') {
-		// Corner needs rotation
-		moveUPrime();
-		performF2LAlgorithm2();
+	// Case 2: Edge in front right, corner in top right
+	else if (cube[edgeFace][1][2] == 'W' && cube[cornerFace][0][2] == 'W') {
+		performF2LAlgorithm2(); // U R U' R'
 	}
-	else {
-		// General misalignment case
-		performF2LAlgorithm3();
+	// Case 3: Edge in back right, corner in top right
+	else if (cube[edgeFace][2][2] == 'W' && cube[cornerFace][0][2] == 'W') {
+		performF2LAlgorithm3(); // U' L' U L
 	}
-	// Step 2: If the edge-corner pair is misaligned (in a different orientation), apply another algorithm
+	// Case 4: Edge in front left, corner in top left
+	else if (cube[edgeFace][0][0] == 'W' && cube[cornerFace][0][0] == 'W') {
+		performF2LAlgorithm4(); // U' L' U L U F U' F'
+	}
+	// Continue with the remaining cases...
+	// Each case should perform a different algorithm as defined
+
+	// Edge in the top layer but misaligned
 	if (cube[edgeFace][0][2] == 'W' && cube[cornerFace][2][0] == 'W') {
 		performF2LAlgorithm2();
 	}
-	// Step 3: Apply an algorithm to handle all other cases
-	else {
-		performF2LAlgorithm3();
-	}
+	// Apply other algorithms
 }
+
 
 void insertF2lPair(int edgeFace, int cornerFace) {
 	// Insert using the appropriate sequence based on the position
@@ -600,15 +605,19 @@ void insertF2lPair(int edgeFace, int cornerFace) {
 
 
 void performF2LAlgorithm1() {
-	// Algorithm 1: Insert edge-corner pair into F2L (simple orientation correction)
-	moveR();
+	// Algorithm 1: U R U' R' U' F' U F
 	moveU();
+	moveR();
+	moveUPrime();
 	moveRPrime();
 	moveUPrime();
+	moveFPrime();
+	moveU();
+	moveF();
 }
 
 void performF2LAlgorithm2() {
-	// Algorithm 2: Another way to orient and insert the edge-corner pair
+	// Algorithm 2: U R U' R'
 	moveU();
 	moveR();
 	moveUPrime();
@@ -617,15 +626,28 @@ void performF2LAlgorithm2() {
 }
 
 void performF2LAlgorithm3() {
-	// Algorithm 3: A different algorithm to orient and insert the pair
-	moveRPrime();
+	// Algorithm 3: U' L' U L
 	moveUPrime();
-	moveR();
+	moveLPrime();
 	moveU();
-	moveRPrime();
-	moveUPrime();
-	moveR();
+	moveL();
 }
+
+// Example for another case:
+void performF2LAlgorithm4() {
+	// Algorithm 4: U' L' U L U F U' F'
+	moveUPrime();
+	moveLPrime();
+	moveU();
+	moveL();
+	moveU();
+	moveF();
+	moveUPrime();
+	moveFPrime();
+}
+
+// Continue similarly for all other cases.
+
 
 void solvePll() {
 
