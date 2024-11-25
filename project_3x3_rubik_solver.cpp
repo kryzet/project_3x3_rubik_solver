@@ -22,13 +22,16 @@ char cube[N_FACES][N_ROWS][N_COLS] = {
 void printFace(char face[N_ROWS][N_COLS]);
 void rotateTopFaceEdges();
 
-// TODO: Write the functions for rotating the cube's faces
+/* TODO (kryzet, 22003): Remove unnecessary functions and reorganize
+prototypes, then change the order of function definitions to match the order
+of prototypes */
 void rotateFaceClockwise(char face[N_ROWS][N_COLS]);
 void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
 void displayCube();
+void exterior_face(bool top_face);
 void resetCube();
 bool isSolved();
 // TODO (kryzet): Implement these functions
@@ -50,6 +53,7 @@ bool isYellowLShape();
 
 
 // Regular moves
+// Face moves
 void moveU();
 void moveD();
 void moveF();
@@ -64,7 +68,6 @@ void sledgehammerMove();
 
 
 void scramble();
-void exterior_face(bool top_face);
 
 void displayMenu() {
     int choice = 0;
@@ -412,7 +415,7 @@ void exterior_face(bool top_face) {
     }
 }
 
-//moves
+// Face moves
 void moveU() {
     char temp[N_COLS];
     for (int i = 0; i < N_COLS; i++) {
