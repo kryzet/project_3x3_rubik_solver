@@ -510,7 +510,7 @@ void moveL2() { moveL(); moveL(); }
 void moveR2() { moveR(); moveR(); }
 
 // Algorithm sequences
-void sexyMove() {
+void rightyAlg() {
     moveR(); moveU(); moveRPrime(); moveUPrime();
 }
 
