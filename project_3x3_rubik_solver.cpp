@@ -96,12 +96,10 @@ void displayMenu() {
             solveWhiteCross(); solveWhiteCorners(); solveMiddleLayer();
             break;
         case 3:
-            solveOll();
+            solveLastLayer();
             break;
-        case 4:
-            solvePll();
-            break;
-        case 5:
+
+            case 4:
             displayCube();
             break;
         case 6:
