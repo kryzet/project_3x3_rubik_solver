@@ -29,6 +29,8 @@ bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
 void displayCube();
+void resetCube();
+bool isSolved();
 // TODO (kryzet): Implement these functions
 void solveWhiteCross();
 void solveWhiteCorners();
