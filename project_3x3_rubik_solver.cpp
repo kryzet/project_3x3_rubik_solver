@@ -78,17 +78,17 @@ void displayMenu() {
 
 	do {
 		// Display the menu
-		cout << "\n=================== Rubik's Cube Solver ===================\n";
-		cout << "1. Scramble the cube\n";
-		cout << "2. Solve F2L (First Two Layers)\n";
-		cout << "3. Solve OLL (Orientation of the Last Layer)\n";
-		cout << "4. Solve PLL (Permutation of the Last Layer)\n";
-		cout << "5. Display the cube\n";
-		cout << "6. Check if cube is solved\n";
-		cout << "7. Reset the cube\n";
-		cout << "8. Exit\n";
-		cout << "===========================================================\n";
-		cout << "Enter your choice (1-8): ";
+		cout << "============ Rubik's Cube Solver ============" << endl
+			<< "1. Scramble the cube" << endl
+			<< "2. Solve F2L (First Two Layers)"
+			<< "3. Solve OLL (Orientation of the Last Layer)" << endl
+			<< "4. Solve PLL (Permutation of the Last Layer)" << endl
+			<< "5. Display the cube" << endl
+			<< "6. Check if cube is solved" << endl
+			<< "7. Reset the cube" << endl
+			<< "8. Exit" << endl
+			<< "=============================================" << endl
+			<< "Enter your choice (1-8): ";
 		cin >> choice;
 		cin.ignore();
 		// Handle user input
