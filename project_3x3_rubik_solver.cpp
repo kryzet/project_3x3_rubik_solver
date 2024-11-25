@@ -587,7 +587,7 @@ void solveYellowEdges() {
 }
 
 void positionYellowCorners() {
-    const int MAX_ATTEMPTS = 20; // Increased attempts
+    const int MAX_ATTEMPTS = 20;
     int attempts = 0;
 
     cout << "Positioning Yellow Corners..." << endl;
@@ -686,34 +686,12 @@ void orientYellowEdges() {
 }
 
 bool isYellowEdgesOriented() {
-    // Check if edges match their center colors
     return (cube[FRONT][0][1] == cube[FRONT][1][1] &&
             cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
             cube[BACK][0][1] == cube[BACK][1][1] &&
             cube[LEFT][0][1] == cube[LEFT][1][1]);
 }
-
-bool isYellowCornersPositioned() {
-    int rotations = 0;
-    for (int i = 0; i < 4; i++) {
-        if (cube[FRONT][0][0] != cube[FRONT][0][2] ||
-            cube[RIGHT][0][0] != cube[RIGHT][0][2] ||
-            cube[BACK][0][0] != cube[BACK][0][2] ||
-            cube[LEFT][0][0] != cube[LEFT][0][2]) {
-            return false;
-            }
-        moveU();
-        rotations++;
-    }
-    while (rotations < 4) {
-        moveU();
-        rotations++;
-    }
-    return true;
-}
-
 bool isAllCornersOriented() {
-    // Check if all corners on the top face are yellow
     return (cube[TOP][0][0] == 'Y' &&
             cube[TOP][0][2] == 'Y' &&
             cube[TOP][2][0] == 'Y' &&
@@ -721,7 +699,7 @@ bool isAllCornersOriented() {
 }
 
 void orientYellowCorners() {
-    const int MAX_ATTEMPTS = 20; // Increased attempts
+    const int MAX_ATTEMPTS = 20;
     int attempts = 0;
 
     cout << "Orienting Yellow Corners..." << endl;
@@ -755,9 +733,24 @@ void orientYellowCorners() {
 
         attempts++;
     }
-
-    cout << "Yellow Corners Orientation: "
-         << (isAllCornersOriented() ? "Solved" : "Not Solved") << endl;
+}
+bool isYellowCornersPositioned() {
+    int rotations = 0;
+    for (int i = 0; i < 4; i++) {
+        if (cube[FRONT][0][0] != cube[FRONT][0][2] ||
+            cube[RIGHT][0][0] != cube[RIGHT][0][2] ||
+            cube[BACK][0][0] != cube[BACK][0][2] ||
+            cube[LEFT][0][0] != cube[LEFT][0][2]) {
+            return false;
+            }
+        moveU();
+        rotations++;
+    }
+    while (rotations < 4) {
+        moveU();
+        rotations++;
+    }
+    return true;
 }
 
 // Additional helper functions for last layer
@@ -789,90 +782,25 @@ void solveLastLayer() {
     while (!isCubeSolved() && globalAttempts < MAX_GLOBAL_ATTEMPTS) {
         // Yellow Cross Stage
         if (!stagesSolved[0]) {
-            int crossAttempts = 0;
-            while (!isYellowCrossShape() && crossAttempts < 10) {
-                // Primary cross-forming algorithm
-                moveF();
-                moveR();
-                moveU();
-                moveRPrime();
-                moveUPrime();
-                moveFPrime();
-
-                // Alternate algorithm if first doesn't work
-                if (!isYellowCrossShape()) {
-                    moveF();
-                    moveR();
-                    moveU();
-                    moveRPrime();
-                    moveUPrime();
-                    moveFPrime();
-                }
-
-                crossAttempts++;
-            }
+            solveYellowCross();
             stagesSolved[0] = isYellowCrossShape();
         }
 
         // Yellow Edges Orientation Stage
         if (stagesSolved[0] && !stagesSolved[1]) {
-            int edgeAttempts = 0;
-            while (!isYellowEdgesOriented() && edgeAttempts < 10) {
-                // Standard edges orientation algorithm
-                moveR();
-                moveU();
-                moveRPrime();
-                moveU();
-                moveR();
-                moveU2();
-                moveRPrime();
-
-                // Rotate if not working
-                if (!isYellowEdgesOriented()) {
-                    moveU();
-                }
-                edgeAttempts++;
-            }
+            solveYellowEdges();
             stagesSolved[1] = isYellowEdgesOriented();
         }
 
         // Yellow Corners Positioning Stage
         if (stagesSolved[0] && stagesSolved[1] && !stagesSolved[2]) {
-            int cornerPosAttempts = 0;
-            while (!isYellowCornersPositioned() && cornerPosAttempts < 10) {
-                // Corner positioning algorithm
-                moveU();
-                moveR();
-                moveUPrime();
-                moveLPrime();
-                moveU();
-                moveRPrime();
-                moveUPrime();
-                moveL();
-
-                cornerPosAttempts++;
-            }
+            positionYellowCorners();
             stagesSolved[2] = isYellowCornersPositioned();
         }
 
         // Yellow Corners Orientation Stage
         if (stagesSolved[0] && stagesSolved[1] && stagesSolved[2] && !stagesSolved[3]) {
-            int cornerOrientAttempts = 0;
-            while (!isAllCornersOriented() && cornerOrientAttempts < 10) {
-                // Alternate between algorithms
-                switch (cornerOrientAttempts % 2) {
-                    case 0:
-                        moveRPrime();
-                        moveDPrime();
-                        moveR();
-                        moveD();
-                        break;
-                    case 1:
-                        rightyAlg();
-                        break;
-                }
-                cornerOrientAttempts++;
-            }
+            orientYellowCorners();
             stagesSolved[3] = isAllCornersOriented();
         }
 
