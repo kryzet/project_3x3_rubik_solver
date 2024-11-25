@@ -533,7 +533,6 @@ void solveF2l() {
     for (int slot = 0; slot < 4; slot++) {
         checkAndSolveF2LPair(slot);
     }
-}
 
     cout << "F2L solution completed!\n";
 }
