@@ -71,12 +71,11 @@ void displayMenu() {
         cout << "============ Welcome to Rubik's Cube Solver ============" << endl
             << "1. Scramble the cube" << endl
             << "2. Solve up to F2L " << endl
-            << "3. Solve OLL " << endl
-            << "4. Solve PLL" << endl
-            << "5. Display cube" << endl
-            << "6. Check if cube is solved" << endl
-            << "7. Reset the cube" << endl
-            << "8. Exit" << endl
+            << "3. Solve Last Layers" << endl
+            << "4. Display cube" << endl
+            << "5. Check if cube is solved" << endl
+            << "6. Reset the cube" << endl
+            << "7. Exit" << endl
             << "=============================================" << endl << endl
             << "Enter your choice (1-8): ";
         cin >> choice;
