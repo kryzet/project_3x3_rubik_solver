@@ -601,7 +601,7 @@ void alignYellowCorners() {
 }
 
 void orientYellowEdges() {
-    int attempts =1;
+    int attempts =0;
     while (!isYellowEdgesOriented()) {
         // Find correctly oriented edge
         bool found = false;
