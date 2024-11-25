@@ -528,6 +528,109 @@ void sledgehammerMove() {
     moveRPrime(); moveFPrime(); moveR(); moveF();
 }
 
+void solveYellowCross() {
+    // Function to create yellow cross on top
+    while (cube[TOP][0][1] != 'Y' || cube[TOP][1][0] != 'Y' ||
+           cube[TOP][1][2] != 'Y' || cube[TOP][2][1] != 'Y') {
+        // If L shape
+        if ((cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y') ||
+            (cube[TOP][1][0] == 'Y' && cube[TOP][2][1] == 'Y') ||
+            (cube[TOP][2][1] == 'Y' && cube[TOP][1][2] == 'Y') ||
+            (cube[TOP][1][2] == 'Y' && cube[TOP][0][1] == 'Y')) {
+            // F R U R' U' F'
+            moveF();
+            moveR();
+            moveU();
+            moveRPrime();
+            moveUPrime();
+            moveFPrime();
+            }
+        // If line shape or dot
+        else {
+            // F U R U' R' F'
+            moveF();
+            moveU();
+            moveR();
+            moveUPrime();
+            moveRPrime();
+            moveFPrime();
+        }
+           }
+}
+void solveYellowEdges() {
+    // Keep applying algorithm until yellow edges are oriented correctly
+    while (!isYellowEdgesOriented()) {
+        // R U R' U R U2 R'
+        moveR();
+        moveU();
+        moveRPrime();
+        moveU();
+        moveR();
+        moveU2();
+        moveRPrime();
+    }
+}
+
+void positionYellowCorners() {
+    // Position yellow corners correctly
+    while (!areYellowCornersPositioned()) {
+      // Use an algorithm to position corners
+      // Example: R U R' U' R U R' U' (this moves corners around)
+                rightyAlg(); // This is a placeholder; use the appropriate algorithm
+           }
+    }
+
+void alignYellowCorners() {
+    // Orient yellow corners
+    for (int corner = 0; corner < 4; corner++) {
+        // Repeat until corner is oriented correctly
+        while (cube[TOP][2][2] != 'Y') {
+            // R U R' U' (sexy move)
+            rightyAlg();
+        }
+        moveD(); // Move to next corner
+    }
+}
+
+bool isYellowEdgesOriented() {
+    // Check if all yellow edges are oriented correctly
+    return (cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y' &&
+            cube[TOP][1][2] == 'Y' && cube[TOP][2][1] == 'Y' &&
+            cube[FRONT][0][1] == cube[FRONT][1][1] &&
+            cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
+            cube[BACK][0][1] == cube[BACK][1][1] &&
+            cube[LEFT][0][1] == cube[LEFT][1][1]);
+}
+
+bool areYellowCornersPositioned() {
+    // Check if yellow corners are in correct positions (not necessarily oriented)
+    return (cube[FRONT][0][0] == cube[FRONT][0][2] &&
+            cube[RIGHT][0][0] == cube[RIGHT][0][2] &&
+            cube[BACK][0][0] == cube[BACK][0][2] &&
+            cube[LEFT][0][0] == cube[LEFT][0][2]);
+}
+
+void orientYellowCorners() {
+        // Orient yellow corners
+        for (int corner = 0; corner < 4; corner++) {
+                // Repeat until corner is oriented correctly
+               while (cube[TOP][2][2] != 'Y') {
+                        // R U R' U' (sexy move)
+                        rightyAlg();
+                    }
+                moveD(); // Move to next corner
+           }
+    }
+
+// Final Layer function which includes all functions to be used in final layer
+void solveLastLayer() {
+    solveYellowCross(); // Solve yellow cross
+    solveYellowEdges(); //  Orient yellow edges
+    positionYellowCorners(); // Position yellow corners
+    orientYellowCorners(); // Orient yellow corners
+    }
+
+
 bool isSolved() {
     // Check each face
     for (int face = 0; face < N_FACES; face++) {
