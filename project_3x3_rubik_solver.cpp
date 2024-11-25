@@ -44,6 +44,9 @@ void positionYellowCorners();
 void orientYellowCorners();
 bool isYellowEdgesOriented();
 bool areYellowCornersPositioned();
+bool isYellowCrossShape();
+bool isYellowLineShape();
+bool isYellowLShape();
 
 
 // Regular moves
