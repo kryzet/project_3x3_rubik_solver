@@ -527,108 +527,217 @@ void sledgehammerMove() {
 }
 
 void solveF2l() {
-    cout << "Solving F2L..." << endl;
+    cout << "Starting F2L solution...\n";
 
-    // We need to loop through the 4 slots of the top layer (where the edge-corner pairs are)
-    for (int i = 0; i < 4; ++i) {
-        // Solve the edge-corner pair at the specified position
-        solveF2lPair(i);
+    // Solve each F2L slot one by one
+    for (int slot = 0; slot < 4; slot++) {
+        checkAndSolveF2LPair(slot);
     }
 }
 
-void solveF2lPair(int pairIndex) {
-    // Normalize pairIndex to be within 0-3
-    pairIndex = pairIndex % 4;
+    cout << "F2L solution completed!\n";
+}
 
-    bool pairFound = false;
+void checkAndSolveF2LPair(int slotNumber) {
+    int maxAttempts = 4; // Prevent infinite loops
     int attempts = 0;
-    const int MAX_ATTEMPTS = 16; // Prevent infinite loops
 
-    while (!pairFound && attempts < MAX_ATTEMPTS) {
-        if (isPairInTopLayer(pairIndex, (pairIndex + 1) % 4)) {
-            if (isPairAligned(pairIndex, (pairIndex + 1) % 4)) {
-                insertF2lPair(pairIndex, (pairIndex + 1) % 4);
-                pairFound = true;
-            }
-            else {
-                orientPair(pairIndex, (pairIndex + 1) % 4);
-            }
+    while (!isCornerEdgePairCorrect(slotNumber) && attempts < maxAttempts) {
+        // Step 1: Check if pieces are in the correct position
+        if (isCornerEdgePairCorrect(slotNumber)) {
+            continue; // This pair is solved, move to next
         }
-        else {
-            moveU();
+
+        // Step 2: If pieces aren't in top layer, bring them there
+        if (!arePiecesInTopLayer(slotNumber)) {
+            bringPiecesToTop(slotNumber);
         }
+
+        // Step 3: Align pieces in top layer
+        alignPiecesInTopLayer(slotNumber);
+
+        // Step 4: Insert the pair
+        insertPairIntoSlot(slotNumber);
+
         attempts++;
     }
+}
 
-    if (!pairFound) {
-        cout << "Warning: Could not solve F2L pair " << pairIndex << " within reasonable attempts" << endl;
+bool isCornerEdgePairCorrect(int slotNumber) {
+    // Check if the F2L pair is correctly placed based on slot number
+    switch(slotNumber) {
+        case 0: // Front-Right slot
+            return (cube[FRONT][2][2] == cube[FRONT][1][1] &&
+                    cube[RIGHT][2][0] == cube[RIGHT][1][1]);
+        case 1: // Front-Left slot
+            return (cube[FRONT][2][0] == cube[FRONT][1][1] &&
+                    cube[LEFT][2][2] == cube[LEFT][1][1]);
+        case 2: // Back-Left slot
+            return (cube[BACK][2][2] == cube[BACK][1][1] &&
+                    cube[LEFT][2][0] == cube[LEFT][1][1]);
+        case 3: // Back-Right slot
+            return (cube[BACK][2][0] == cube[BACK][1][1] &&
+                    cube[RIGHT][2][2] == cube[RIGHT][1][1]);
+    }
+    return false;
+}
+
+bool arePiecesInTopLayer(int slotNumber) {
+    char frontColor, sideColor;
+
+    // Get the colors we're looking for based on slot
+    switch(slotNumber) {
+        case 0:
+            frontColor = cube[FRONT][1][1];
+            sideColor = cube[RIGHT][1][1];
+            break;
+        case 1:
+            frontColor = cube[FRONT][1][1];
+            sideColor = cube[LEFT][1][1];
+            break;
+        case 2:
+            frontColor = cube[BACK][1][1];
+            sideColor = cube[LEFT][1][1];
+            break;
+        case 3:
+            frontColor = cube[BACK][1][1];
+            sideColor = cube[RIGHT][1][1];
+            break;
+    }
+
+    // Check if either color appears in top layer
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (cube[TOP][i][j] == frontColor || cube[TOP][i][j] == sideColor) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void bringPiecesToTop(int slotNumber) {
+    // Simple sequence to bring pieces to top layer based on slot
+    switch(slotNumber) {
+        case 0: // Front-Right
+            moveR();
+            moveU();
+            moveRPrime();
+            break;
+
+        case 1: // Front-Left
+            moveLPrime();
+            moveU();
+            moveL();
+            break;
+
+        case 2: // Back-Left
+            moveL();
+            moveU();
+            moveLPrime();
+            break;
+
+        case 3: // Back-Right
+            moveRPrime();
+            moveU();
+            moveR();
+            break;
     }
 }
 
-bool isPairInTopLayer(int edgeFace, int cornerFace) {
-    // Check if both pieces are in the top layer and belong together
-    char edgeColor = cube[TOP][1][edgeFace];
-    char cornerColor = cube[TOP][cornerFace][cornerFace];
-
-    // Verify if the colors are consistent with the F2L pair
-    return (edgeColor == cube[edgeFace][1][1] &&
-        cornerColor == cube[cornerFace][1][1]);
-}
-
-bool isPairAligned(int edgeFace, int cornerFace) {
-    char edgeTarget = cube[edgeFace][1][1];
-    char cornerTarget = cube[cornerFace][1][1];
-
-    return (cube[TOP][edgeFace][1] == edgeTarget &&
-        cube[TOP][cornerFace][2] == cornerTarget);
-}
-
-
-void orientPair(int edgeFace, int cornerFace) {
-    // Identify the orientation and relative position of the edge and corner
-    // Case 1: Edge on top, corner directly above
-    if (cube[edgeFace][0][1] == 'W' && cube[cornerFace][0][0] == 'W') {
-        performF2LAlgorithm1(); // U R U' R' U' F' U F
-    }
-    // Case 2: Edge in front right, corner in top right
-    else if (cube[edgeFace][1][2] == 'W' && cube[cornerFace][0][2] == 'W') {
-        performF2LAlgorithm2(); // U R U' R'
-    }
-    // Case 3: Edge in back right, corner in top right
-    else if (cube[edgeFace][2][2] == 'W' && cube[cornerFace][0][2] == 'W') {
-        performF2LAlgorithm3(); // U' L' U L
-    }
-    // Case 4: Edge in front left, corner in top left
-    else if (cube[edgeFace][0][0] == 'W' && cube[cornerFace][0][0] == 'W') {
-        performF2LAlgorithm4(); // U' L' U L U F U' F'
-    }
-    // Continue with the remaining cases...
-    // Each case should perform a different algorithm as defined
-
-    // Edge in the top layer but misaligned
-    if (cube[edgeFace][0][2] == 'W' && cube[cornerFace][2][0] == 'W') {
-        performF2LAlgorithm2();
-    }
-    // Apply other algorithms
-}
-
-
-void insertF2lPair(int edgeFace, int cornerFace) {
-    // Insert using the appropriate sequence based on the position
-    if (cube[edgeFace][1][2] == 'W' && cube[cornerFace][1][2] == 'W') {
-        // Both in the right orientation
-        moveR(); moveU(); moveRPrime();
-    }
-    else {
-        // Handle misaligned insertions
-        moveUPrime();
-        performF2LAlgorithm2();
+void alignPiecesInTopLayer(int slotNumber) {
+    // Rotate top face until pieces are aligned above their slot
+    for (int i = 0; i < 4; i++) {
+        if (arePiecesAlignedForInsertion(slotNumber)) {
+            break;
+        }
+        moveU();
     }
 }
 
+bool arePiecesAlignedForInsertion(int slotNumber) {
+    char frontColor, sideColor;
 
-void performF2LAlgorithm1() {
-    // Algorithm 1: U R U' R' U' F' U F
+    // Get target colors based on slot
+    switch(slotNumber) {
+        case 0:
+            frontColor = cube[FRONT][1][1];
+            sideColor = cube[RIGHT][1][1];
+            return (cube[TOP][2][2] == frontColor || cube[TOP][2][2] == sideColor);
+        case 1:
+            frontColor = cube[FRONT][1][1];
+            sideColor = cube[LEFT][1][1];
+            return (cube[TOP][2][0] == frontColor || cube[TOP][2][0] == sideColor);
+        case 2:
+            frontColor = cube[BACK][1][1];
+            sideColor = cube[LEFT][1][1];
+            return (cube[TOP][0][0] == frontColor || cube[TOP][0][0] == sideColor);
+        case 3:
+            frontColor = cube[BACK][1][1];
+            sideColor = cube[RIGHT][1][1];
+            return (cube[TOP][0][2] == frontColor || cube[TOP][0][2] == sideColor);
+    }
+    return false;
+}
+
+void insertPairIntoSlot(int slotNumber) {
+    switch(slotNumber) {
+        case 0: // Front-Right
+            // Basic Front-Right insertion algorithm
+            moveU();
+            moveR();
+            moveUPrime();
+            moveRPrime();
+            break;
+
+        case 1: // Front-Left
+            // Basic Front-Left insertion algorithm
+            moveUPrime();
+            moveLPrime();
+            moveU();
+            moveL();
+            break;
+
+        case 2: // Back-Left
+            // Rotate cube and use front-right algorithm
+            moveU();
+            moveL();
+            moveUPrime();
+            moveLPrime();
+            break;
+
+        case 3: // Back-Right
+            // Rotate cube and use front-right algorithm
+            moveUPrime();
+            moveRPrime();
+            moveU();
+            moveR();
+            break;
+    }
+}
+
+// Additional helper algorithms for specific cases
+void insertPairBasic() {
+    moveR();
+    moveU();
+    moveRPrime();
+    moveUPrime();
+    moveR();
+    moveU();
+    moveRPrime();
+}
+
+void insertPairReverse() {
+    moveLPrime();
+    moveUPrime();
+    moveL();
+    moveU();
+    moveLPrime();
+    moveUPrime();
+    moveL();
+}
+
+void insertPairAdvanced() {
     moveU();
     moveR();
     moveUPrime();
@@ -637,36 +746,6 @@ void performF2LAlgorithm1() {
     moveFPrime();
     moveU();
     moveF();
-}
-
-void performF2LAlgorithm2() {
-    // Algorithm 2: U R U' R'
-    moveU();
-    moveR();
-    moveUPrime();
-    moveRPrime();
-    moveUPrime();
-}
-
-void performF2LAlgorithm3() {
-    // Algorithm 3: U' L' U L
-    moveUPrime();
-    moveLPrime();
-    moveU();
-    moveL();
-}
-
-// Example for another case:
-void performF2LAlgorithm4() {
-    // Algorithm 4: U' L' U L U F U' F'
-    moveUPrime();
-    moveLPrime();
-    moveU();
-    moveL();
-    moveU();
-    moveF();
-    moveUPrime();
-    moveFPrime();
 }
 
 // Continue similarly for all other cases.
