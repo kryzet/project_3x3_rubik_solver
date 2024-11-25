@@ -68,7 +68,7 @@ void displayMenu() {
             << "2. Solve up to F2L " << endl
             << "3. Solve OLL " << endl
             << "4. Solve PLL" << endl
-            << "5. Display  cube" << endl
+            << "5. Display cube" << endl
             << "6. Check if cube is solved" << endl
             << "7. Reset the cube" << endl
             << "8. Exit" << endl
