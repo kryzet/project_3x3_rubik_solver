@@ -783,29 +783,119 @@ bool isYellowLShape() {
 
 // Final Layer function which includes all functions to be used in final layer
 void solveLastLayer() {
+    const int MAX_GLOBAL_ATTEMPTS = 50;
+    int globalAttempts = 0;
+    bool stagesSolved[4] = {false};
+
     cout << "Starting Last Layer Solution..." << endl;
 
-    // Solve yellow cross
-    solveYellowCross();
+    while (!isCubeSolved() && globalAttempts < MAX_GLOBAL_ATTEMPTS) {
+        // Yellow Cross Stage
+        if (!stagesSolved[0]) {
+            int crossAttempts = 0;
+            while (!isYellowCrossShape() && crossAttempts < 10) {
+                // Primary cross-forming algorithm
+                moveF();
+                moveR();
+                moveU();
+                moveRPrime();
+                moveUPrime();
+                moveFPrime();
 
-    // Solve edges
-    orientYellowEdges();
+                // Alternate algorithm if first doesn't work
+                if (!isYellowCrossShape()) {
+                    moveF();
+                    moveR();
+                    moveU();
+                    moveRPrime();
+                    moveUPrime();
+                    moveFPrime();
+                }
 
-    // Position corners
-    positionYellowCorners();
+                crossAttempts++;
+            }
+            stagesSolved[0] = isYellowCrossShape();
+        }
 
-    // Orient corners
-    orientYellowCorners();
+        // Yellow Edges Orientation Stage
+        if (stagesSolved[0] && !stagesSolved[1]) {
+            int edgeAttempts = 0;
+            while (!isYellowEdgesOriented() && edgeAttempts < 10) {
+                // Standard edges orientation algorithm
+                moveR();
+                moveU();
+                moveRPrime();
+                moveU();
+                moveR();
+                moveU2();
+                moveRPrime();
+
+                // Rotate if not working
+                if (!isYellowEdgesOriented()) {
+                    moveU();
+                }
+                edgeAttempts++;
+            }
+            stagesSolved[1] = isYellowEdgesOriented();
+        }
+
+        // Yellow Corners Positioning Stage
+        if (stagesSolved[0] && stagesSolved[1] && !stagesSolved[2]) {
+            int cornerPosAttempts = 0;
+            while (!isYellowCornersPositioned() && cornerPosAttempts < 10) {
+                // Corner positioning algorithm
+                moveU();
+                moveR();
+                moveUPrime();
+                moveLPrime();
+                moveU();
+                moveRPrime();
+                moveUPrime();
+                moveL();
+
+                cornerPosAttempts++;
+            }
+            stagesSolved[2] = isYellowCornersPositioned();
+        }
+
+        // Yellow Corners Orientation Stage
+        if (stagesSolved[0] && stagesSolved[1] && stagesSolved[2] && !stagesSolved[3]) {
+            int cornerOrientAttempts = 0;
+            while (!isAllCornersOriented() && cornerOrientAttempts < 10) {
+                // Alternate between algorithms
+                switch (cornerOrientAttempts % 2) {
+                    case 0:
+                        moveRPrime();
+                        moveDPrime();
+                        moveR();
+                        moveD();
+                        break;
+                    case 1:
+                        rightyAlg();
+                        break;
+                }
+                cornerOrientAttempts++;
+            }
+            stagesSolved[3] = isAllCornersOriented();
+        }
+
+        globalAttempts++;
+    }
 
     // Final verification
-    if (!isCubeSolved()) {
-        cout << "Warning: Cube solving encountered difficulties." << endl;
-        cout << "Cube may not be fully solved." << endl;
-
-        // Additional diagnostic information
-        displayCube();
+    if (isCubeSolved()) {
+        cout << "Cube successfully solved in " << globalAttempts << " global attempts!" << endl;
     } else {
-        cout << "Cube successfully solved!" << endl;
+        cout << "Cube solving failed after " << MAX_GLOBAL_ATTEMPTS << " attempts." << endl;
+
+        // Print which stages were not solved
+        cout << "Unsolved Stages:" << endl;
+        if (!stagesSolved[0]) cout << "- Yellow Cross" << endl;
+        if (!stagesSolved[1]) cout << "- Yellow Edges Orientation" << endl;
+        if (!stagesSolved[2]) cout << "- Yellow Corners Positioning" << endl;
+        if (!stagesSolved[3]) cout << "- Yellow Corners Orientation" << endl;
+
+        displayCube();  // Show final state for debugging
     }
 }
 
