@@ -577,15 +577,19 @@ void insertF2lPair(int edgeFace, int cornerFace) {
 
 
 void performF2LAlgorithm1() {
-	// Algorithm 1: Insert edge-corner pair into F2L (simple orientation correction)
-	moveR();
+	// Algorithm 1: U R U' R' U' F' U F
 	moveU();
+	moveR();
+	moveUPrime();
 	moveRPrime();
 	moveUPrime();
+	moveFPrime();
+	moveU();
+	moveF();
 }
 
 void performF2LAlgorithm2() {
-	// Algorithm 2: Another way to orient and insert the edge-corner pair
+	// Algorithm 2: U R U' R'
 	moveU();
 	moveR();
 	moveUPrime();
@@ -594,15 +598,28 @@ void performF2LAlgorithm2() {
 }
 
 void performF2LAlgorithm3() {
-	// Algorithm 3: A different algorithm to orient and insert the pair
-	moveRPrime();
+	// Algorithm 3: U' L' U L
 	moveUPrime();
-	moveR();
+	moveLPrime();
 	moveU();
-	moveRPrime();
-	moveUPrime();
-	moveR();
+	moveL();
 }
+
+// Example for another case:
+void performF2LAlgorithm4() {
+	// Algorithm 4: U' L' U L U F U' F'
+	moveUPrime();
+	moveLPrime();
+	moveU();
+	moveL();
+	moveU();
+	moveF();
+	moveUPrime();
+	moveFPrime();
+}
+
+// Continue similarly for all other cases.
+
 
 void solvePll() {
 
