@@ -363,6 +363,13 @@ void solveWhiteCross() {
 }
 
 
+void solveOll() {
+    cout << "Oll" << endl;
+}
+
+void solvePll() {
+    cout << "Pll" << endl;
+}
 
 void displayCube() {
     // Print the top face
