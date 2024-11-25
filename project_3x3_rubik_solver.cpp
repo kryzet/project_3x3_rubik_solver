@@ -33,7 +33,7 @@ void parseAndApplyMoves(const string& moves);
 void displayCube();
 void exterior_face(bool top_face);
 void resetCube();
-bool isSolved();
+bool isCubeSolved();
 // TODO (kryzet): Implement these functions
 void solveWhiteCross();
 void solveWhiteCorners();
@@ -110,7 +110,7 @@ void displayMenu() {
             displayCube();
             break;
         case 5:
-            if (isSolved()) {
+            if (isCubeSolved()) {
                 cout << "The Rubik's Cube is solved!\n";
             }
             else {
