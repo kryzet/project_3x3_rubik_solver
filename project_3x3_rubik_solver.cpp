@@ -316,8 +316,10 @@ void solveWhiteCross() {
 				white_edge_positions[white_edge_n][2] = 1;
 				++white_edge_n;
 			}
-			constexpr 
-			if (face)
+			if (LEFT == face || FRONT == face ||
+				RIGHT == face || BACK == face) {  // Middle face
+				
+			}
 		}
 }
 
