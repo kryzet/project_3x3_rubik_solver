@@ -362,6 +362,12 @@ void solveWhiteCross() {
 
 }
 
+void solveWhiteCorners() {
+    cout << "White corners" << endl;
+}
+void solveMiddleLayer() {
+    cout << "Middle layer" << endl;
+}
 
 void solveOll() {
     cout << "Oll" << endl;
