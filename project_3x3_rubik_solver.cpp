@@ -639,8 +639,8 @@ bool isYellowCrossShape() {
 }
 
 bool isYellowLineShape() {
-    return ((cube[TOP][0][1] == 'Y' && cube[TOP][2][1] == 'Y' && cube[TOP][1][0] != 'Y' && cube[TOP][1][2] != 'Y') ||
-            (cube[TOP][1][0] == 'Y' && cube[TOP][1][2] == 'Y' && cube[TOP][0][1] != 'Y' && cube[TOP][2][1] != 'Y'));
+    return ((cube[TOP][0][1] == 'Y' && cube[TOP][2][1] == 'Y') ||
+            (cube[TOP][1][0] == 'Y' && cube[TOP][1][2] == 'Y'));
 }
 
 bool isYellowLShape() {
