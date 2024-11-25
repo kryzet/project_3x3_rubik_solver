@@ -724,18 +724,43 @@ bool isAllCornersOriented() {
 }
 
 void orientYellowCorners() {
-    // Repeat for each corner
-    for (int corner = 0; corner < 4; corner++) {
-        // Orient current corner
-        while (cube[TOP][2][2] != 'Y') {
-            // R' D' R D
+    const int MAX_ATTEMPTS = 20; // Increased attempts
+    int attempts = 0;
+
+    cout << "Orienting Yellow Corners..." << endl;
+    while (!isAllCornersOriented() && attempts < MAX_ATTEMPTS) {
+        cout << "Current Corner Orientation Attempt: " << attempts + 1 << endl;
+
+        // Diagnostic print of current corner orientations
+        cout << "Current Corner Orientations:" << endl;
+        cout << "Top Face Corners: "
+             << cube[TOP][0][0] << " "
+             << cube[TOP][0][2] << " "
+             << cube[TOP][2][0] << " "
+             << cube[TOP][2][2] << endl;
+
+        // Iterate through each corner
+        for (int corner = 0; corner < 4; corner++) {
+            // Orientation algorithm
             moveRPrime();
             moveDPrime();
             moveR();
             moveD();
+
+            // Check if current corner is oriented
+            if (cube[TOP][2][2] == 'Y') {
+                break;
+            }
+
+            // Rotate to next corner
+            moveU();
         }
-        moveU();
+
+        attempts++;
     }
+
+    cout << "Yellow Corners Orientation: "
+         << (isAllCornersOriented() ? "Solved" : "Not Solved") << endl;
 }
 
 // Additional helper functions for last layer
