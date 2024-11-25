@@ -520,7 +520,7 @@ void leftyAlg() {
     moveL(); moveUPrime(); moveLPrime(); moveU();
 }
 
-void reverseSexyMove() {
+void reverserightyAlg() {
     moveUPrime(); moveRPrime(); moveU(); moveR();
 }
 
