@@ -783,29 +783,38 @@ bool isYellowLShape() {
 
 // Final Layer function which includes all functions to be used in final layer
 void solveLastLayer() {
+    cout << "Starting Last Layer Solution..." << endl;
+
+    // Solve yellow cross
     solveYellowCross();
+
+    // Solve edges
     orientYellowEdges();
+
+    // Position corners
     positionYellowCorners();
+
+    // Orient corners
     orientYellowCorners();
 
-    // Final adjustment of U face if needed
-    int attempts = 0;
-    while (cube[FRONT][0][1] != cube[FRONT][1][1] && attempts < 4) {
-        moveU();
-        attempts++;
+    // Final verification
+    if (!isCubeSolved()) {
+        cout << "Warning: Cube solving encountered difficulties." << endl;
+        cout << "Cube may not be fully solved." << endl;
+
+        // Additional diagnostic information
+        displayCube();
+    } else {
+        cout << "Cube successfully solved!" << endl;
     }
 }
 
 
-bool isSolved() {
-    // Check each face
-    for (int face = 0; face < N_FACES; face++) {
-        // Get the center color of the current face
+bool isCubeSolved() {
+    for (size_t face = 0; face < N_FACES; face++) {
         char centerColor = cube[face][1][1];
-
-        // Check if all pieces on this face match the center color
-        for (int row = 0; row < N_ROWS; row++) {
-            for (int col = 0; col < N_COLS; col++) {
+        for (size_t row = 0; row < N_ROWS; row++) {
+            for (size_t col = 0; col < N_COLS; col++) {
                 if (cube[face][row][col] != centerColor) {
                     return false;
                 }
