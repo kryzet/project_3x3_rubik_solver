@@ -77,16 +77,16 @@ void displayMenu() {
 
     do {
         // Display the menu
-        cout << "============ Rubik's Cube Solver ============" << endl
+        cout << "============ Welcome to Rubik's Cube Solver ============" << endl
             << "1. Scramble the cube" << endl
-            << "2. Solve F2L (First Two Layers)"
-            << "3. Solve OLL (Orientation of the Last Layer)" << endl
-            << "4. Solve PLL (Permutation of the Last Layer)" << endl
-            << "5. Display the cube" << endl
+            << "2. Solve F2L " << endl
+            << "3. Solve OLL " << endl
+            << "4. Solve PLL" << endl
+            << "5. Display  cube" << endl
             << "6. Check if cube is solved" << endl
             << "7. Reset the cube" << endl
             << "8. Exit" << endl
-            << "=============================================" << endl
+            << "=============================================" << endl << endl
             << "Enter your choice (1-8): ";
         cin >> choice;
         if (cin.fail()) {
@@ -156,8 +156,10 @@ int main()
 
 void scramble() {
     // Get the scramble moves from the user
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear any leftover newline
     cout << "Enter the scramble: ";
-    string moves; getline(cin, moves);
+    string moves;
+    getline(cin, moves);
 
     // Parse and apply the moves
     string move = "";
