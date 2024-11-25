@@ -34,12 +34,10 @@ bool isSolved();
 // TODO (kryzet): Implement these functions
 void solveWhiteCross();
 void solveWhiteCorners();
-void solveOll();
-// TODO (22003): Implement these functions
-void solvePll();
 void solveMiddleLayer();
-void resetCube();
-bool isSolved();
+// TODO (22003): Implement these functions
+void solveOll();
+void solvePll();
 
 
 // Regular moves
