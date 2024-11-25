@@ -652,11 +652,16 @@ bool isYellowLShape() {
 
 // Final Layer function which includes all functions to be used in final layer
 void solveLastLayer() {
-    solveYellowCross(); // Solve yellow cross
-    solveYellowEdges(); //  Orient yellow edges
-    positionYellowCorners(); // Position yellow corners
-    orientYellowCorners(); // Orient yellow corners
+    solveYellowCross();
+    orientYellowEdges();
+    positionYellowCorners();
+    orientYellowCorners();
+
+    // Final adjustment of U face if needed
+    while (cube[FRONT][0][1] != cube[FRONT][1][1]) {
+        moveU();
     }
+}
 
 
 bool isSolved() {
