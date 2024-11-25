@@ -623,3 +623,24 @@ bool isSolved() {
 	}
 	return true;
 }
+
+void resetCube() {
+	constexpr char defaultCube[N_FACES][N_ROWS][N_COLS] = {
+		{{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},
+		{{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
+		{{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
+		{{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},
+		{{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
+		{{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}
+	};
+
+	// Copy the default state back into the cube
+	for (size_t face = 0; face < N_FACES; ++face) {
+		for (size_t row = 0; row < N_ROWS; ++row) {
+			for (size_t col = 0; col < N_COLS; ++col) {
+				cube[face][row][col] = defaultCube[face][row][col];
+			}
+		}
+	}
+	cout << "The cube has been reset to the solved state." << endl;
+}
