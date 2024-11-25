@@ -31,10 +31,11 @@ void parseAndApplyMoves(const string& moves);
 void displayCube();
 // TODO (kryzet): Implement these functions
 void solveWhiteCross();
+void solveWhiteCorners();
 void solveOll();
 // TODO (22003): Implement these functions
-void solveF2l();
 void solvePll();
+void solveMiddleLayer();
 void resetCube();
 bool isSolved();
 
