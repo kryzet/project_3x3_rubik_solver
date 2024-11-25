@@ -626,7 +626,7 @@ void orientYellowEdges() {
     }
 }
 
-bool areYellowEdgesOriented() {
+bool isYellowEdgesOriented() {
     // Check if edges match their center colors
     return (cube[FRONT][0][1] == cube[FRONT][1][1] &&
             cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
@@ -634,7 +634,7 @@ bool areYellowEdgesOriented() {
             cube[LEFT][0][1] == cube[LEFT][1][1]);
 }
 
-bool areYellowCornersPositioned() {
+bool isYellowCornersPositioned() {
     int rotations = 0;
     for (int i = 0; i < 4; i++) {
         if (cube[FRONT][0][0] != cube[FRONT][0][2] ||
