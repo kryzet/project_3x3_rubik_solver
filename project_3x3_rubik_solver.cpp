@@ -33,7 +33,7 @@ void parseAndApplyMoves(const string& moves);
 void displayCube();
 void exterior_face(bool top_face);
 void resetCube();
-bool isSolved();
+bool isCubeSolved();
 // TODO (kryzet): Implement these functions
 void solveWhiteCross();
 void solveWhiteCorners();
@@ -114,7 +114,7 @@ void displayMenu() {
             displayCube();
             break;
         case 5:
-            if (isSolved()) {
+            if (isCubeSolved()) {
                 cout << "The Rubik's Cube is solved!\n";
             }
             else {
@@ -540,13 +540,22 @@ void sledgehammerMove() {
 }
 
 void solveYellowCross() {
-    while (!isYellowCrossShape()) {
+    const int MAX_ATTEMPTS = 20; // Increased attempts
+    int attempts = 0;
+
+    cout << "Solving Yellow Cross..." << endl;
+    while (!isYellowCrossShape() && attempts < MAX_ATTEMPTS) {
+        // Diagnostic print
+        cout << "Current Yellow Cross Attempt: " << attempts + 1 << endl;
+
+        // Check for different starting configurations
         if (isYellowLShape()) {
-            while (!isYellowLineShape()) {
-                moveU();
-            }
+            // Rotate to get line or dot configuration
+            moveU();
+            cout << "Detected L-Shape, rotating U" << endl;
         }
-        // FRUR'U'F'
+
+        // Primary cross-forming algorithm
         moveF();
         moveR();
         moveU();
@@ -554,8 +563,8 @@ void solveYellowCross() {
         moveUPrime();
         moveFPrime();
 
-        if (!isYellowCrossShape() && !isYellowLShape()) {
-            // If we have a dot, we need to do the algorithm twice
+        // If still not solved, try alternate algorithm
+        if (!isYellowCrossShape()) {
             moveF();
             moveR();
             moveU();
@@ -563,7 +572,12 @@ void solveYellowCross() {
             moveUPrime();
             moveFPrime();
         }
+
+        attempts++;
     }
+
+    // Debug print for cross shape
+    cout << "Yellow Cross Shape: " << (isYellowCrossShape() ? "Solved" : "Not Solved") << endl;
 }
 void solveYellowEdges() {
     // Keep applying algorithm until yellow edges are oriented correctly
@@ -580,9 +594,29 @@ void solveYellowEdges() {
 }
 
 void positionYellowCorners() {
-    // Position yellow corners correctly
-    while (!isYellowCornersPositioned()) {
-        // U R U' L' U R' U' L
+    const int MAX_ATTEMPTS = 20;
+    int attempts = 0;
+
+    cout << "Positioning Yellow Corners..." << endl;
+    while (!isYellowCornersPositioned() && attempts < MAX_ATTEMPTS) {
+        cout << "Current Corner Positioning Attempt: " << attempts + 1 << endl;
+
+        // Diagnostic print of current corner positions
+        cout << "Current Corner Positions:" << endl;
+        cout << "Front Corners: "
+             << cube[FRONT][0][0] << " " << cube[FRONT][0][2]
+             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+        cout << "Right Corners: "
+             << cube[RIGHT][0][0] << " " << cube[RIGHT][0][2]
+             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+        cout << "Back Corners: "
+             << cube[BACK][0][0] << " " << cube[BACK][0][2]
+             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+        cout << "Left Corners: "
+             << cube[LEFT][0][0] << " " << cube[LEFT][0][2]
+             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+
+        // Positioning algorithm
         moveU();
         moveR();
         moveUPrime();
@@ -591,7 +625,12 @@ void positionYellowCorners() {
         moveRPrime();
         moveUPrime();
         moveL();
+
+        attempts++;
     }
+
+    cout << "Yellow Corners Positioning: "
+         << (isYellowCornersPositioned() ? "Solved" : "Not Solved") << endl;
 }
 
 
@@ -608,19 +647,36 @@ void alignYellowCorners() {
 }
 
 void orientYellowEdges() {
-    int attempts =0;
-    while (!isYellowEdgesOriented()) {
-        // Find correctly oriented edge
-        bool found = false;
+    const int MAX_ATTEMPTS = 20; // Increased attempts
+    int attempts = 0;
+
+    cout << "Orienting Yellow Edges..." << endl;
+    while (!isYellowEdgesOriented() && attempts < MAX_ATTEMPTS) {
+        cout << "Current Edge Orientation Attempt: " << attempts + 1 << endl;
+
+        // Diagnostic print of current edge orientations
+        cout << "Current Edge Orientations:" << endl;
+        cout << "Front Edge: " << cube[FRONT][0][1]
+             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+        cout << "Right Edge: " << cube[RIGHT][0][1]
+             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+        cout << "Back Edge: " << cube[BACK][0][1]
+             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+        cout << "Left Edge: " << cube[LEFT][0][1]
+             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+
+        // Find a correctly oriented edge
+        bool foundOrientedEdge = false;
         for (int i = 0; i < 4; i++) {
             if (cube[FRONT][0][1] == cube[FRONT][1][1]) {
-                found = true;
+                foundOrientedEdge = true;
                 break;
             }
             moveU();
+            cout << "Rotating U to find oriented edge" << endl;
         }
 
-        // R U R' U R U2 R' algorithm
+        // Edge orientation algorithm
         moveR();
         moveU();
         moveRPrime();
@@ -631,16 +687,60 @@ void orientYellowEdges() {
 
         attempts++;
     }
+
+    cout << "Yellow Edges Orientation: "
+         << (isYellowEdgesOriented() ? "Solved" : "Not Solved") << endl;
 }
 
 bool isYellowEdgesOriented() {
-    // Check if edges match their center colors
     return (cube[FRONT][0][1] == cube[FRONT][1][1] &&
             cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
             cube[BACK][0][1] == cube[BACK][1][1] &&
             cube[LEFT][0][1] == cube[LEFT][1][1]);
 }
+bool isAllCornersOriented() {
+    return (cube[TOP][0][0] == 'Y' &&
+            cube[TOP][0][2] == 'Y' &&
+            cube[TOP][2][0] == 'Y' &&
+            cube[TOP][2][2] == 'Y');
+}
 
+void orientYellowCorners() {
+    const int MAX_ATTEMPTS = 20;
+    int attempts = 0;
+
+    cout << "Orienting Yellow Corners..." << endl;
+    while (!isAllCornersOriented() && attempts < MAX_ATTEMPTS) {
+        cout << "Current Corner Orientation Attempt: " << attempts + 1 << endl;
+
+        // Diagnostic print of current corner orientations
+        cout << "Current Corner Orientations:" << endl;
+        cout << "Top Face Corners: "
+             << cube[TOP][0][0] << " "
+             << cube[TOP][0][2] << " "
+             << cube[TOP][2][0] << " "
+             << cube[TOP][2][2] << endl;
+
+        // Iterate through each corner
+        for (int corner = 0; corner < 4; corner++) {
+            // Orientation algorithm
+            moveRPrime();
+            moveDPrime();
+            moveR();
+            moveD();
+
+            // Check if current corner is oriented
+            if (cube[TOP][2][2] == 'Y') {
+                break;
+            }
+
+            // Rotate to next corner
+            moveU();
+        }
+
+        attempts++;
+    }
+}
 bool isYellowCornersPositioned() {
     int rotations = 0;
     for (int i = 0; i < 4; i++) {
@@ -658,21 +758,6 @@ bool isYellowCornersPositioned() {
         rotations++;
     }
     return true;
-}
-
-void orientYellowCorners() {
-    // Repeat for each corner
-    for (int corner = 0; corner < 4; corner++) {
-        // Orient current corner
-        while (cube[TOP][2][2] != 'Y') {
-            // R' D' R D
-            moveRPrime();
-            moveDPrime();
-            moveR();
-            moveD();
-        }
-        moveU();
-    }
 }
 
 // Additional helper functions for last layer
@@ -695,29 +780,63 @@ bool isYellowLShape() {
 
 // Final Layer function which includes all functions to be used in final layer
 void solveLastLayer() {
-    solveYellowCross();
-    orientYellowEdges();
-    positionYellowCorners();
-    orientYellowCorners();
+    const int MAX_GLOBAL_ATTEMPTS = 50;
+    int globalAttempts = 0;
+    bool stagesSolved[4] = {false};
 
-    // Final adjustment of U face if needed
-    int attempts = 0;
-    while (cube[FRONT][0][1] != cube[FRONT][1][1] && attempts < 4) {
-        moveU();
-        attempts++;
+    cout << "Starting Last Layer Solution..." << endl;
+
+    while (!isCubeSolved() && globalAttempts < MAX_GLOBAL_ATTEMPTS) {
+        // Yellow Cross Stage
+        if (!stagesSolved[0]) {
+            solveYellowCross();
+            stagesSolved[0] = isYellowCrossShape();
+        }
+
+        // Yellow Edges Orientation Stage
+        if (stagesSolved[0] && !stagesSolved[1]) {
+            solveYellowEdges();
+            stagesSolved[1] = isYellowEdgesOriented();
+        }
+
+        // Yellow Corners Positioning Stage
+        if (stagesSolved[0] && stagesSolved[1] && !stagesSolved[2]) {
+            positionYellowCorners();
+            stagesSolved[2] = isYellowCornersPositioned();
+        }
+
+        // Yellow Corners Orientation Stage
+        if (stagesSolved[0] && stagesSolved[1] && stagesSolved[2] && !stagesSolved[3]) {
+            orientYellowCorners();
+            stagesSolved[3] = isAllCornersOriented();
+        }
+
+        globalAttempts++;
+    }
+
+    // Final verification
+    if (isCubeSolved()) {
+        cout << "Cube successfully solved in " << globalAttempts << " global attempts!" << endl;
+    } else {
+        cout << "Cube solving failed after " << MAX_GLOBAL_ATTEMPTS << " attempts." << endl;
+
+        // Print which stages were not solved
+        cout << "Unsolved Stages:" << endl;
+        if (!stagesSolved[0]) cout << "- Yellow Cross" << endl;
+        if (!stagesSolved[1]) cout << "- Yellow Edges Orientation" << endl;
+        if (!stagesSolved[2]) cout << "- Yellow Corners Positioning" << endl;
+        if (!stagesSolved[3]) cout << "- Yellow Corners Orientation" << endl;
+
+        displayCube();  // Show final state for debugging
     }
 }
 
 
-bool isSolved() {
-    // Check each face
-    for (int face = 0; face < N_FACES; face++) {
-        // Get the center color of the current face
+bool isCubeSolved() {
+    for (size_t face = 0; face < N_FACES; face++) {
         char centerColor = cube[face][1][1];
-
-        // Check if all pieces on this face match the center color
-        for (int row = 0; row < N_ROWS; row++) {
-            for (int col = 0; col < N_COLS; col++) {
+        for (size_t row = 0; row < N_ROWS; row++) {
+            for (size_t col = 0; col < N_COLS; col++) {
                 if (cube[face][row][col] != centerColor) {
                     return false;
                 }
