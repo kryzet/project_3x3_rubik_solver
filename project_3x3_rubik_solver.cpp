@@ -536,13 +536,22 @@ void sledgehammerMove() {
 }
 
 void solveYellowCross() {
-    while (!isYellowCrossShape()) {
+    const int MAX_ATTEMPTS = 20; // Increased attempts
+    int attempts = 0;
+
+    cout << "Solving Yellow Cross..." << endl;
+    while (!isYellowCrossShape() && attempts < MAX_ATTEMPTS) {
+        // Diagnostic print
+        cout << "Current Yellow Cross Attempt: " << attempts + 1 << endl;
+
+        // Check for different starting configurations
         if (isYellowLShape()) {
-            while (!isYellowLineShape()) {
-                moveU();
-            }
+            // Rotate to get line or dot configuration
+            moveU();
+            cout << "Detected L-Shape, rotating U" << endl;
         }
-        // FRUR'U'F'
+
+        // Primary cross-forming algorithm
         moveF();
         moveR();
         moveU();
@@ -550,8 +559,8 @@ void solveYellowCross() {
         moveUPrime();
         moveFPrime();
 
-        if (!isYellowCrossShape() && !isYellowLShape()) {
-            // If we have a dot, we need to do the algorithm twice
+        // If still not solved, try alternate algorithm
+        if (!isYellowCrossShape()) {
             moveF();
             moveR();
             moveU();
@@ -559,7 +568,12 @@ void solveYellowCross() {
             moveUPrime();
             moveFPrime();
         }
+
+        attempts++;
     }
+
+    // Debug print for cross shape
+    cout << "Yellow Cross Shape: " << (isYellowCrossShape() ? "Solved" : "Not Solved") << endl;
 }
 void solveYellowEdges() {
     // Keep applying algorithm until yellow edges are oriented correctly
