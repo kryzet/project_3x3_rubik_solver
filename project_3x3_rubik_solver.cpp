@@ -54,8 +54,8 @@ void moveR();
 void moveL();
 
 // Algorithms
-void sexyMove();
-void ReverseSexyMove();
+void rightyAlg();
+void ReverserightyAlg();
 void sledgehammerMove();
 
 
