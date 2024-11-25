@@ -533,33 +533,30 @@ void sledgehammerMove() {
 }
 
 void solveYellowCross() {
-    // Function to create yellow cross on top
-    while (cube[TOP][0][1] != 'Y' || cube[TOP][1][0] != 'Y' ||
-           cube[TOP][1][2] != 'Y' || cube[TOP][2][1] != 'Y') {
-        // If L shape
-        if ((cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y') ||
-            (cube[TOP][1][0] == 'Y' && cube[TOP][2][1] == 'Y') ||
-            (cube[TOP][2][1] == 'Y' && cube[TOP][1][2] == 'Y') ||
-            (cube[TOP][1][2] == 'Y' && cube[TOP][0][1] == 'Y')) {
-            // F R U R' U' F'
-            moveF();
-            moveR();
-            moveU();
-            moveRPrime();
-            moveUPrime();
-            moveFPrime();
+    while (!isYellowCrossShape()) {
+        if (isYellowLShape()) {
+            while (!isYellowLineShape()) {
+                moveU();
             }
-        // If line shape or dot
-        else {
-            // F U R U' R' F'
+        }
+        // FRUR'U'F'
+        moveF();
+        moveR();
+        moveU();
+        moveRPrime();
+        moveUPrime();
+        moveFPrime();
+
+        if (!isYellowCrossShape() && !isYellowLShape()) {
+            // If we have a dot, we need to do the algorithm twice
             moveF();
-            moveU();
             moveR();
-            moveUPrime();
+            moveU();
             moveRPrime();
+            moveUPrime();
             moveFPrime();
         }
-           }
+    }
 }
 void solveYellowEdges() {
     // Keep applying algorithm until yellow edges are oriented correctly
