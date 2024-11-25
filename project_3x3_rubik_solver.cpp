@@ -43,7 +43,7 @@ void solveYellowEdges();
 void positionYellowCorners();
 void orientYellowCorners();
 bool isYellowEdgesOriented();
-bool areYellowCornersPositioned();
+bool isYellowCornersPositioned();
 bool isYellowCrossShape();
 bool isYellowLineShape();
 bool isYellowLShape();
@@ -602,7 +602,7 @@ void alignYellowCorners() {
 
 void orientYellowEdges() {
     int attempts =1;
-    while (!areYellowEdgesOriented()) {
+    while (!isYellowEdgesOriented()) {
         // Find correctly oriented edge
         bool found = false;
         for (int i = 0; i < 4; i++) {
