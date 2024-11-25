@@ -574,7 +574,7 @@ void solveYellowEdges() {
 
 void positionYellowCorners() {
     // Position yellow corners correctly
-    while (!areYellowCornersPositioned()) {
+    while (!isYellowCornersPositioned()) {
         // U R U' L' U R' U' L
         moveU();
         moveR();
@@ -601,6 +601,7 @@ void alignYellowCorners() {
 }
 
 void orientYellowEdges() {
+    int attempts =1;
     while (!areYellowEdgesOriented()) {
         // Find correctly oriented edge
         bool found = false;
