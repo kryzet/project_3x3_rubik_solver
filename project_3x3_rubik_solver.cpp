@@ -71,6 +71,62 @@ void performF2LAlgorithm3();
 void scramble();
 void exterior_face(bool top_face);
 
+void displayMenu() {
+	int choice = 0;
+
+
+	do {
+		// Display the menu
+		cout << "\n=================== Rubik's Cube Solver ===================\n";
+		cout << "1. Scramble the cube\n";
+		cout << "2. Solve F2L (First Two Layers)\n";
+		cout << "3. Solve OLL (Orientation of the Last Layer)\n";
+		cout << "4. Solve PLL (Permutation of the Last Layer)\n";
+		cout << "5. Display the cube\n";
+		cout << "6. Check if cube is solved\n";
+		cout << "7. Reset the cube\n";
+		cout << "8. Exit\n";
+		cout << "===========================================================\n";
+		cout << "Enter your choice (1-8): ";
+		cin >> choice;
+		cin.ignore();
+		// Handle user input
+		switch (choice) {
+			case 1:
+				scramble();
+			break;
+			case 2:
+				solveF2l();
+			break;
+			case 3:
+				solveOll();
+			break;
+			case 4:
+				solvePll();
+			break;
+			case 5:
+				displayCube();
+			break;
+			case 6:
+				if (isSolved()) {
+					cout << "The Rubik's Cube is solved!\n";
+				} else {
+					cout << "The Rubik's Cube is not solved yet.\n";
+				}
+			break;
+			case 7:
+				resetCube();
+			cout << "The cube has been reset.\n";
+			break;
+			case 8:
+				cout << "Exiting the program. Goodbye!\n";
+			break;
+			default:
+				cout << "Invalid choice! Please enter a number between 1 and 8.\n";
+		}
+	} while (choice != 8);  // Loop until the user chooses to exit
+}
+
 int main()
 {
 	/* Ask for the scramble and use it to simulate a scramble of the virtual
