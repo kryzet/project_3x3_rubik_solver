@@ -307,18 +307,46 @@ void solveWhiteCross() {
 	// Find white edges
 	constexpr size_t N_EDGE_ROWS = 2, N_WHITE_EDGES = 4;
 	size_t white_edge_positions[N_WHITE_EDGES][3], white_edge_n = 0;
-	for (size_t face = 0; white_edge_n < N_WHITE_EDGES
-		&& face < N_FACES; ++face)
-		for (size_t rows = 0; rows < N_EDGE_ROWS; ++rows) {
+	for (size_t face = 0; face < N_FACES; ++face)
+		for (size_t rows = 0; white_edge_n < N_WHITE_EDGES
+			&& rows < N_EDGE_ROWS; ++rows) {
 			if ('W' == cube[face][rows][1]) {
 				white_edge_positions[white_edge_n][0] = face;
 				white_edge_positions[white_edge_n][1] = rows;
 				white_edge_positions[white_edge_n][2] = 1;
 				++white_edge_n;
 			}
-			if (LEFT == face || FRONT == face ||
-				RIGHT == face || BACK == face) {  // Middle face
-				
+			string move;
+			switch (rows) {
+			case 2:
+				switch (face) {
+				case LEFT:
+					move += "L";
+					break;
+				case FRONT:
+					move += "F";
+					break;
+				case RIGHT:
+					move += "R";
+					break;
+				case BACK:
+					move += "B";
+				}
+				move += " ";
+				[[fallthrough]];
+			case 1:
+				switch (face) {
+				case LEFT:
+					move += "F";
+					break;
+				case FRONT:
+					move += "R";
+					break;
+				case RIGHT:
+					move += "";
+					break;
+				}
+				move += " ";
 			}
 		}
 }
