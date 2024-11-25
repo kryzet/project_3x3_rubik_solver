@@ -88,7 +88,7 @@ void displayMenu() {
         // Display the menu
         cout << "============ Welcome to Rubik's Cube Solver ============" << endl
             << "1. Scramble the cube" << endl
-            << "2. Solve F2L " << endl
+            << "2. Solve up to F2L " << endl
             << "3. Solve OLL " << endl
             << "4. Solve PLL" << endl
             << "5. Display  cube" << endl
