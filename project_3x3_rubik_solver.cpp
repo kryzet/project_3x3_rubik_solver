@@ -600,28 +600,63 @@ void alignYellowCorners() {
     }
 }
 
-bool isYellowEdgesOriented() {
-    // Check if all yellow edges are oriented correctly
-    return (cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y' &&
-            cube[TOP][1][2] == 'Y' && cube[TOP][2][1] == 'Y' &&
-            cube[FRONT][0][1] == cube[FRONT][1][1] &&
+void orientYellowEdges() {
+    while (!areYellowEdgesOriented()) {
+        // Find correctly oriented edge
+        bool found = false;
+        for (int i = 0; i < 4; i++) {
+            if (cube[FRONT][0][1] == cube[FRONT][1][1]) {
+                found = true;
+                break;
+            }
+            moveU();
+        }
+
+        // R U R' U R U2 R' algorithm
+        moveR();
+        moveU();
+        moveRPrime();
+        moveU();
+        moveR();
+        moveU2();
+        moveRPrime();
+
+        attempts++;
+    }
+}
+
+bool areYellowEdgesOriented() {
+    // Check if edges match their center colors
+    return (cube[FRONT][0][1] == cube[FRONT][1][1] &&
             cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
             cube[BACK][0][1] == cube[BACK][1][1] &&
             cube[LEFT][0][1] == cube[LEFT][1][1]);
 }
 
 bool areYellowCornersPositioned() {
-    // Check if yellow corners are in correct positions (not necessarily oriented)
-    return (cube[FRONT][0][0] == cube[FRONT][0][2] &&
-            cube[RIGHT][0][0] == cube[RIGHT][0][2] &&
-            cube[BACK][0][0] == cube[BACK][0][2] &&
-            cube[LEFT][0][0] == cube[LEFT][0][2]);
+    int rotations = 0;
+    for (int i = 0; i < 4; i++) {
+        if (cube[FRONT][0][0] != cube[FRONT][0][2] ||
+            cube[RIGHT][0][0] != cube[RIGHT][0][2] ||
+            cube[BACK][0][0] != cube[BACK][0][2] ||
+            cube[LEFT][0][0] != cube[LEFT][0][2]) {
+            return false;
+            }
+        moveU();
+        rotations++;
+    }
+    while (rotations < 4) {
+        moveU();
+        rotations++;
+    }
+    return true;
 }
 
 void orientYellowCorners() {
-    // Function to orient yellow corners correctly
-    for (int i = 0; i < 4; i++) {
-        while (cube[TOP][2][0] != 'Y') {
+    // Repeat for each corner
+    for (int corner = 0; corner < 4; corner++) {
+        // Orient current corner
+        while (cube[TOP][2][2] != 'Y') {
             // R' D' R D
             moveRPrime();
             moveDPrime();
