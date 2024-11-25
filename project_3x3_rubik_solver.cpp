@@ -87,7 +87,7 @@ void displayMenu() {
             << "5. Check if cube is solved" << endl
             << "6. Reset the cube" << endl
             << "7. Exit" << endl
-            << "=============================================" << endl << endl
+            << "========================================================" << endl << endl
             << "Enter your choice (1-8): ";
         cin >> choice;
         if (cin.fail()) {
