@@ -112,7 +112,7 @@ void displayMenu() {
             scramble();
             break;
         case 2:
-            solveF2l();
+            solveWhiteCross(); solveWhiteCorners(); solveMiddleLayer();
             break;
         case 3:
             solveOll();
