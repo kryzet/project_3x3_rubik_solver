@@ -186,7 +186,7 @@ void parseAndApplyMoves(const string& moves) {
 }
 
 void applyMove(const string& move) {
-    if (!isValidMove(move) || move.empty()) {
+    if (move.empty() || !isValidMove(move)) {
         cout << "Invalid move: " << move << endl;
         return;
     }
