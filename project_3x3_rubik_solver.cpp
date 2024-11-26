@@ -60,11 +60,8 @@ void ReverserightyAlg();
 void sledgehammerMove();
 
 
-void scramble();
-
-void displayMenu() {
-    int choice = 0;
-
+int main()
+{
 
     do {
         // Display the menu
@@ -121,13 +118,7 @@ void displayMenu() {
             cout << "Invalid choice! Please enter a number between 1 and 8.\n";
         }
     } while (choice != 7);  // Loop until the user chooses to exit
-}
 
-int main()
-{
-    /* Ask for the scramble and use it to simulate a scramble of the virtual
-    Rubik's cube */
-    displayMenu();
     return 0;
 }
 
