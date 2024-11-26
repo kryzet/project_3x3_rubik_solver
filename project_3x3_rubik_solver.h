@@ -6,6 +6,7 @@
 #include <iostream>
 
 // TODO: Reference additional headers your program requires here.
+#include <array>
 #include <string>
 #include <cstdbool>
 #include <limits>

@@ -9,24 +9,17 @@ using namespace std;
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
 TOP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, BOTTOM = 5;
-char cube[N_FACES][N_ROWS][N_COLS] = {
-    {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},
-    {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
-    {{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
-    {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},
-    {{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
-    {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}
-};
+array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
 
 // functions
-void printFace(char face[N_ROWS][N_COLS]);
+void printFace(array<array<char, N_COLS>, N_ROWS> face);
 void rotateTopFaceEdges();
 
 /* TODO (kryzet, 22003): Remove unnecessary functions and reorganize
 prototypes, then change the order of function definitions to match the order
 of prototypes */
-void rotateFaceClockwise(char face[N_ROWS][N_COLS]);
-void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]);
+void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>);
+void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS>);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
@@ -269,8 +262,8 @@ bool isValidMove(const string& MOVE) {
 }
 
 
-void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
-    char temp[N_ROWS][N_COLS];
+void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS> face) {
+    array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
     for (int i = 0; i < N_ROWS; i++) {
@@ -288,8 +281,8 @@ void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
 }
 
 
-void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
-    char temp[N_ROWS][N_COLS];
+void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
+    array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
     for (int i = 0; i < N_ROWS; i++) {
@@ -311,7 +304,8 @@ void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
 void solveWhiteCross() {
     // Find white edges
     constexpr size_t N_EDGE_ROWS = 2, N_WHITE_EDGES = 4;
-    size_t white_edge[N_WHITE_EDGES][3], white_edge_n = 0;
+    array<array<size_t, 3>, N_WHITE_EDGES> white_edge;
+    size_t white_edge_n = 0;
     for (size_t face = 0; face < N_FACES; ++face)
         for (size_t rows = 0; white_edge_n < N_WHITE_EDGES
             && rows < N_EDGE_ROWS; ++rows) {
@@ -417,7 +411,7 @@ void exterior_face(bool top_face) {
 
 // Face moves
 void moveU() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][0][i];
     }
@@ -431,7 +425,7 @@ void moveU() {
 }
 
 void moveD() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][2][i];
     }
@@ -445,7 +439,7 @@ void moveD() {
 }
 
 void moveF() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][2][i];
     }
@@ -459,7 +453,7 @@ void moveF() {
 }
 
 void moveB() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][0][i];
     }
@@ -473,7 +467,7 @@ void moveB() {
 }
 
 void moveL() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][i][0];
     }
@@ -487,7 +481,7 @@ void moveL() {
 }
 
 void moveR() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][i][2];
     }
@@ -843,14 +837,31 @@ bool isCubeSolved() {
 }
 
 void resetCube() {
-    constexpr char defaultCube[N_FACES][N_ROWS][N_COLS] = {
-        {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},
-        {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
-        {{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
-        {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},
-        {{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
-        {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}
-    };
+    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = {{
+        {{{{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}}}},
+
+        {{{{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}}}},
+
+        {{{{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}}}},
+
+        {{{{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}}}},
+
+        {{{{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}}}},
+
+        {{{{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}}}}
+    }};
 
     // Copy the default state back into the cube
     for (size_t face = 0; face < N_FACES; ++face) {
