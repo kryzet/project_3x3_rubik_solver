@@ -9,24 +9,17 @@ using namespace std;
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
 TOP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, BOTTOM = 5;
-char cube[N_FACES][N_ROWS][N_COLS] = {
-    {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},
-    {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
-    {{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
-    {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},
-    {{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
-    {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}
-};
+array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
 
 // functions
-void printFace(char face[N_ROWS][N_COLS]);
+void printFace(array<array<char, N_COLS>, N_ROWS> face);
 void rotateTopFaceEdges();
 
 /* TODO (kryzet, 22003): Remove unnecessary functions and reorganize
 prototypes, then change the order of function definitions to match the order
 of prototypes */
-void rotateFaceClockwise(char face[N_ROWS][N_COLS]);
-void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]);
+void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>);
+void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS>);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
@@ -53,9 +46,9 @@ bool isYellowLShape();
 
 
 // Cube moves
-void move_x(const bool PRIME);
-void move_y(const bool PRIME);
-void move_z(const bool PRIME);
+void move_x(const bool);
+void move_y(const bool);
+void move_z(const bool);
 
 // Face moves
 void moveU();
@@ -65,37 +58,35 @@ void moveB();
 void moveR();
 void moveL();
 
+void scramble();
+
 // Algorithms
 void rightyAlg();
 void ReverserightyAlg();
 void sledgehammerMove();
 
 
-void scramble();
-
-void displayMenu() {
-    int choice = 0;
-
+int main()
+{
+    unsigned int choice = 0;
+    const string MENU = "============ Welcome to Rubik's Cube Solver ========="
+        "===\n1. Scramble the cube\n2. Solve up to F2L\n3. Solve Last Layers\n"
+        "4. Display cube\n5. Check if cube is solved\n6. Reset the cube\n7. Ex"
+        "it\n=============================================\nEnter your choice "
+        "(1-8): ";
+    resetCube();
 
     do {
         // Display the menu
-        cout << "============ Welcome to Rubik's Cube Solver ============" << endl
-            << "1. Scramble the cube" << endl
-            << "2. Solve up to F2L " << endl
-            << "3. Solve Last Layers" << endl
-            << "4. Display cube" << endl
-            << "5. Check if cube is solved" << endl
-            << "6. Reset the cube" << endl
-            << "7. Exit" << endl
-            << "========================================================" << endl << endl
-            << "Enter your choice (1-8): ";
+        cout << MENU;
         cin >> choice;
         if (cin.fail()) {
-            // Clear the error flag and ignore the rest of the line
             cin.clear();  // Clear the error flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignore the rest of the invalid input
+            // Ignore the rest of the invalid input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
             cout << "Invalid input! Please enter a number between 1 and 8.\n";
-            continue;  // Skip to the next iteration of the loop
+            continue;  // Will reshow the menu
         }
 
         // Handle user input
@@ -115,30 +106,25 @@ void displayMenu() {
             break;
         case 5:
             if (isCubeSolved()) {
-                cout << "The Rubik's Cube is solved!\n";
+                cout << "The Rubik's Cube is solved!" << endl;
             }
             else {
-                cout << "The Rubik's Cube is not solved yet.\n";
+                cout << "The Rubik's Cube is not solved yet." << endl;
             }
             break;
         case 6:
             resetCube();
-            cout << "The cube has been reset.\n";
+            cout << "The cube has been reset." << endl;
             break;
         case 7:
-            cout << "Exiting the program. Goodbye!\n";
+            cout << "Exiting the program. Goodbye!" << endl;
             break;
         default:
-            cout << "Invalid choice! Please enter a number between 1 and 8.\n";
+            cout << "Invalid choice! Please enter a number between 1 and 8."
+                << endl;
         }
     } while (choice != 7);  // Loop until the user chooses to exit
-}
 
-int main()
-{
-    /* Ask for the scramble and use it to simulate a scramble of the virtual
-    Rubik's cube */
-    displayMenu();
     return 0;
 }
 
@@ -273,8 +259,8 @@ bool isValidMove(const string& MOVE) {
 }
 
 
-void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
-    char temp[N_ROWS][N_COLS];
+void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS> face) {
+    array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
     for (int i = 0; i < N_ROWS; i++) {
@@ -292,8 +278,8 @@ void rotateFaceClockwise(char face[N_ROWS][N_COLS]) {
 }
 
 
-void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
-    char temp[N_ROWS][N_COLS];
+void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
+    array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
     for (int i = 0; i < N_ROWS; i++) {
@@ -315,7 +301,8 @@ void rotateFaceCounterClockwise(char face[N_ROWS][N_COLS]) {
 void solveWhiteCross() {
     // Find white edges
     constexpr size_t N_EDGE_ROWS = 2, N_WHITE_EDGES = 4;
-    size_t white_edge[N_WHITE_EDGES][3], white_edge_n = 0;
+    array<array<size_t, 3>, N_WHITE_EDGES> white_edge;
+    size_t white_edge_n = 0;
     for (size_t face = 0; face < N_FACES; ++face)
         for (size_t rows = 0; white_edge_n < N_WHITE_EDGES
             && rows < N_EDGE_ROWS; ++rows) {
@@ -419,9 +406,23 @@ void exterior_face(bool top_face) {
     }
 }
 
+
+// Cube moves
+void move_x(const bool PRIME) {
+
+}
+
+void move_y(const bool PRIME) {
+
+}
+
+void move_z(const bool PRIME) {
+
+}
+
 // Face moves
 void moveU() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][0][i];
     }
@@ -435,7 +436,7 @@ void moveU() {
 }
 
 void moveD() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][2][i];
     }
@@ -449,7 +450,7 @@ void moveD() {
 }
 
 void moveF() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][2][i];
     }
@@ -463,7 +464,7 @@ void moveF() {
 }
 
 void moveB() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][0][i];
     }
@@ -477,7 +478,7 @@ void moveB() {
 }
 
 void moveL() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][i][0];
     }
@@ -491,7 +492,7 @@ void moveL() {
 }
 
 void moveR() {
-    char temp[N_COLS];
+    array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
         temp[i] = cube[TOP][i][2];
     }
@@ -847,22 +848,32 @@ bool isCubeSolved() {
 }
 
 void resetCube() {
-    constexpr char defaultCube[N_FACES][N_ROWS][N_COLS] = {
-        {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},
-        {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
-        {{'G', 'G', 'G'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
-        {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},
-        {{'B', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
-        {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}
-    };
+    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = {{
+        {{{{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}}}},
+
+        {{{{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}}}},
+
+        {{{{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}}}},
+
+        {{{{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}}}},
+
+        {{{{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}}}},
+
+        {{{{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}}}}
+    }};
 
     // Copy the default state back into the cube
-    for (size_t face = 0; face < N_FACES; ++face) {
-        for (size_t row = 0; row < N_ROWS; ++row) {
-            for (size_t col = 0; col < N_COLS; ++col) {
-                cube[face][row][col] = defaultCube[face][row][col];
-            }
-        }
-    }
-    cout << "The cube has been reset to the solved state." << endl;
+    cube = defaultCube;
 }
