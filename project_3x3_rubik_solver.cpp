@@ -299,8 +299,10 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
 
 
 void solveWhiteCross() {
+    constexpr size_t N_WHITE_EDGES = 4;
+    
     // Find white edges
-    constexpr size_t N_EDGE_ROWS = 2, N_WHITE_EDGES = 4;
+    constexpr size_t N_EDGE_ROWS = 2;
     array<array<size_t, 3>, N_WHITE_EDGES> white_edge;
     size_t white_edge_n = 0;
     for (size_t face = 0; face < N_FACES; ++face)
@@ -314,52 +316,103 @@ void solveWhiteCross() {
             }
         }
     
-    // Form a daisy
-    for (white_edge_n = 0; white_edge_n < N_WHITE_EDGES; ++white_edge_n) {
-            string move;
-        //if (white_edge[]);
-        //switch (rows) {
-        //case 2:
-        //    switch (face) {
-        //    case LEFT:
-        //        move += "L";
-        //        break;
-        //    case FRONT:
-        //        move += "F";
-        //        break;
-        //    case RIGHT:
-        //        move += "R";
-        //        break;
-        //    case BACK:
-        //        move += "B";
+    //bool done = false;
+    //while (!done) {
+    //    //for (size_t white_edge = 0; white_edge < N_WHITE_EDGES; ++white_edge)
+    //    for (size_t face = 0, white_edge = 0;
+    //        face < N_FACES && white_edge < N_WHITE_EDGES;
+    //        ++face)
+    //        for (size_t row = 0; row < N_ROWS; ++row)
+    //            for (size_t col = 0; col < N_COLS; ++col)
+    //                if ('W' == cube[face][row][col]) {
+    //                    white_edges[white_edge] = {face, row, col};
+    //                    ++white_edge;
+    //                }
+    //    for (array<size_t, 3> white_edge : white_edges) {
+    //        if (TOP != white_edge[0]) {
+    //            done = false;
+    //            break;
+    //        }
+    //        done = true;
         //    }
-        //    move += " ";
-        //    break;
-        //case 1:
-        //    switch (face) {
-        //    case LEFT:
-        //        move += "F";
-        //        break;
-        //    case FRONT:
-        //        move += "R";
-        //        break;
-        //    case RIGHT:
-        //        move += "B";
-        //        break;
-        //    case BACK:
-        //        move += "L";
-        //        break;
+    //    if (done) continue;
+    //    for (array<size_t, 3> white_edge : white_edges) {
+    //        // TODO: Skip good edges
+    //        size_t case_n = 0 - 1;
+    //        if (TOP == white_edge[0]) case_n = 0;
+    //        else if ([white_edge]() {
+    //            constexpr array<size_t, 4> MIDDLE_FACES = {{LEFT, FRONT,
+    //            RIGHT, BACK}};
+    //            for (const size_t FACE : MIDDLE_FACES)
+    //                if (FACE == white_edge[0]) {
+    //                    return true;
+    //                }
+    //            return false;
+    //            }()) {
+    //            if ([white_edge]() {
+    //                constexpr array<size_t, 2> CASE_1 = {{0, 2}};
+    //                for (const size_t ROW_N : CASE_1)
+    //                    if (ROW_N == white_edge[1]) return true;
+    //                return false;
+    //                }())
+    //                case_n = 1;
+    //            else if (1 == white_edge[1])
+    //                case_n = 2;
+    //            }
+    //            switch (case_n) {
+    //            case 0:
+    //                
+    //                break;
+    //            default:
+    //                throw;
+    //        }
         //    }
-        //    move += " ";
-        //    break;
-        //case 0:
-        //    break;
         //}
-        }
+    
+    // Form a daisy
+    //for (white_edge_n = 0; white_edge_n < N_WHITE_EDGES; ++white_edge_n) {
+    //        string move;
+    //    //if (white_edge[]);
+    //    //switch (rows) {
+    //    //case 2:
+    //    //    switch (face) {
+    //    //    case LEFT:
+    //    //        move += "L";
+    //    //        break;
+    //    //    case FRONT:
+    //    //        move += "F";
+    //    //        break;
+    //    //    case RIGHT:
+    //    //        move += "R";
+    //    //        break;
+    //    //    case BACK:
+    //    //        move += "B";
+    //    //    }
+    //    //    move += " ";
+    //    //    break;
+    //    //case 1:
+    //    //    switch (face) {
+    //    //    case LEFT:
+    //    //        move += "F";
+    //    //        break;
+    //    //    case FRONT:
+    //    //        move += "R";
+    //    //        break;
+    //    //    case RIGHT:
+    //    //        move += "B";
+    //    //        break;
+    //    //    case BACK:
+    //    //        move += "L";
+    //    //        break;
+    //    //    }
+    //    //    move += " ";
+    //    //    break;
+    //    //case 0:
+    //    //    break;
+    //    //}
+    //    }
 
     // Assemble the cross
-
-
 }
 
 void solveWhiteCorners() {
