@@ -45,7 +45,11 @@ bool isYellowLineShape();
 bool isYellowLShape();
 
 
-// Regular moves
+// Cube moves
+void move_x(const bool);
+void move_y(const bool);
+void move_z(const bool);
+
 // Face moves
 void moveU();
 void moveD();
@@ -398,6 +402,20 @@ void exterior_face(bool top_face) {
         }
         cout << endl;
     }
+}
+
+
+// Cube moves
+void move_x(const bool PRIME) {
+
+}
+
+void move_y(const bool PRIME) {
+
+}
+
+void move_z(const bool PRIME) {
+
 }
 
 // Face moves
