@@ -58,6 +58,8 @@ void moveB();
 void moveR();
 void moveL();
 
+void scramble();
+
 // Algorithms
 void rightyAlg();
 void ReverserightyAlg();
