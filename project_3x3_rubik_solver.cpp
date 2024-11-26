@@ -68,26 +68,25 @@ void sledgehammerMove();
 
 int main()
 {
+    unsigned int choice = 0;
+    const string MENU = "============ Welcome to Rubik's Cube Solver ========="
+        "===\n1. Scramble the cube\n2. Solve up to F2L\n3. Solve Last Layers\n"
+        "4. Display cube\n5. Check if cube is solved\n6. Reset the cube\n7. Ex"
+        "it\n=============================================\nEnter your choice "
+        "(1-8): ";
+    resetCube();
 
     do {
         // Display the menu
-        cout << "============ Welcome to Rubik's Cube Solver ============" << endl
-            << "1. Scramble the cube" << endl
-            << "2. Solve up to F2L " << endl
-            << "3. Solve Last Layers" << endl
-            << "4. Display cube" << endl
-            << "5. Check if cube is solved" << endl
-            << "6. Reset the cube" << endl
-            << "7. Exit" << endl
-            << "=============================================" << endl << endl
-            << "Enter your choice (1-8): ";
+        cout << MENU;
         cin >> choice;
         if (cin.fail()) {
-            // Clear the error flag and ignore the rest of the line
             cin.clear();  // Clear the error flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignore the rest of the invalid input
+            // Ignore the rest of the invalid input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
             cout << "Invalid input! Please enter a number between 1 and 8.\n";
-            continue;  // Skip to the next iteration of the loop
+            continue;  // Will reshow the menu
         }
 
         // Handle user input
