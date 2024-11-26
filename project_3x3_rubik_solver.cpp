@@ -106,21 +106,22 @@ int main()
             break;
         case 5:
             if (isCubeSolved()) {
-                cout << "The Rubik's Cube is solved!\n";
+                cout << "The Rubik's Cube is solved!" << endl;
             }
             else {
-                cout << "The Rubik's Cube is not solved yet.\n";
+                cout << "The Rubik's Cube is not solved yet." << endl;
             }
             break;
         case 6:
             resetCube();
-            cout << "The cube has been reset.\n";
+            cout << "The cube has been reset." << endl;
             break;
         case 7:
-            cout << "Exiting the program. Goodbye!\n";
+            cout << "Exiting the program. Goodbye!" << endl;
             break;
         default:
-            cout << "Invalid choice! Please enter a number between 1 and 8.\n";
+            cout << "Invalid choice! Please enter a number between 1 and 8."
+                << endl;
         }
     } while (choice != 7);  // Loop until the user chooses to exit
 
@@ -874,12 +875,5 @@ void resetCube() {
     }};
 
     // Copy the default state back into the cube
-    for (size_t face = 0; face < N_FACES; ++face) {
-        for (size_t row = 0; row < N_ROWS; ++row) {
-            for (size_t col = 0; col < N_COLS; ++col) {
-                cube[face][row][col] = defaultCube[face][row][col];
-            }
-        }
-    }
-    cout << "The cube has been reset to the solved state." << endl;
+    cube = defaultCube;
 }
