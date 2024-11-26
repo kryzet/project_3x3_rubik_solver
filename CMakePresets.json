@@ -2,7 +2,7 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "windows-msvc",
+            "name": "windows-base",
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
@@ -18,9 +18,9 @@
             }
         },
         {
-            "name": "x64-debug-msvc",
-            "displayName": "x64 Debug - MSVC",
-            "inherits": "windows-msvc",
+            "name": "x64-debug",
+            "displayName": "x64 Debug",
+            "inherits": "windows-base",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
@@ -30,17 +30,17 @@
             }
         },
         {
-            "name": "x64-release-msvc",
-            "displayName": "x64 Release - MSVC",
-            "inherits": "x64-debug-msvc",
+            "name": "x64-release",
+            "displayName": "x64 Release",
+            "inherits": "x64-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "x86-debug-msvc",
-            "displayName": "x86 Debug - MSVC",
-            "inherits": "windows-msvc",
+            "name": "x86-debug",
+            "displayName": "x86 Debug",
+            "inherits": "windows-base",
             "architecture": {
                 "value": "x86",
                 "strategy": "external"
@@ -50,69 +50,12 @@
             }
         },
         {
-            "name": "x86-release-msvc",
-            "displayName": "x86 Release - MSVC",
-            "inherits": "x86-debug-msvc",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "windows-clang",
-            "hidden": true,
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang-cl",
-                "CMAKE_CXX_COMPILER": "clang-cl"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
-            }
-        },
-        {
-            "name": "x64-debug-clang",
-            "displayName": "x64 Debug - Clang",
-            "inherits": "windows-clang",
-            "architecture": {
-                "value": "x64",
-                "strategy": "external"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "x64-release-clang",
-            "displayName": "x64 Release - Clang",
-            "inherits": "x64-debug-clang",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "x86-debug-clang",
-            "displayName": "x86 Debug - Clang",
-            "inherits": "windows-clang",
-            "architecture": {
-                "value": "x86",
-                "strategy": "external"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "x86-release-clang",
-            "displayName": "x86 Release - Clang",
-            "inherits": "x86-debug-clang",
+            "name": "x86-release",
+            "displayName": "x86 Release",
+            "inherits": "x86-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         }
-
     ]
 }
