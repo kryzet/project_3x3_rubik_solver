@@ -8,7 +8,7 @@ using namespace std;
 /* Declare the face arrays with a compile-time constant for the
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
-TOP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, BOTTOM = 5;
+UP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, DOWN = 5;
 array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
 
 // functions
@@ -329,7 +329,7 @@ void solveWhiteCross() {
     //                    ++white_edge;
     //                }
     //    for (array<size_t, 3> white_edge : white_edges) {
-    //        if (TOP != white_edge[0]) {
+    //        if (UP != white_edge[0]) {
     //            done = false;
     //            break;
     //        }
@@ -339,7 +339,7 @@ void solveWhiteCross() {
     //    for (array<size_t, 3> white_edge : white_edges) {
     //        // TODO: Skip good edges
     //        size_t case_n = 0 - 1;
-    //        if (TOP == white_edge[0]) case_n = 0;
+    //        if (UP == white_edge[0]) case_n = 0;
     //        else if ([white_edge]() {
     //            constexpr array<size_t, 4> MIDDLE_FACES = {{LEFT, FRONT,
     //            RIGHT, BACK}};
@@ -431,6 +431,9 @@ void solvePll() {
 }
 
 void displayCube() {
+    cout << "The first face is UP, then follow LEFT, FRONT, RIGHT, and BACK, "
+        << "then the last" << endl << "face is DOWN." << endl;
+    
     // Print the top face
     exterior_face(true);
 
@@ -485,7 +488,7 @@ void moveU() {
         cube[BACK][0][i] = cube[LEFT][0][i];
         cube[LEFT][0][i] = temp[i];
     }
-    rotateFaceClockwise(cube[TOP]);
+    rotateFaceClockwise(cube[UP]);
 }
 
 void moveD() {
@@ -499,18 +502,18 @@ void moveD() {
         cube[BACK][2][i] = cube[RIGHT][2][i];
         cube[RIGHT][2][i] = temp[i];
     }
-    rotateFaceClockwise(cube[BOTTOM]);
+    rotateFaceClockwise(cube[DOWN]);
 }
 
 void moveF() {
     array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][2][i];
+        temp[i] = cube[UP][2][i];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][2][i] = cube[LEFT][2 - i][2];
-        cube[LEFT][2 - i][2] = cube[BOTTOM][0][2 - i];
-        cube[BOTTOM][0][2 - i] = cube[RIGHT][i][0];
+        cube[UP][2][i] = cube[LEFT][2 - i][2];
+        cube[LEFT][2 - i][2] = cube[DOWN][0][2 - i];
+        cube[DOWN][0][2 - i] = cube[RIGHT][i][0];
         cube[RIGHT][i][0] = temp[i];
     }
     rotateFaceClockwise(cube[FRONT]);
@@ -519,12 +522,12 @@ void moveF() {
 void moveB() {
     array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][0][i];
+        temp[i] = cube[UP][0][i];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][0][i] = cube[RIGHT][i][2];
-        cube[RIGHT][i][2] = cube[BOTTOM][2][2 - i];
-        cube[BOTTOM][2][2 - i] = cube[LEFT][2 - i][0];
+        cube[UP][0][i] = cube[RIGHT][i][2];
+        cube[RIGHT][i][2] = cube[DOWN][2][2 - i];
+        cube[DOWN][2][2 - i] = cube[LEFT][2 - i][0];
         cube[LEFT][2 - i][0] = temp[i];
     }
     rotateFaceClockwise(cube[BACK]);
@@ -533,12 +536,12 @@ void moveB() {
 void moveL() {
     array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][i][0];
+        temp[i] = cube[UP][i][0];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][i][0] = cube[BACK][2 - i][2];
-        cube[BACK][2 - i][2] = cube[BOTTOM][i][0];
-        cube[BOTTOM][i][0] = cube[FRONT][i][0];
+        cube[UP][i][0] = cube[BACK][2 - i][2];
+        cube[BACK][2 - i][2] = cube[DOWN][i][0];
+        cube[DOWN][i][0] = cube[FRONT][i][0];
         cube[FRONT][i][0] = temp[i];
     }
     rotateFaceClockwise(cube[LEFT]);
@@ -547,12 +550,12 @@ void moveL() {
 void moveR() {
     array<char, N_COLS> temp;
     for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][i][2];
+        temp[i] = cube[UP][i][2];
     }
     for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][i][2] = cube[FRONT][i][2];
-        cube[FRONT][i][2] = cube[BOTTOM][i][2];
-        cube[BOTTOM][i][2] = cube[BACK][2 - i][0];
+        cube[UP][i][2] = cube[FRONT][i][2];
+        cube[FRONT][i][2] = cube[DOWN][i][2];
+        cube[DOWN][i][2] = cube[BACK][2 - i][0];
         cube[BACK][2 - i][0] = temp[i];
     }
     rotateFaceClockwise(cube[RIGHT]);
@@ -692,7 +695,7 @@ void alignYellowCorners() {
     // Orient yellow corners
     for (int corner = 0; corner < 4; corner++) {
         // Repeat until corner is oriented correctly
-        while (cube[TOP][2][2] != 'Y') {
+        while (cube[UP][2][2] != 'Y') {
             // R U R' U' (sexy move)
             rightyAlg();
         }
@@ -753,10 +756,10 @@ bool isYellowEdgesOriented() {
             cube[LEFT][0][1] == cube[LEFT][1][1]);
 }
 bool isAllCornersOriented() {
-    return (cube[TOP][0][0] == 'Y' &&
-            cube[TOP][0][2] == 'Y' &&
-            cube[TOP][2][0] == 'Y' &&
-            cube[TOP][2][2] == 'Y');
+    return (cube[UP][0][0] == 'Y' &&
+        cube[UP][0][2] == 'Y' &&
+        cube[UP][2][0] == 'Y' &&
+        cube[UP][2][2] == 'Y');
 }
 
 void orientYellowCorners() {
@@ -770,10 +773,10 @@ void orientYellowCorners() {
         // Diagnostic print of current corner orientations
         cout << "Current Corner Orientations:" << endl;
         cout << "Top Face Corners: "
-             << cube[TOP][0][0] << " "
-             << cube[TOP][0][2] << " "
-             << cube[TOP][2][0] << " "
-             << cube[TOP][2][2] << endl;
+            << cube[UP][0][0] << " "
+            << cube[UP][0][2] << " "
+            << cube[UP][2][0] << " "
+            << cube[UP][2][2] << endl;
 
         // Iterate through each corner
         for (int corner = 0; corner < 4; corner++) {
@@ -784,7 +787,7 @@ void orientYellowCorners() {
             moveD();
 
             // Check if current corner is oriented
-            if (cube[TOP][2][2] == 'Y') {
+            if (cube[UP][2][2] == 'Y') {
                 break;
             }
 
@@ -816,20 +819,20 @@ bool isYellowCornersPositioned() {
 
 // Additional helper functions for last layer
 bool isYellowCrossShape() {
-    return (cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y' &&
-            cube[TOP][1][2] == 'Y' && cube[TOP][2][1] == 'Y');
+    return (cube[UP][0][1] == 'Y' && cube[UP][1][0] == 'Y' &&
+        cube[UP][1][2] == 'Y' && cube[UP][2][1] == 'Y');
 }
 
 bool isYellowLineShape() {
-    return ((cube[TOP][0][1] == 'Y' && cube[TOP][2][1] == 'Y') ||
-            (cube[TOP][1][0] == 'Y' && cube[TOP][1][2] == 'Y'));
+    return ((cube[UP][0][1] == 'Y' && cube[UP][2][1] == 'Y') ||
+        (cube[UP][1][0] == 'Y' && cube[UP][1][2] == 'Y'));
 }
 
 bool isYellowLShape() {
-    return ((cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y') ||
-            (cube[TOP][1][0] == 'Y' && cube[TOP][2][1] == 'Y') ||
-            (cube[TOP][2][1] == 'Y' && cube[TOP][1][2] == 'Y') ||
-            (cube[TOP][1][2] == 'Y' && cube[TOP][0][1] == 'Y'));
+    return ((cube[UP][0][1] == 'Y' && cube[UP][1][0] == 'Y') ||
+        (cube[UP][1][0] == 'Y' && cube[UP][2][1] == 'Y') ||
+        (cube[UP][2][1] == 'Y' && cube[UP][1][2] == 'Y') ||
+        (cube[UP][1][2] == 'Y' && cube[UP][0][1] == 'Y'));
 }
 
 // Final Layer function which includes all functions to be used in final layer
