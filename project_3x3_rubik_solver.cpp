@@ -270,15 +270,15 @@ void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS> face) {
     array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             temp[i][j] = face[i][j];
         }
     }
 
     // Rotate 90 degrees clockwise
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             face[j][N_COLS - 1 - i] = temp[i][j];
         }
     }
@@ -289,15 +289,15 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
     array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             temp[i][j] = face[i][j];
         }
     }
 
     // Rotate 90 degrees counter-clockwise
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             face[N_ROWS - 1 - j][i] = temp[i][j];
         }
     }
@@ -510,9 +510,9 @@ void displayCube() {
 
     // Print the middle faces
     constexpr size_t N_MIDDLE_FACES = N_FACES - 1;
-    for (int row = 0; row < N_ROWS; row++) {
+    for (size_t row = 0; row < N_ROWS; row++) {
         for (size_t face = 1; face < N_MIDDLE_FACES; ++face)
-            for (int col = 0; col < N_COLS; ++col)
+            for (size_t col = 0; col < N_COLS; ++col)
                 cout << cube[face][row][col] << ' ';
         cout << endl;
     }
@@ -550,10 +550,10 @@ void move_z(const bool PRIME) {
 // Face moves
 void moveU() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][0][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[FRONT][0][i] = cube[RIGHT][0][i];
         cube[RIGHT][0][i] = cube[BACK][0][i];
         cube[BACK][0][i] = cube[LEFT][0][i];
@@ -564,10 +564,10 @@ void moveU() {
 
 void moveD() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][2][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[FRONT][2][i] = cube[LEFT][2][i];
         cube[LEFT][2][i] = cube[BACK][2][i];
         cube[BACK][2][i] = cube[RIGHT][2][i];
@@ -578,10 +578,10 @@ void moveD() {
 
 void moveF() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[UP][2][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[UP][2][i] = cube[LEFT][2 - i][2];
         cube[LEFT][2 - i][2] = cube[DOWN][0][2 - i];
         cube[DOWN][0][2 - i] = cube[RIGHT][i][0];
@@ -592,10 +592,10 @@ void moveF() {
 
 void moveB() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[UP][0][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[UP][0][i] = cube[RIGHT][i][2];
         cube[RIGHT][i][2] = cube[DOWN][2][2 - i];
         cube[DOWN][2][2 - i] = cube[LEFT][2 - i][0];
@@ -606,10 +606,10 @@ void moveB() {
 
 void moveL() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[UP][i][0];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[UP][i][0] = cube[BACK][2 - i][2];
         cube[BACK][2 - i][2] = cube[DOWN][i][0];
         cube[DOWN][i][0] = cube[FRONT][i][0];
@@ -620,10 +620,10 @@ void moveL() {
 
 void moveR() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[UP][i][2];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[UP][i][2] = cube[FRONT][i][2];
         cube[FRONT][i][2] = cube[DOWN][i][2];
         cube[DOWN][i][2] = cube[BACK][2 - i][0];
