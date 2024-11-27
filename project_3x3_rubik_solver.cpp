@@ -8,8 +8,20 @@ using namespace std;
 /* Declare the face arrays with a compile-time constant for the
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
-TOP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, BOTTOM = 5;
+UP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, DOWN = 5;
 array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
+
+// A data structure for storing the coordinates of a color tag
+typedef struct color_coords {
+    size_t face, row, col;
+} color_coords;
+/* Operator overload for allowing the comparison of two instances of the new
+datatype */
+bool operator==(const color_coords& lhs, const color_coords& rhs) {
+    return lhs.face == rhs.face &&
+        lhs.row == rhs.row &&
+        lhs.col == rhs.col;
+}
 
 // functions
 void printFace(array<array<char, N_COLS>, N_ROWS> face);
@@ -68,17 +80,22 @@ void sledgehammerMove();
 
 int main()
 {
-    unsigned int choice = 0;
-    const string MENU = "============ Welcome to Rubik's Cube Solver ========="
-        "===\n1. Scramble the cube\n2. Solve up to F2L\n3. Solve Last Layers\n"
-        "4. Display cube\n5. Check if cube is solved\n6. Reset the cube\n7. Ex"
-        "it\n=============================================\nEnter your choice "
-        "(1-8): ";
+    unsigned int choice;
     resetCube();
 
     do {
         // Display the menu
-        cout << MENU;
+        cout << "=== Welcome to Rubik's Cube Solver ===" << endl
+            << "1. Display cube" << endl
+            << "2. Scramble cube" << endl
+            << "3. Solve white cross" << endl
+            << "4. Solve white corners" << endl
+            << "5. Solve last layer" << endl
+            << "6. Check if cube is solved" << endl
+            << "7. Reset cube" << endl
+            << "8. Exit" << endl
+            << "======================================" << endl
+            << "Enter your choice (1-8): ";
         cin >> choice;
         if (cin.fail()) {
             cin.clear();  // Clear the error flag
@@ -92,19 +109,21 @@ int main()
         // Handle user input
         switch (choice) {
         case 1:
-            scramble();
-            break;
-        case 2:
-            solveWhiteCross(); solveWhiteCorners(); solveMiddleLayer();
-            break;
-        case 3:
-            solveLastLayer();
-            break;
-
-            case 4:
             displayCube();
             break;
+        case 2:
+            scramble();
+            break;
+        case 3:
+            solveWhiteCross();
+            break;
+        case 4:
+            solveWhiteCorners();
+            break;
         case 5:
+            solveLastLayer();
+            break;
+        case 6:
             if (isCubeSolved()) {
                 cout << "The Rubik's Cube is solved!" << endl;
             }
@@ -112,11 +131,11 @@ int main()
                 cout << "The Rubik's Cube is not solved yet." << endl;
             }
             break;
-        case 6:
+        case 7:
             resetCube();
             cout << "The cube has been reset." << endl;
             break;
-        case 7:
+        case 8:
             cout << "Exiting the program. Goodbye!" << endl;
             break;
         default:
@@ -263,15 +282,15 @@ void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS> face) {
     array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             temp[i][j] = face[i][j];
         }
     }
 
     // Rotate 90 degrees clockwise
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             face[j][N_COLS - 1 - i] = temp[i][j];
         }
     }
@@ -282,15 +301,15 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
     array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             temp[i][j] = face[i][j];
         }
     }
 
     // Rotate 90 degrees counter-clockwise
-    for (int i = 0; i < N_ROWS; i++) {
-        for (int j = 0; j < N_COLS; j++) {
+    for (size_t i = 0; i < N_ROWS; i++) {
+        for (size_t j = 0; j < N_COLS; j++) {
             face[N_ROWS - 1 - j][i] = temp[i][j];
         }
     }
@@ -299,67 +318,184 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
 
 
 void solveWhiteCross() {
+    typedef struct w_edge {
+        color_coords coords;
+        char other_color = '\0';
+    } w_edge;
+    constexpr size_t N_WHITE_EDGES = 4;
+
     // Find white edges
-    constexpr size_t N_EDGE_ROWS = 2, N_WHITE_EDGES = 4;
-    array<array<size_t, 3>, N_WHITE_EDGES> white_edge;
+    // Will store search results in the below array, using a counter
+    array<w_edge, N_WHITE_EDGES> white_edges;
     size_t white_edge_n = 0;
-    for (size_t face = 0; face < N_FACES; ++face)
-        for (size_t rows = 0; white_edge_n < N_WHITE_EDGES
-            && rows < N_EDGE_ROWS; ++rows) {
-            if ('W' == cube[face][rows][1]) {
-                white_edge[white_edge_n][0] = face;
-                white_edge[white_edge_n][1] = rows;
-                white_edge[white_edge_n][2] = 1;
-                ++white_edge_n;
+    for (size_t face_n = 0; face_n < N_FACES && N_WHITE_EDGES > white_edge_n;
+        ++face_n) {
+        constexpr size_t MIDDLE = 1;
+        // Only two rows and two columns of every face can include a white edge
+        constexpr array<size_t, 2> RCS_N = { 0, 2 };
+        array<array<char, N_COLS>, N_ROWS>& face = cube[face_n];
+        // Two conditions for breaking the below loop
+        // 1. We have found 4 white edges
+        // 2. We exhausted all four edge locations
+        while (N_WHITE_EDGES > white_edge_n)
+            for (const size_t RC_N : RCS_N) {
+                bool white_edge_found = false;
+                if ('W' == face[RC_N][MIDDLE]) {
+                    white_edges[white_edge_n].coords = { face_n, RC_N, MIDDLE };
+                    white_edge_found = true;
+                }
+                else if ('W' == face[MIDDLE][RC_N]) {
+                    white_edges[white_edge_n].coords = { face_n, MIDDLE, RC_N };
+                    white_edge_found = true;
+                }
+                if (white_edge_found) ++white_edge_n;
             }
+    }
+
+    // We have found all the white edges!
+    displayCube();
+    for (w_edge white_edge : white_edges) {
+        // Ask the user for the other color of the white edge
+        // Keep prompting the user until receiving valid input
+        constexpr char WHITE_EDGE_COLORS[] = { 'O', 'R', 'G', 'B' };
+        string input = "\0";
+        const char* COLORS_END = end(WHITE_EDGE_COLORS);
+        while (find(begin(WHITE_EDGE_COLORS), COLORS_END, input[0])
+            == COLORS_END) {
+            // Ignore any remnant input from other prompts
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "What is the other color of the white edge on face "
+                << white_edge.coords.face << ", row "
+                << white_edge.coords.row << " and column "
+                << white_edge.coords.col << "? ";
+            getline(cin, input);
         }
-    
+        white_edge.other_color = input[0];
+
+        // Make a move based on the white edge's other color
+        color_coords correct_coords = { .face = UP };
+        switch (white_edge.other_color) {
+        case 'O':
+            correct_coords.row = 1;
+            correct_coords.col = 0;
+            break;
+        case 'R':
+            correct_coords.row = 1;
+            correct_coords.col = 2;
+            break;
+        case 'G':
+            correct_coords.row = 2;
+            correct_coords.col = 1;
+            break;
+        case 'B':
+            correct_coords.row = 0;
+            correct_coords.col = 1;
+            break;
+        default:
+            throw;
+        }
+        // White edge correctly positioned and oriented
+        if (white_edge.coords == correct_coords)
+            continue;
+    }
+
+    //bool done = false;
+    //while (!done) {
+    //    //for (size_t white_edge = 0; white_edge < N_WHITE_EDGES; ++white_edge)
+    //    for (size_t face = 0, white_edge = 0;
+    //        face < N_FACES && white_edge < N_WHITE_EDGES;
+    //        ++face)
+    //        for (size_t row = 0; row < N_ROWS; ++row)
+    //            for (size_t col = 0; col < N_COLS; ++col)
+    //                if ('W' == cube[face][row][col]) {
+    //                    white_edges[white_edge] = {face, row, col};
+    //                    ++white_edge;
+    //                }
+    //    for (array<size_t, 3> white_edge : white_edges) {
+    //        if (UP != white_edge[0]) {
+    //            done = false;
+    //            break;
+    //        }
+    //        done = true;
+    //    }
+    //    if (done) continue;
+    //    for (array<size_t, 3> white_edge : white_edges) {
+    //        // TODO: Skip good edges
+    //        size_t case_n = numeric_limits<size_t>::max();
+    //        if (UP == white_edge[0]) case_n = 0;
+    //        else if ([white_edge]() {
+    //            constexpr array<size_t, 4> MIDDLE_FACES = {{LEFT, FRONT,
+    //            RIGHT, BACK}};
+    //            for (const size_t FACE : MIDDLE_FACES)
+    //                if (FACE == white_edge[0]) {
+    //                    return true;
+    //                }
+    //            return false;
+    //            }()) {
+    //            if ([white_edge]() {
+    //                constexpr array<size_t, 2> CASE_1 = {{0, 2}};
+    //                for (const size_t ROW_N : CASE_1)
+    //                    if (ROW_N == white_edge[1]) return true;
+    //                return false;
+    //                }())
+    //                case_n = 1;
+    //            else if (1 == white_edge[1])
+    //                case_n = 2;
+    //            }
+    //            switch (case_n) {
+    //            case 0:
+    //                
+    //                break;
+    //            default:
+    //                throw;
+    //        }
+    //    }
+    //}
+
     // Form a daisy
-    for (white_edge_n = 0; white_edge_n < N_WHITE_EDGES; ++white_edge_n) {
-            string move;
-        //if (white_edge[]);
-        //switch (rows) {
-        //case 2:
-        //    switch (face) {
-        //    case LEFT:
-        //        move += "L";
-        //        break;
-        //    case FRONT:
-        //        move += "F";
-        //        break;
-        //    case RIGHT:
-        //        move += "R";
-        //        break;
-        //    case BACK:
-        //        move += "B";
-        //    }
-        //    move += " ";
-        //    break;
-        //case 1:
-        //    switch (face) {
-        //    case LEFT:
-        //        move += "F";
-        //        break;
-        //    case FRONT:
-        //        move += "R";
-        //        break;
-        //    case RIGHT:
-        //        move += "B";
-        //        break;
-        //    case BACK:
-        //        move += "L";
-        //        break;
-        //    }
-        //    move += " ";
-        //    break;
-        //case 0:
-        //    break;
-        //}
-        }
+    //for (white_edge_n = 0; white_edge_n < N_WHITE_EDGES; ++white_edge_n) {
+    //        string move;
+    //    //if (white_edge[]);
+    //    //switch (row) {
+    //    //case 2:
+    //    //    switch (face) {
+    //    //    case LEFT:
+    //    //        move += "L";
+    //    //        break;
+    //    //    case FRONT:
+    //    //        move += "F";
+    //    //        break;
+    //    //    case RIGHT:
+    //    //        move += "R";
+    //    //        break;
+    //    //    case BACK:
+    //    //        move += "B";
+    //    //    }
+    //    //    move += " ";
+    //    //    break;
+    //    //case 1:
+    //    //    switch (face) {
+    //    //    case LEFT:
+    //    //        move += "F";
+    //    //        break;
+    //    //    case FRONT:
+    //    //        move += "R";
+    //    //        break;
+    //    //    case RIGHT:
+    //    //        move += "B";
+    //    //        break;
+    //    //    case BACK:
+    //    //        move += "L";
+    //    //        break;
+    //    //    }
+    //    //    move += " ";
+    //    //    break;
+    //    //case 0:
+    //    //    break;
+    //    //}
+    //    }
 
     // Assemble the cross
-
-
 }
 
 void solveWhiteCorners() {
@@ -378,14 +514,17 @@ void solvePll() {
 }
 
 void displayCube() {
+    cout << "The first face is UP, then follow LEFT, FRONT, RIGHT, and BACK, "
+        << "then the last" << endl << "face is DOWN." << endl;
+
     // Print the top face
     exterior_face(true);
 
     // Print the middle faces
     constexpr size_t N_MIDDLE_FACES = N_FACES - 1;
-    for (int row = 0; row < N_ROWS; row++) {
+    for (size_t row = 0; row < N_ROWS; row++) {
         for (size_t face = 1; face < N_MIDDLE_FACES; ++face)
-            for (int col = 0; col < N_COLS; ++col)
+            for (size_t col = 0; col < N_COLS; ++col)
                 cout << cube[face][row][col] << ' ';
         cout << endl;
     }
@@ -423,41 +562,41 @@ void move_z(const bool PRIME) {
 // Face moves
 void moveU() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][0][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[FRONT][0][i] = cube[RIGHT][0][i];
         cube[RIGHT][0][i] = cube[BACK][0][i];
         cube[BACK][0][i] = cube[LEFT][0][i];
         cube[LEFT][0][i] = temp[i];
     }
-    rotateFaceClockwise(cube[TOP]);
+    rotateFaceClockwise(cube[UP]);
 }
 
 void moveD() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         temp[i] = cube[FRONT][2][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
+    for (size_t i = 0; i < N_COLS; i++) {
         cube[FRONT][2][i] = cube[LEFT][2][i];
         cube[LEFT][2][i] = cube[BACK][2][i];
         cube[BACK][2][i] = cube[RIGHT][2][i];
         cube[RIGHT][2][i] = temp[i];
     }
-    rotateFaceClockwise(cube[BOTTOM]);
+    rotateFaceClockwise(cube[DOWN]);
 }
 
 void moveF() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][2][i];
+    for (size_t i = 0; i < N_COLS; i++) {
+        temp[i] = cube[UP][2][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][2][i] = cube[LEFT][2 - i][2];
-        cube[LEFT][2 - i][2] = cube[BOTTOM][0][2 - i];
-        cube[BOTTOM][0][2 - i] = cube[RIGHT][i][0];
+    for (size_t i = 0; i < N_COLS; i++) {
+        cube[UP][2][i] = cube[LEFT][2 - i][2];
+        cube[LEFT][2 - i][2] = cube[DOWN][0][2 - i];
+        cube[DOWN][0][2 - i] = cube[RIGHT][i][0];
         cube[RIGHT][i][0] = temp[i];
     }
     rotateFaceClockwise(cube[FRONT]);
@@ -465,13 +604,13 @@ void moveF() {
 
 void moveB() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][0][i];
+    for (size_t i = 0; i < N_COLS; i++) {
+        temp[i] = cube[UP][0][i];
     }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][0][i] = cube[RIGHT][i][2];
-        cube[RIGHT][i][2] = cube[BOTTOM][2][2 - i];
-        cube[BOTTOM][2][2 - i] = cube[LEFT][2 - i][0];
+    for (size_t i = 0; i < N_COLS; i++) {
+        cube[UP][0][i] = cube[RIGHT][i][2];
+        cube[RIGHT][i][2] = cube[DOWN][2][2 - i];
+        cube[DOWN][2][2 - i] = cube[LEFT][2 - i][0];
         cube[LEFT][2 - i][0] = temp[i];
     }
     rotateFaceClockwise(cube[BACK]);
@@ -479,13 +618,13 @@ void moveB() {
 
 void moveL() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][i][0];
+    for (size_t i = 0; i < N_COLS; i++) {
+        temp[i] = cube[UP][i][0];
     }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][i][0] = cube[BACK][2 - i][2];
-        cube[BACK][2 - i][2] = cube[BOTTOM][i][0];
-        cube[BOTTOM][i][0] = cube[FRONT][i][0];
+    for (size_t i = 0; i < N_COLS; i++) {
+        cube[UP][i][0] = cube[BACK][2 - i][2];
+        cube[BACK][2 - i][2] = cube[DOWN][i][0];
+        cube[DOWN][i][0] = cube[FRONT][i][0];
         cube[FRONT][i][0] = temp[i];
     }
     rotateFaceClockwise(cube[LEFT]);
@@ -493,13 +632,13 @@ void moveL() {
 
 void moveR() {
     array<char, N_COLS> temp;
-    for (int i = 0; i < N_COLS; i++) {
-        temp[i] = cube[TOP][i][2];
+    for (size_t i = 0; i < N_COLS; i++) {
+        temp[i] = cube[UP][i][2];
     }
-    for (int i = 0; i < N_COLS; i++) {
-        cube[TOP][i][2] = cube[FRONT][i][2];
-        cube[FRONT][i][2] = cube[BOTTOM][i][2];
-        cube[BOTTOM][i][2] = cube[BACK][2 - i][0];
+    for (size_t i = 0; i < N_COLS; i++) {
+        cube[UP][i][2] = cube[FRONT][i][2];
+        cube[FRONT][i][2] = cube[DOWN][i][2];
+        cube[DOWN][i][2] = cube[BACK][2 - i][0];
         cube[BACK][2 - i][0] = temp[i];
     }
     rotateFaceClockwise(cube[RIGHT]);
@@ -605,17 +744,17 @@ void positionYellowCorners() {
         // Diagnostic print of current corner positions
         cout << "Current Corner Positions:" << endl;
         cout << "Front Corners: "
-             << cube[FRONT][0][0] << " " << cube[FRONT][0][2]
-             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+            << cube[FRONT][0][0] << " " << cube[FRONT][0][2]
+            << " (Center: " << cube[FRONT][1][1] << ")" << endl;
         cout << "Right Corners: "
-             << cube[RIGHT][0][0] << " " << cube[RIGHT][0][2]
-             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+            << cube[RIGHT][0][0] << " " << cube[RIGHT][0][2]
+            << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
         cout << "Back Corners: "
-             << cube[BACK][0][0] << " " << cube[BACK][0][2]
-             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+            << cube[BACK][0][0] << " " << cube[BACK][0][2]
+            << " (Center: " << cube[BACK][1][1] << ")" << endl;
         cout << "Left Corners: "
-             << cube[LEFT][0][0] << " " << cube[LEFT][0][2]
-             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+            << cube[LEFT][0][0] << " " << cube[LEFT][0][2]
+            << " (Center: " << cube[LEFT][1][1] << ")" << endl;
 
         // Positioning algorithm
         moveU();
@@ -631,7 +770,7 @@ void positionYellowCorners() {
     }
 
     cout << "Yellow Corners Positioning: "
-         << (isYellowCornersPositioned() ? "Solved" : "Not Solved") << endl;
+        << (isYellowCornersPositioned() ? "Solved" : "Not Solved") << endl;
 }
 
 
@@ -639,7 +778,7 @@ void alignYellowCorners() {
     // Orient yellow corners
     for (int corner = 0; corner < 4; corner++) {
         // Repeat until corner is oriented correctly
-        while (cube[TOP][2][2] != 'Y') {
+        while (cube[UP][2][2] != 'Y') {
             // R U R' U' (sexy move)
             rightyAlg();
         }
@@ -658,21 +797,18 @@ void orientYellowEdges() {
         // Diagnostic print of current edge orientations
         cout << "Current Edge Orientations:" << endl;
         cout << "Front Edge: " << cube[FRONT][0][1]
-             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+            << " (Center: " << cube[FRONT][1][1] << ")" << endl;
         cout << "Right Edge: " << cube[RIGHT][0][1]
-             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+            << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
         cout << "Back Edge: " << cube[BACK][0][1]
-             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+            << " (Center: " << cube[BACK][1][1] << ")" << endl;
         cout << "Left Edge: " << cube[LEFT][0][1]
-             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+            << " (Center: " << cube[LEFT][1][1] << ")" << endl;
 
         // Find a correctly oriented edge
-        bool foundOrientedEdge = false;
         for (int i = 0; i < 4; i++) {
-            if (cube[FRONT][0][1] == cube[FRONT][1][1]) {
-                foundOrientedEdge = true;
+            if (cube[FRONT][0][1] == cube[FRONT][1][1])
                 break;
-            }
             moveU();
             cout << "Rotating U to find oriented edge" << endl;
         }
@@ -690,20 +826,20 @@ void orientYellowEdges() {
     }
 
     cout << "Yellow Edges Orientation: "
-         << (isYellowEdgesOriented() ? "Solved" : "Not Solved") << endl;
+        << (isYellowEdgesOriented() ? "Solved" : "Not Solved") << endl;
 }
 
 bool isYellowEdgesOriented() {
     return (cube[FRONT][0][1] == cube[FRONT][1][1] &&
-            cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
-            cube[BACK][0][1] == cube[BACK][1][1] &&
-            cube[LEFT][0][1] == cube[LEFT][1][1]);
+        cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
+        cube[BACK][0][1] == cube[BACK][1][1] &&
+        cube[LEFT][0][1] == cube[LEFT][1][1]);
 }
 bool isAllCornersOriented() {
-    return (cube[TOP][0][0] == 'Y' &&
-            cube[TOP][0][2] == 'Y' &&
-            cube[TOP][2][0] == 'Y' &&
-            cube[TOP][2][2] == 'Y');
+    return (cube[UP][0][0] == 'Y' &&
+        cube[UP][0][2] == 'Y' &&
+        cube[UP][2][0] == 'Y' &&
+        cube[UP][2][2] == 'Y');
 }
 
 void orientYellowCorners() {
@@ -717,10 +853,10 @@ void orientYellowCorners() {
         // Diagnostic print of current corner orientations
         cout << "Current Corner Orientations:" << endl;
         cout << "Top Face Corners: "
-             << cube[TOP][0][0] << " "
-             << cube[TOP][0][2] << " "
-             << cube[TOP][2][0] << " "
-             << cube[TOP][2][2] << endl;
+            << cube[UP][0][0] << " "
+            << cube[UP][0][2] << " "
+            << cube[UP][2][0] << " "
+            << cube[UP][2][2] << endl;
 
         // Iterate through each corner
         for (int corner = 0; corner < 4; corner++) {
@@ -731,7 +867,7 @@ void orientYellowCorners() {
             moveD();
 
             // Check if current corner is oriented
-            if (cube[TOP][2][2] == 'Y') {
+            if (cube[UP][2][2] == 'Y') {
                 break;
             }
 
@@ -750,7 +886,7 @@ bool isYellowCornersPositioned() {
             cube[BACK][0][0] != cube[BACK][0][2] ||
             cube[LEFT][0][0] != cube[LEFT][0][2]) {
             return false;
-            }
+        }
         moveU();
         rotations++;
     }
@@ -763,27 +899,27 @@ bool isYellowCornersPositioned() {
 
 // Additional helper functions for last layer
 bool isYellowCrossShape() {
-    return (cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y' &&
-            cube[TOP][1][2] == 'Y' && cube[TOP][2][1] == 'Y');
+    return (cube[UP][0][1] == 'Y' && cube[UP][1][0] == 'Y' &&
+        cube[UP][1][2] == 'Y' && cube[UP][2][1] == 'Y');
 }
 
 bool isYellowLineShape() {
-    return ((cube[TOP][0][1] == 'Y' && cube[TOP][2][1] == 'Y') ||
-            (cube[TOP][1][0] == 'Y' && cube[TOP][1][2] == 'Y'));
+    return ((cube[UP][0][1] == 'Y' && cube[UP][2][1] == 'Y') ||
+        (cube[UP][1][0] == 'Y' && cube[UP][1][2] == 'Y'));
 }
 
 bool isYellowLShape() {
-    return ((cube[TOP][0][1] == 'Y' && cube[TOP][1][0] == 'Y') ||
-            (cube[TOP][1][0] == 'Y' && cube[TOP][2][1] == 'Y') ||
-            (cube[TOP][2][1] == 'Y' && cube[TOP][1][2] == 'Y') ||
-            (cube[TOP][1][2] == 'Y' && cube[TOP][0][1] == 'Y'));
+    return ((cube[UP][0][1] == 'Y' && cube[UP][1][0] == 'Y') ||
+        (cube[UP][1][0] == 'Y' && cube[UP][2][1] == 'Y') ||
+        (cube[UP][2][1] == 'Y' && cube[UP][1][2] == 'Y') ||
+        (cube[UP][1][2] == 'Y' && cube[UP][0][1] == 'Y'));
 }
 
 // Final Layer function which includes all functions to be used in final layer
 void solveLastLayer() {
     const int MAX_GLOBAL_ATTEMPTS = 50;
     int globalAttempts = 0;
-    bool stagesSolved[4] = {false};
+    bool stagesSolved[4] = { false };
 
     cout << "Starting Last Layer Solution..." << endl;
 
@@ -818,7 +954,8 @@ void solveLastLayer() {
     // Final verification
     if (isCubeSolved()) {
         cout << "Cube successfully solved in " << globalAttempts << " global attempts!" << endl;
-    } else {
+    }
+    else {
         cout << "Cube solving failed after " << MAX_GLOBAL_ATTEMPTS << " attempts." << endl;
 
         // Print which stages were not solved
@@ -848,7 +985,7 @@ bool isCubeSolved() {
 }
 
 void resetCube() {
-    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = {{
+    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = { {
         {{{{'W', 'W', 'W'}},
           {{'W', 'W', 'W'}},
           {{'W', 'W', 'W'}}}},
@@ -872,7 +1009,7 @@ void resetCube() {
         {{{{'Y', 'Y', 'Y'}},
           {{'Y', 'Y', 'Y'}},
           {{'Y', 'Y', 'Y'}}}}
-    }};
+    } };
 
     // Copy the default state back into the cube
     cube = defaultCube;
