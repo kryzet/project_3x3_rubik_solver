@@ -306,6 +306,10 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
 
 
 void solveWhiteCross() {
+    typedef struct w_edge {
+        color_coords coords;
+        char other_color = '\0';
+    } w_edge;
     constexpr size_t N_WHITE_EDGES = 4;
     
     // Find white edges
