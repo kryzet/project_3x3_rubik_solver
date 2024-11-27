@@ -68,12 +68,7 @@ void sledgehammerMove();
 
 int main()
 {
-    unsigned int choice = 0;
-    const string MENU = "============ Welcome to Rubik's Cube Solver ========="
-        "===\n1. Scramble the cube\n2. Solve up to F2L\n3. Solve Last Layers\n"
-        "4. Display cube\n5. Check if cube is solved\n6. Reset the cube\n7. Ex"
-        "it\n=============================================\nEnter your choice "
-        "(1-8): ";
+    unsigned int choice;
     resetCube();
 
     do {
