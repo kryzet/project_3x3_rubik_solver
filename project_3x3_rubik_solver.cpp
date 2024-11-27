@@ -806,12 +806,9 @@ void orientYellowEdges() {
              << " (Center: " << cube[LEFT][1][1] << ")" << endl;
 
         // Find a correctly oriented edge
-        bool foundOrientedEdge = false;
         for (int i = 0; i < 4; i++) {
-            if (cube[FRONT][0][1] == cube[FRONT][1][1]) {
-                foundOrientedEdge = true;
+            if (cube[FRONT][0][1] == cube[FRONT][1][1])
                 break;
-            }
             moveU();
             cout << "Rotating U to find oriented edge" << endl;
         }
