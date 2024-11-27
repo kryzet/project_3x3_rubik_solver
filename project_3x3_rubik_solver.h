@@ -1,4 +1,4 @@
-﻿// project_3x3_rubik_solver1.h : Include file for standard system include files,
+﻿// project_3x3_rubik_solver.h : Include file for standard system include files,
 // or project specific include files.
 
 #pragma once
@@ -9,4 +9,4 @@
 #include <array>
 #include <string>
 #include <cstdbool>
-#include <limits>
+//#include <limits>

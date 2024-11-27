@@ -421,7 +421,7 @@ void solveWhiteCross() {
     //    if (done) continue;
     //    for (array<size_t, 3> white_edge : white_edges) {
     //        // TODO: Skip good edges
-    //        size_t case_n = 0 - 1;
+    //        size_t case_n = numeric_limits<size_t>::max();
     //        if (UP == white_edge[0]) case_n = 0;
     //        else if ([white_edge]() {
     //            constexpr array<size_t, 4> MIDDLE_FACES = {{LEFT, FRONT,
