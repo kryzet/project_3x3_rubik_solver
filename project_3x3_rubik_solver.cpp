@@ -11,6 +11,18 @@ constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
 UP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, DOWN = 5;
 array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
 
+// A data structure for storing the coordinates of a color tag
+typedef struct color_coords {
+    size_t face, row, col;
+} color_coords;
+/* Operator overload for allowing the comparison of two instances of the new
+datatype */
+bool operator==(const color_coords& lhs, const color_coords& rhs) {
+    return lhs.face == rhs.face &&
+           lhs.row == rhs.row &&
+           lhs.col == rhs.col;
+}
+
 // functions
 void printFace(array<array<char, N_COLS>, N_ROWS> face);
 void rotateTopFaceEdges();
