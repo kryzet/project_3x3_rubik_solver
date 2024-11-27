@@ -85,7 +85,17 @@ int main()
 
     do {
         // Display the menu
-        cout << MENU;
+        cout << "=== Welcome to Rubik's Cube Solver ===" << endl
+            << "1. Display cube" << endl
+            << "2. Scramble cube" << endl
+            << "3. Solve white cross" << endl
+            << "4. Solve white corners" << endl
+            << "5. Solve last layer" << endl
+            << "6. Check if cube is solved" << endl
+            << "7. Reset cube" << endl
+            << "8. Exit" << endl
+            << "======================================" << endl
+            << "Enter your choice (1-8): ";
         cin >> choice;
         if (cin.fail()) {
             cin.clear();  // Clear the error flag
@@ -99,19 +109,21 @@ int main()
         // Handle user input
         switch (choice) {
         case 1:
-            scramble();
-            break;
-        case 2:
-            solveWhiteCross(); solveWhiteCorners(); solveMiddleLayer();
-            break;
-        case 3:
-            solveLastLayer();
-            break;
-
-            case 4:
             displayCube();
             break;
+        case 2:
+            scramble();
+            break;
+        case 3:
+            solveWhiteCross();
+            break;
+            case 4:
+            solveWhiteCorners();
+            break;
         case 5:
+            solveLastLayer();
+            break;
+        case 6:
             if (isCubeSolved()) {
                 cout << "The Rubik's Cube is solved!" << endl;
             }
@@ -119,11 +131,11 @@ int main()
                 cout << "The Rubik's Cube is not solved yet." << endl;
             }
             break;
-        case 6:
+        case 7:
             resetCube();
             cout << "The cube has been reset." << endl;
             break;
-        case 7:
+        case 8:
             cout << "Exiting the program. Goodbye!" << endl;
             break;
         default:
