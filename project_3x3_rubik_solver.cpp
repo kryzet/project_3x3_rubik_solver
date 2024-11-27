@@ -19,8 +19,8 @@ typedef struct color_coords {
 datatype */
 bool operator==(const color_coords& lhs, const color_coords& rhs) {
     return lhs.face == rhs.face &&
-           lhs.row == rhs.row &&
-           lhs.col == rhs.col;
+        lhs.row == rhs.row &&
+        lhs.col == rhs.col;
 }
 
 // functions
@@ -117,7 +117,7 @@ int main()
         case 3:
             solveWhiteCross();
             break;
-            case 4:
+        case 4:
             solveWhiteCorners();
             break;
         case 5:
@@ -323,7 +323,7 @@ void solveWhiteCross() {
         char other_color = '\0';
     } w_edge;
     constexpr size_t N_WHITE_EDGES = 4;
-    
+
     // Find white edges
     // Will store search results in the below array, using a counter
     array<w_edge, N_WHITE_EDGES> white_edges;
@@ -332,8 +332,8 @@ void solveWhiteCross() {
         ++face_n) {
         constexpr size_t MIDDLE = 1;
         // Only two rows and two columns of every face can include a white edge
-        constexpr array<size_t, 2> RCS_N = {0, 2};
-        array<array<char, N_COLS>, N_ROWS> &face = cube[face_n];
+        constexpr array<size_t, 2> RCS_N = { 0, 2 };
+        array<array<char, N_COLS>, N_ROWS>& face = cube[face_n];
         // Two conditions for breaking the below loop
         // 1. We have found 4 white edges
         // 2. We exhausted all four edge locations
@@ -341,25 +341,25 @@ void solveWhiteCross() {
             for (const size_t RC_N : RCS_N) {
                 bool white_edge_found = false;
                 if ('W' == face[RC_N][MIDDLE]) {
-                    white_edges[white_edge_n].coords = {face_n, RC_N, MIDDLE};
+                    white_edges[white_edge_n].coords = { face_n, RC_N, MIDDLE };
                     white_edge_found = true;
                 }
                 else if ('W' == face[MIDDLE][RC_N]) {
-                    white_edges[white_edge_n].coords = {face_n, MIDDLE, RC_N};
+                    white_edges[white_edge_n].coords = { face_n, MIDDLE, RC_N };
                     white_edge_found = true;
                 }
                 if (white_edge_found) ++white_edge_n;
             }
     }
-    
+
     // We have found all the white edges!
     displayCube();
     for (w_edge white_edge : white_edges) {
         // Ask the user for the other color of the white edge
         // Keep prompting the user until receiving valid input
-        constexpr char WHITE_EDGE_COLORS[] = {'O', 'R', 'G', 'B'};
+        constexpr char WHITE_EDGE_COLORS[] = { 'O', 'R', 'G', 'B' };
         string input = "\0";
-        const char *COLORS_END = end(WHITE_EDGE_COLORS);
+        const char* COLORS_END = end(WHITE_EDGE_COLORS);
         while (find(begin(WHITE_EDGE_COLORS), COLORS_END, input[0])
             == COLORS_END) {
             // Ignore any remnant input from other prompts
@@ -373,7 +373,7 @@ void solveWhiteCross() {
         white_edge.other_color = input[0];
 
         // Make a move based on the white edge's other color
-        color_coords correct_coords = {.face = UP};
+        color_coords correct_coords = { .face = UP };
         switch (white_edge.other_color) {
         case 'O':
             correct_coords.row = 1;
@@ -393,12 +393,12 @@ void solveWhiteCross() {
             break;
         default:
             throw;
-            }
+        }
         // White edge correctly positioned and oriented
         if (white_edge.coords == correct_coords)
             continue;
-        }
-    
+    }
+
     //bool done = false;
     //while (!done) {
     //    //for (size_t white_edge = 0; white_edge < N_WHITE_EDGES; ++white_edge)
@@ -417,7 +417,7 @@ void solveWhiteCross() {
     //            break;
     //        }
     //        done = true;
-        //    }
+    //    }
     //    if (done) continue;
     //    for (array<size_t, 3> white_edge : white_edges) {
     //        // TODO: Skip good edges
@@ -449,14 +449,14 @@ void solveWhiteCross() {
     //            default:
     //                throw;
     //        }
-        //    }
-        //}
-    
+    //    }
+    //}
+
     // Form a daisy
     //for (white_edge_n = 0; white_edge_n < N_WHITE_EDGES; ++white_edge_n) {
     //        string move;
     //    //if (white_edge[]);
-    //    //switch (rows) {
+    //    //switch (row) {
     //    //case 2:
     //    //    switch (face) {
     //    //    case LEFT:
@@ -516,7 +516,7 @@ void solvePll() {
 void displayCube() {
     cout << "The first face is UP, then follow LEFT, FRONT, RIGHT, and BACK, "
         << "then the last" << endl << "face is DOWN." << endl;
-    
+
     // Print the top face
     exterior_face(true);
 
@@ -744,17 +744,17 @@ void positionYellowCorners() {
         // Diagnostic print of current corner positions
         cout << "Current Corner Positions:" << endl;
         cout << "Front Corners: "
-             << cube[FRONT][0][0] << " " << cube[FRONT][0][2]
-             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+            << cube[FRONT][0][0] << " " << cube[FRONT][0][2]
+            << " (Center: " << cube[FRONT][1][1] << ")" << endl;
         cout << "Right Corners: "
-             << cube[RIGHT][0][0] << " " << cube[RIGHT][0][2]
-             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+            << cube[RIGHT][0][0] << " " << cube[RIGHT][0][2]
+            << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
         cout << "Back Corners: "
-             << cube[BACK][0][0] << " " << cube[BACK][0][2]
-             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+            << cube[BACK][0][0] << " " << cube[BACK][0][2]
+            << " (Center: " << cube[BACK][1][1] << ")" << endl;
         cout << "Left Corners: "
-             << cube[LEFT][0][0] << " " << cube[LEFT][0][2]
-             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+            << cube[LEFT][0][0] << " " << cube[LEFT][0][2]
+            << " (Center: " << cube[LEFT][1][1] << ")" << endl;
 
         // Positioning algorithm
         moveU();
@@ -770,7 +770,7 @@ void positionYellowCorners() {
     }
 
     cout << "Yellow Corners Positioning: "
-         << (isYellowCornersPositioned() ? "Solved" : "Not Solved") << endl;
+        << (isYellowCornersPositioned() ? "Solved" : "Not Solved") << endl;
 }
 
 
@@ -797,13 +797,13 @@ void orientYellowEdges() {
         // Diagnostic print of current edge orientations
         cout << "Current Edge Orientations:" << endl;
         cout << "Front Edge: " << cube[FRONT][0][1]
-             << " (Center: " << cube[FRONT][1][1] << ")" << endl;
+            << " (Center: " << cube[FRONT][1][1] << ")" << endl;
         cout << "Right Edge: " << cube[RIGHT][0][1]
-             << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
+            << " (Center: " << cube[RIGHT][1][1] << ")" << endl;
         cout << "Back Edge: " << cube[BACK][0][1]
-             << " (Center: " << cube[BACK][1][1] << ")" << endl;
+            << " (Center: " << cube[BACK][1][1] << ")" << endl;
         cout << "Left Edge: " << cube[LEFT][0][1]
-             << " (Center: " << cube[LEFT][1][1] << ")" << endl;
+            << " (Center: " << cube[LEFT][1][1] << ")" << endl;
 
         // Find a correctly oriented edge
         for (int i = 0; i < 4; i++) {
@@ -826,14 +826,14 @@ void orientYellowEdges() {
     }
 
     cout << "Yellow Edges Orientation: "
-         << (isYellowEdgesOriented() ? "Solved" : "Not Solved") << endl;
+        << (isYellowEdgesOriented() ? "Solved" : "Not Solved") << endl;
 }
 
 bool isYellowEdgesOriented() {
     return (cube[FRONT][0][1] == cube[FRONT][1][1] &&
-            cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
-            cube[BACK][0][1] == cube[BACK][1][1] &&
-            cube[LEFT][0][1] == cube[LEFT][1][1]);
+        cube[RIGHT][0][1] == cube[RIGHT][1][1] &&
+        cube[BACK][0][1] == cube[BACK][1][1] &&
+        cube[LEFT][0][1] == cube[LEFT][1][1]);
 }
 bool isAllCornersOriented() {
     return (cube[UP][0][0] == 'Y' &&
@@ -886,7 +886,7 @@ bool isYellowCornersPositioned() {
             cube[BACK][0][0] != cube[BACK][0][2] ||
             cube[LEFT][0][0] != cube[LEFT][0][2]) {
             return false;
-            }
+        }
         moveU();
         rotations++;
     }
@@ -919,7 +919,7 @@ bool isYellowLShape() {
 void solveLastLayer() {
     const int MAX_GLOBAL_ATTEMPTS = 50;
     int globalAttempts = 0;
-    bool stagesSolved[4] = {false};
+    bool stagesSolved[4] = { false };
 
     cout << "Starting Last Layer Solution..." << endl;
 
@@ -954,7 +954,8 @@ void solveLastLayer() {
     // Final verification
     if (isCubeSolved()) {
         cout << "Cube successfully solved in " << globalAttempts << " global attempts!" << endl;
-    } else {
+    }
+    else {
         cout << "Cube solving failed after " << MAX_GLOBAL_ATTEMPTS << " attempts." << endl;
 
         // Print which stages were not solved
@@ -984,7 +985,7 @@ bool isCubeSolved() {
 }
 
 void resetCube() {
-    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = {{
+    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = { {
         {{{{'W', 'W', 'W'}},
           {{'W', 'W', 'W'}},
           {{'W', 'W', 'W'}}}},
@@ -1008,7 +1009,7 @@ void resetCube() {
         {{{{'Y', 'Y', 'Y'}},
           {{'Y', 'Y', 'Y'}},
           {{'Y', 'Y', 'Y'}}}}
-    }};
+    } };
 
     // Copy the default state back into the cube
     cube = defaultCube;
