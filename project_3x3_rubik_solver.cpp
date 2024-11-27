@@ -313,18 +313,78 @@ void solveWhiteCross() {
     constexpr size_t N_WHITE_EDGES = 4;
     
     // Find white edges
-    constexpr size_t N_EDGE_ROWS = 2;
-    array<array<size_t, 3>, N_WHITE_EDGES> white_edge;
+    // Will store search results in the below array, using a counter
+    array<w_edge, N_WHITE_EDGES> white_edges;
     size_t white_edge_n = 0;
-    for (size_t face = 0; face < N_FACES; ++face)
-        for (size_t rows = 0; white_edge_n < N_WHITE_EDGES
-            && rows < N_EDGE_ROWS; ++rows) {
-            if ('W' == cube[face][rows][1]) {
-                white_edge[white_edge_n][0] = face;
-                white_edge[white_edge_n][1] = rows;
-                white_edge[white_edge_n][2] = 1;
-                ++white_edge_n;
+    for (size_t face_n = 0; face_n < N_FACES && N_WHITE_EDGES > white_edge_n;
+        ++face_n) {
+        constexpr size_t MIDDLE = 1;
+        // Only two rows and two columns of every face can include a white edge
+        constexpr array<size_t, 2> RCS_N = {0, 2};
+        array<array<char, N_COLS>, N_ROWS> &face = cube[face_n];
+        // Two conditions for breaking the below loop
+        // 1. We have found 4 white edges
+        // 2. We exhausted all four edge locations
+        while (N_WHITE_EDGES > white_edge_n)
+            for (const size_t RC_N : RCS_N) {
+                bool white_edge_found = false;
+                if ('W' == face[RC_N][MIDDLE]) {
+                    white_edges[white_edge_n].coords = {face_n, RC_N, MIDDLE};
+                    white_edge_found = true;
+                }
+                else if ('W' == face[MIDDLE][RC_N]) {
+                    white_edges[white_edge_n].coords = {face_n, MIDDLE, RC_N};
+                    white_edge_found = true;
+                }
+                if (white_edge_found) ++white_edge_n;
             }
+    }
+    
+    // We have found all the white edges!
+    displayCube();
+    for (w_edge white_edge : white_edges) {
+        // Ask the user for the other color of the white edge
+        // Keep prompting the user until receiving valid input
+        constexpr char WHITE_EDGE_COLORS[] = {'O', 'R', 'G', 'B'};
+        string input = "\0";
+        const char *COLORS_END = end(WHITE_EDGE_COLORS);
+        while (find(begin(WHITE_EDGE_COLORS), COLORS_END, input[0])
+            == COLORS_END) {
+            // Ignore any remnant input from other prompts
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "What is the other color of the white edge on face "
+                << white_edge.coords.face << ", row "
+                << white_edge.coords.row << " and column "
+                << white_edge.coords.col << "? ";
+            getline(cin, input);
+        }
+        white_edge.other_color = input[0];
+
+        // Make a move based on the white edge's other color
+        color_coords correct_coords = {.face = UP};
+        switch (white_edge.other_color) {
+        case 'O':
+            correct_coords.row = 1;
+            correct_coords.col = 0;
+            break;
+        case 'R':
+            correct_coords.row = 1;
+            correct_coords.col = 2;
+            break;
+        case 'G':
+            correct_coords.row = 2;
+            correct_coords.col = 1;
+            break;
+        case 'B':
+            correct_coords.row = 0;
+            correct_coords.col = 1;
+            break;
+        default:
+            throw;
+            }
+        // White edge correctly positioned and oriented
+        if (white_edge.coords == correct_coords)
+            continue;
         }
     
     //bool done = false;
