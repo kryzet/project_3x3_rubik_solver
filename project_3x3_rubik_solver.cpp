@@ -34,6 +34,15 @@ struct CubeState {
     Edges edges;
 };
 
+//struct CubeState {
+//    std::array<uint8_t, N_EDGES> edge_permutation,
+//        edge_orientation;    // Values: 0 or 1 (mod N_EDGE_ORIENTS)
+//    std::array<uint8_t, N_CORNERS> corner_permutation,  
+//        corner_orientation;  // Values: 0, 1, or 2 (mod N_CORNER_ORIENTS)
+//};
+
+// BEGIN DEPRECATED CODE
+
 /* Declare the face arrays with a compile-time constant for the
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
@@ -51,6 +60,8 @@ bool operator==(const color_coords& lhs, const color_coords& rhs) {
         lhs.row == rhs.row &&
         lhs.col == rhs.col;
 }
+
+// END DEPRECATED CODE
 
 // functions
 void printFace(array<array<char, N_COLS>, N_ROWS> face);
