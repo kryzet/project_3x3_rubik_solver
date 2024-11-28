@@ -355,22 +355,24 @@ void solveWhiteCross() {
     // We have found all the white edges!
     displayCube();
     for (w_edge white_edge : white_edges) {
-        // Ask the user for the other color of the white edge
-        // Keep prompting the user until receiving valid input
-        constexpr char WHITE_EDGE_COLORS[] = { 'O', 'R', 'G', 'B' };
-        string input = "\0";
-        const char* COLORS_END = end(WHITE_EDGE_COLORS);
-        while (find(begin(WHITE_EDGE_COLORS), COLORS_END, input[0])
-            == COLORS_END) {
-            // Ignore any remnant input from other prompts
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "What is the other color of the white edge on face "
-                << white_edge.coords.face << ", row "
-                << white_edge.coords.row << " and column "
-                << white_edge.coords.col << "? ";
-            getline(cin, input);
-        }
-        white_edge.other_color = input[0];
+        //// Ask the user for the other color of the white edge
+
+        //// Keep prompting the user until receiving valid input
+        //constexpr char WHITE_EDGE_COLORS[] = { 'O', 'R', 'G', 'B' };
+        //string input = "\0";
+        //const char* COLORS_END = end(WHITE_EDGE_COLORS);
+        //while (find(begin(WHITE_EDGE_COLORS), COLORS_END, input[0])
+        //    == COLORS_END) {
+        //    // Ignore any remnant input from other prompts
+        //    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        //    cout << "What is the other color of the white edge on face "
+        //        << white_edge.coords.face << ", row "
+        //        << white_edge.coords.row << " and column "
+        //        << white_edge.coords.col << "? ";
+        //    getline(cin, input);
+        //}
+        //white_edge.other_color = input[0];
+
 
         // Make a move based on the white edge's other color
         color_coords correct_coords = { .face = UP };
@@ -394,9 +396,11 @@ void solveWhiteCross() {
         default:
             throw;
         }
+        size_t case_n = numeric_limits<size_t>::max();
         // White edge correctly positioned and oriented
         if (white_edge.coords == correct_coords)
             continue;
+        else if (cube[][1][1] == white_edge.other_color)
     }
 
     //bool done = false;
