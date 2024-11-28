@@ -5,6 +5,19 @@
 
 using namespace std;
 
+// Define the cube's state structure
+constexpr size_t N_CORNERS = 8, N_EDGES = 12;
+struct CubeState {
+    std::array<uint8_t, N_CORNERS> corner_permutation,  /* Permutations should
+                                                        be sorted when
+                                                        solved */
+        corner_orientation;                             /* Values: 0, 1, or 2
+                                                        (mod 3 possible
+                                                        orientations) */
+    std::array<uint8_t, N_EDGES> edge_permutation,
+        edge_orientation;                               // Values: 0 or 1 (mod 2)
+};
+
 /* Declare the face arrays with a compile-time constant for the
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
@@ -26,6 +39,9 @@ bool operator==(const color_coords& lhs, const color_coords& rhs) {
 // functions
 void printFace(array<array<char, N_COLS>, N_ROWS> face);
 void rotateTopFaceEdges();
+
+// Define all the valid moves
+enum Move { U, U_, D, D_, L, L_, R, R_, F, F_, B, B_};
 
 /* TODO (kryzet, 22003): Remove unnecessary functions and reorganize
 prototypes, then change the order of function definitions to match the order
