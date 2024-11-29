@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// Define the cube's structure
+// BEGIN DEPRECATED CODE
 
 // Define the cube's state structure
 
@@ -54,13 +54,38 @@ struct CubeState {
 //        corner_orientations;  // Values: 0, 1, or 2 (mod N_CORNER_ORIENTS)
 //};
 
-// BEGIN DEPRECATED CODE
+// END DEPRECATED CODE
 
 /* Declare the face arrays with a compile-time constant for the
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
 UP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, DOWN = 5;
-array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
+array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube,
+defaultCube = { {
+        {{{{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}}}},
+
+        {{{{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}}}},
+
+        {{{{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}}}},
+
+        {{{{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}}}},
+
+        {{{{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}}}},
+
+        {{{{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}}}}
+    } };
 
 // A data structure for storing the coordinates of a color tag
 typedef struct color_coords {
@@ -73,8 +98,6 @@ bool operator==(const color_coords& lhs, const color_coords& rhs) {
         lhs.row == rhs.row &&
         lhs.col == rhs.col;
 }
-
-// END DEPRECATED CODE
 
 // functions
 void printFace(array<array<char, N_COLS>, N_ROWS> face);
@@ -1045,32 +1068,6 @@ bool isCubeSolved() {
 }
 
 void resetCube() {
-    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = { {
-        {{{{'W', 'W', 'W'}},
-          {{'W', 'W', 'W'}},
-          {{'W', 'W', 'W'}}}},
-
-        {{{{'O', 'O', 'O'}},
-          {{'O', 'O', 'O'}},
-          {{'O', 'O', 'O'}}}},
-
-        {{{{'G', 'G', 'G'}},
-          {{'G', 'G', 'G'}},
-          {{'G', 'G', 'G'}}}},
-
-        {{{{'R', 'R', 'R'}},
-          {{'R', 'R', 'R'}},
-          {{'R', 'R', 'R'}}}},
-
-        {{{{'B', 'B', 'B'}},
-          {{'B', 'B', 'B'}},
-          {{'B', 'B', 'B'}}}},
-
-        {{{{'Y', 'Y', 'Y'}},
-          {{'Y', 'Y', 'Y'}},
-          {{'Y', 'Y', 'Y'}}}}
-    } };
-
-    // Copy the default state back into the cube
+    // Copy the default state to the cube
     cube = defaultCube;
 }
