@@ -397,27 +397,30 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
 
 
 void solveWhiteCross() {
+    // Useful definitions
     typedef struct w_edge {
         color_coords coords;
         char other_color = '\0';
     } w_edge;
     constexpr size_t N_WHITE_EDGES = 4;
-
-    // Find white edges
-    // Will store search results in the below array, using a counter
     array<w_edge, N_WHITE_EDGES> white_edges;
+
+    // Populate white_edges
+    // A counter is defined outside of the loops because
     size_t white_edge_n = 0;
-    for (size_t face_n = 0; face_n < N_FACES && N_WHITE_EDGES > white_edge_n;
-        ++face_n) {
+    for (size_t face_n = 0; face_n < N_FACES; ++face_n) {
+        // White edge search should be terminated once all edges are found
+        if (white_edge_n >= N_WHITE_EDGES) break;
+
+        /* On every face, edges are located at {0, 1}, {2, 1}, {1, 0},
+        and {1, 2}. These are definitions for searching those specific
+        coordinates in a loop and to avoid magic numbers */
+        constexpr array<size_t, 2> EDGE_RCS_N = { 0, 2 };
         constexpr size_t MIDDLE = 1;
-        // Only two rows and two columns of every face can include a white edge
-        constexpr array<size_t, 2> RCS_N = { 0, 2 };
-        array<array<char, N_COLS>, N_ROWS>& face = cube[face_n];
-        // Two conditions for breaking the below loop
-        // 1. We have found 4 white edges
-        // 2. We exhausted all four edge locations
-        while (N_WHITE_EDGES > white_edge_n)
-            for (const size_t RC_N : RCS_N) {
+        
+        // Check the edges of the current face for 'W'
+        array<array<char, N_COLS>, N_ROWS> &face = cube[face_n];
+        for (const size_t RC_N : EDGE_RCS_N) {
                 bool white_edge_found = false;
                 if ('W' == face[RC_N][MIDDLE]) {
                     white_edges[white_edge_n].coords = { face_n, RC_N, MIDDLE };
