@@ -159,10 +159,10 @@ void sledgehammerMove();
 
 int main()
 {
-    unsigned int choice;
+    unsigned int choice = 0;
     resetCube();
 
-    do {
+    while (choice != 7) {  // Loop until the user chooses to exit
         // Display the menu
         cout << "=== Welcome to Rubik's Cube Solver ===" << endl
             << "1. Display cube" << endl
@@ -221,7 +221,7 @@ int main()
             cout << "Invalid choice! Please enter a number between 1 and 8."
                 << endl;
         }
-    } while (choice != 7);  // Loop until the user chooses to exit
+    }
 
     return 0;
 }
