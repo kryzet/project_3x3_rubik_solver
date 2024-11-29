@@ -104,7 +104,7 @@ void printFace(array<array<char, N_COLS>, N_ROWS> face);
 void rotateTopFaceEdges();
 
 // Define valid moves
-enum Move { U, U_, D, D_, L, L_, R, R_, F, F_, B, B_};
+enum Move { U, U_, D, D_, L, L_, R, R_, F, F_, B, B_ };
 
 /* TODO (kryzet, 22003): Remove unnecessary functions and reorganize
 prototypes, then change the order of function definitions to match the order
@@ -417,21 +417,21 @@ void solveWhiteCross() {
         coordinates in a loop and to avoid magic numbers */
         constexpr array<size_t, 2> EDGE_RCS_N = { 0, 2 };
         constexpr size_t MIDDLE = 1;
-        
+
         // Check the edges of the current face for 'W'
         array<array<char, N_COLS>, N_ROWS> &face = cube[face_n];
         for (const size_t RC_N : EDGE_RCS_N) {
-                bool white_edge_found = false;
-                if ('W' == face[RC_N][MIDDLE]) {
-                    white_edges[white_edge_n].coords = { face_n, RC_N, MIDDLE };
-                    white_edge_found = true;
-                }
-                else if ('W' == face[MIDDLE][RC_N]) {
-                    white_edges[white_edge_n].coords = { face_n, MIDDLE, RC_N };
-                    white_edge_found = true;
-                }
-                if (white_edge_found) ++white_edge_n;
+            bool white_edge_found = false;
+            if ('W' == face[RC_N][MIDDLE]) {
+                white_edges[white_edge_n].coords = { face_n, RC_N, MIDDLE };
+                white_edge_found = true;
             }
+            else if ('W' == face[MIDDLE][RC_N]) {
+                white_edges[white_edge_n].coords = { face_n, MIDDLE, RC_N };
+                white_edge_found = true;
+            }
+            if (white_edge_found) ++white_edge_n;
+        }
     }
 
     // We have found all the white edges!
