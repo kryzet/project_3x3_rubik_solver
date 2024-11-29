@@ -7,24 +7,37 @@ using namespace std;
 
 // Define the cube's structure
 
-/* Define the movable pieces.
-We represent the orientation of a piece using all the possible modulo values
+// Define the cube's state structure
+
+// Define the movable pieces
+/* We represent the orientation of a piece using all the possible modulo values
 for N_<PIECE>_ORIENTS. We also represent the number of all possible pieces of
 the same kind using the group of modulo values for N_<PIECE>S */
 
 /* A corner has 3 possible orientations, and 8 corners exist on a 3x3 Rubik's
 cube */
-constexpr size_t N_CORNERS = 8;
-constexpr unsigned int N_CORNER_ORIENTS = 3;
+constexpr unsigned int N_CORNERS = 8, N_CORNER_ORIENTS = 3;
 struct Corners {
-    array<unsigned int, N_CORNERS> corner_permutation, corner_orientation;
+    array<unsigned int, N_CORNERS> corner_permutation, corner_orientations;
+
+    /* Only half of the corners change state in a physical cube when a rotation
+    is performed */
+    void rotate(const array<size_t, N_CORNERS / 2> CORNERS_N, bool clockwise) {
+        unsigned int temp;
+        if (clockwise) {
+            temp = corner_permutation[CORNERS_N[3]];
+        }
+    }
 };
 /* An edge has 2 possible orientations, and 12 edges exist on a 3x3 Rubik's
 cube */
-constexpr size_t N_EDGES = 12;
-constexpr unsigned int N_EDGE_ORIENTS = 2;
+constexpr unsigned int N_EDGES = 12, N_EDGE_ORIENTS = 2;
 struct Edges {
-    array<unsigned int, N_EDGES> edge_permutation, edge_orientation;
+    array<unsigned int, N_EDGES> edge_permutation, edge_orientations;
+
+    void flip(size_t edge_n) {
+        edge_orientations[edge_n] = 1 - edge_orientations[edge_n];
+    }
 };
 
 /* Permutations should be sorted when the cube is solved, and the orientations
@@ -36,9 +49,9 @@ struct CubeState {
 
 //struct CubeState {
 //    std::array<uint8_t, N_EDGES> edge_permutation,
-//        edge_orientation;    // Values: 0 or 1 (mod N_EDGE_ORIENTS)
+//        edge_orientations;    // Values: 0 or 1 (mod N_EDGE_ORIENTS)
 //    std::array<uint8_t, N_CORNERS> corner_permutation,  
-//        corner_orientation;  // Values: 0, 1, or 2 (mod N_CORNER_ORIENTS)
+//        corner_orientations;  // Values: 0, 1, or 2 (mod N_CORNER_ORIENTS)
 //};
 
 // BEGIN DEPRECATED CODE
