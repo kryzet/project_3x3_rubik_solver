@@ -5,11 +5,87 @@
 
 using namespace std;
 
+// BEGIN DEPRECATED CODE
+
+// Define the cube's state structure
+
+// Define the movable pieces
+/* We represent the orientation of a piece using all the possible modulo values
+for N_<PIECE>_ORIENTS. We also represent the number of all possible pieces of
+the same kind using the group of modulo values for N_<PIECE>S */
+
+/* A corner has 3 possible orientations, and 8 corners exist on a 3x3 Rubik's
+cube */
+constexpr unsigned int N_CORNERS = 8, N_CORNER_ORIENTS = 3;
+struct Corners {
+    array<unsigned int, N_CORNERS> corner_permutation, corner_orientations;
+
+    /* Only half of the corners change state in a physical cube when a rotation
+    is performed */
+    void rotate(const array<size_t, N_CORNERS / 2> CORNERS_N, bool clockwise) {
+        unsigned int temp;
+        if (clockwise) {
+            temp = corner_permutation[CORNERS_N[3]];
+        }
+    }
+};
+/* An edge has 2 possible orientations, and 12 edges exist on a 3x3 Rubik's
+cube */
+constexpr unsigned int N_EDGES = 12, N_EDGE_ORIENTS = 2;
+struct Edges {
+    array<unsigned int, N_EDGES> edge_permutation, edge_orientations;
+
+    void flip(size_t edge_n) {
+        edge_orientations[edge_n] = 1 - edge_orientations[edge_n];
+    }
+};
+
+/* Permutations should be sorted when the cube is solved, and the orientations
+should be all 0 */
+struct CubeState {
+    Corners corners;
+    Edges edges;
+};
+
+//struct CubeState {
+//    std::array<uint8_t, N_EDGES> edge_permutation,
+//        edge_orientations;    // Values: 0 or 1 (mod N_EDGE_ORIENTS)
+//    std::array<uint8_t, N_CORNERS> corner_permutation,  
+//        corner_orientations;  // Values: 0, 1, or 2 (mod N_CORNER_ORIENTS)
+//};
+
+// END DEPRECATED CODE
+
 /* Declare the face arrays with a compile-time constant for the
 number of pieces per face. */
 constexpr size_t N_FACES = 6, N_ROWS = 3, N_COLS = 3,
 UP = 0, LEFT = 1, FRONT = 2, RIGHT = 3, BACK = 4, DOWN = 5;
-array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
+array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube,
+defaultCube = { {
+        {{{{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}},
+          {{'W', 'W', 'W'}}}},
+
+        {{{{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}},
+          {{'O', 'O', 'O'}}}},
+
+        {{{{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}},
+          {{'G', 'G', 'G'}}}},
+
+        {{{{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}},
+          {{'R', 'R', 'R'}}}},
+
+        {{{{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}},
+          {{'B', 'B', 'B'}}}},
+
+        {{{{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}},
+          {{'Y', 'Y', 'Y'}}}}
+    } };
 
 // A data structure for storing the coordinates of a color tag
 typedef struct color_coords {
@@ -26,6 +102,9 @@ bool operator==(const color_coords& lhs, const color_coords& rhs) {
 // functions
 void printFace(array<array<char, N_COLS>, N_ROWS> face);
 void rotateTopFaceEdges();
+
+// Define valid moves
+enum Move { U, U_, D, D_, L, L_, R, R_, F, F_, B, B_ };
 
 /* TODO (kryzet, 22003): Remove unnecessary functions and reorganize
 prototypes, then change the order of function definitions to match the order
@@ -80,10 +159,10 @@ void sledgehammerMove();
 
 int main()
 {
-    unsigned int choice;
+    unsigned int choice = 0;
     resetCube();
 
-    do {
+    while (choice != 7) {  // Loop until the user chooses to exit
         // Display the menu
         cout << "=== Welcome to Rubik's Cube Solver ===" << endl
             << "1. Display cube" << endl
@@ -142,7 +221,7 @@ int main()
             cout << "Invalid choice! Please enter a number between 1 and 8."
                 << endl;
         }
-    } while (choice != 7);  // Loop until the user chooses to exit
+    }
 
     return 0;
 }
@@ -318,60 +397,63 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
 
 
 void solveWhiteCross() {
+    // Useful definitions
     typedef struct w_edge {
         color_coords coords;
         char other_color = '\0';
     } w_edge;
     constexpr size_t N_WHITE_EDGES = 4;
-
-    // Find white edges
-    // Will store search results in the below array, using a counter
     array<w_edge, N_WHITE_EDGES> white_edges;
+
+    // Populate white_edges
+    // A counter is defined outside of the loops because
     size_t white_edge_n = 0;
-    for (size_t face_n = 0; face_n < N_FACES && N_WHITE_EDGES > white_edge_n;
-        ++face_n) {
+    for (size_t face_n = 0; face_n < N_FACES; ++face_n) {
+        // White edge search should be terminated once all edges are found
+        if (white_edge_n >= N_WHITE_EDGES) break;
+
+        /* On every face, edges are located at {0, 1}, {2, 1}, {1, 0},
+        and {1, 2}. These are definitions for searching those specific
+        coordinates in a loop and to avoid magic numbers */
+        constexpr array<size_t, 2> EDGE_RCS_N = { 0, 2 };
         constexpr size_t MIDDLE = 1;
-        // Only two rows and two columns of every face can include a white edge
-        constexpr array<size_t, 2> RCS_N = { 0, 2 };
-        array<array<char, N_COLS>, N_ROWS>& face = cube[face_n];
-        // Two conditions for breaking the below loop
-        // 1. We have found 4 white edges
-        // 2. We exhausted all four edge locations
-        while (N_WHITE_EDGES > white_edge_n)
-            for (const size_t RC_N : RCS_N) {
-                bool white_edge_found = false;
-                if ('W' == face[RC_N][MIDDLE]) {
-                    white_edges[white_edge_n].coords = { face_n, RC_N, MIDDLE };
-                    white_edge_found = true;
-                }
-                else if ('W' == face[MIDDLE][RC_N]) {
-                    white_edges[white_edge_n].coords = { face_n, MIDDLE, RC_N };
-                    white_edge_found = true;
-                }
-                if (white_edge_found) ++white_edge_n;
+
+        // Check the edges of the current face for 'W'
+        array<array<char, N_COLS>, N_ROWS> &face = cube[face_n];
+        for (const size_t RC_N : EDGE_RCS_N) {
+            bool white_edge_found = false;
+            if ('W' == face[RC_N][MIDDLE]) {
+                white_edges[white_edge_n].coords = { face_n, RC_N, MIDDLE };
+                white_edge_found = true;
             }
+            else if ('W' == face[MIDDLE][RC_N]) {
+                white_edges[white_edge_n].coords = { face_n, MIDDLE, RC_N };
+                white_edge_found = true;
+            }
+            if (white_edge_found) ++white_edge_n;
+        }
     }
 
     // We have found all the white edges!
     displayCube();
     for (w_edge white_edge : white_edges) {
-        //// Ask the user for the other color of the white edge
+        // Ask the user for the other color of the white edge
 
-        //// Keep prompting the user until receiving valid input
-        //constexpr char WHITE_EDGE_COLORS[] = { 'O', 'R', 'G', 'B' };
-        //string input = "\0";
-        //const char* COLORS_END = end(WHITE_EDGE_COLORS);
-        //while (find(begin(WHITE_EDGE_COLORS), COLORS_END, input[0])
-        //    == COLORS_END) {
-        //    // Ignore any remnant input from other prompts
-        //    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        //    cout << "What is the other color of the white edge on face "
-        //        << white_edge.coords.face << ", row "
-        //        << white_edge.coords.row << " and column "
-        //        << white_edge.coords.col << "? ";
-        //    getline(cin, input);
-        //}
-        //white_edge.other_color = input[0];
+        // Keep prompting the user until receiving valid input
+        constexpr char WHITE_EDGE_COLORS[] = { 'O', 'R', 'G', 'B' };
+        string input = "\0";
+        const char* COLORS_END = end(WHITE_EDGE_COLORS);
+        while (find(begin(WHITE_EDGE_COLORS), COLORS_END, input[0])
+            == COLORS_END) {
+            // Ignore any remnant input from other prompts
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "What is the other color of the white edge on face "
+                << white_edge.coords.face << ", row "
+                << white_edge.coords.row << " and column "
+                << white_edge.coords.col << "? ";
+            getline(cin, input);
+        }
+        white_edge.other_color = input[0];
 
 
         // Make a move based on the white edge's other color
@@ -989,32 +1071,6 @@ bool isCubeSolved() {
 }
 
 void resetCube() {
-    constexpr array<array<array<char, N_COLS>, N_ROWS>, N_FACES> defaultCube = { {
-        {{{{'W', 'W', 'W'}},
-          {{'W', 'W', 'W'}},
-          {{'W', 'W', 'W'}}}},
-
-        {{{{'O', 'O', 'O'}},
-          {{'O', 'O', 'O'}},
-          {{'O', 'O', 'O'}}}},
-
-        {{{{'G', 'G', 'G'}},
-          {{'G', 'G', 'G'}},
-          {{'G', 'G', 'G'}}}},
-
-        {{{{'R', 'R', 'R'}},
-          {{'R', 'R', 'R'}},
-          {{'R', 'R', 'R'}}}},
-
-        {{{{'B', 'B', 'B'}},
-          {{'B', 'B', 'B'}},
-          {{'B', 'B', 'B'}}}},
-
-        {{{{'Y', 'Y', 'Y'}},
-          {{'Y', 'Y', 'Y'}},
-          {{'Y', 'Y', 'Y'}}}}
-    } };
-
-    // Copy the default state back into the cube
+    // Copy the default state to the cube
     cube = defaultCube;
 }
