@@ -110,7 +110,7 @@ enum Move { U, U_, D, D_, L, L_, R, R_, F, F_, B, B_ };
 prototypes, then change the order of function definitions to match the order
 of prototypes */
 void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>& face);
-void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS>);
+void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS>& face);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
 void parseAndApplyMoves(const string& moves);
@@ -376,7 +376,7 @@ void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>& face) {
 }
 
 
-void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
+void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS>& face) {
     array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
@@ -393,6 +393,7 @@ void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS> face) {
         }
     }
 }
+
 
 
 
@@ -666,11 +667,13 @@ void move_x(const bool PRIME) {
 
 void move_y(const bool PRIME) {
     // Y rotation rotates entire cube around y-axis
-    array<array<char, N_COLS>> temp;
+    array<array<array<char, N_COLS>, N_ROWS>, N_FACES> cube;
 
     if (!PRIME) {
         // Clockwise rotation of side faces
         for (size_t i = 0; i < N_COLS; i++) {
+            array<char, N_COLS> temp;
+
             temp[i] = cube[FRONT][0][i];
             cube[FRONT][0][i] = cube[RIGHT][0][i];
             cube[RIGHT][0][i] = cube[BACK][0][i];
