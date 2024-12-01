@@ -109,7 +109,7 @@ enum Move { U, U_, D, D_, L, L_, R, R_, F, F_, B, B_ };
 /* TODO (kryzet, 22003): Remove unnecessary functions and reorganize
 prototypes, then change the order of function definitions to match the order
 of prototypes */
-void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>);
+void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>& face);
 void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS>);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
@@ -357,7 +357,7 @@ bool isValidMove(const string& MOVE) {
 }
 
 
-void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS> face) {
+void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>& face) {
     array<array<char, N_COLS>, N_ROWS> temp;
 
     // Copy the original face
@@ -634,16 +634,86 @@ void exterior_face(bool top_face) {
 
 // Cube moves
 void move_x(const bool PRIME) {
+    // X rotation rotates the entire cube around the x-axis
+    array<array<array<char, N_COLS>, N_ROWS>, N_FACES> temp_cube = cube;
 
+    if (!PRIME) {
+        // Clockwise rotation
+        cube[UP] = temp_cube[FRONT];
+        cube[FRONT] = temp_cube[DOWN];
+
+        // Create temporary copy to rotate
+        auto tempBack = temp_cube[BACK];
+        rotateFaceClockwise(tempBack);
+        rotateFaceClockwise(tempBack);
+        cube[DOWN] = tempBack;
+
+        // Create temporary copy to rotate
+        auto tempBackUp = temp_cube[UP];
+        rotateFaceClockwise(tempBackUp);
+        rotateFaceClockwise(tempBackUp);
+        cube[BACK] = tempBackUp;
+
+        rotateFaceClockwise(cube[RIGHT]);
+        rotateFaceCounterClockwise(cube[LEFT]);
+    } else {
+        // Counterclockwise rotation (3 clockwise rotations)
+        move_x(false);
+        move_x(false);
+        move_x(false);
+    }
 }
 
 void move_y(const bool PRIME) {
+    // Y rotation rotates entire cube around y-axis
+    array<array<char, N_COLS>> temp;
 
+    if (!PRIME) {
+        // Clockwise rotation of side faces
+        for (size_t i = 0; i < N_COLS; i++) {
+            temp[i] = cube[FRONT][0][i];
+            cube[FRONT][0][i] = cube[RIGHT][0][i];
+            cube[RIGHT][0][i] = cube[BACK][0][i];
+            cube[BACK][0][i] = cube[LEFT][0][i];
+            cube[LEFT][0][i] = temp[i];
+        }
+
+        // Rotate top and bottom faces
+        rotateFaceClockwise(cube[UP]);
+        rotateFaceCounterClockwise(cube[DOWN]);
+    } else {
+        // Counterclockwise rotation (3 clockwise rotations)
+        move_y(false);
+        move_y(false);
+        move_y(false);
+    }
 }
 
 void move_z(const bool PRIME) {
+    // Z rotation rotates entire cube around z-axis
+    array<array<array<char, N_COLS>, N_ROWS>, N_FACES> temp_cube = cube;
 
+    if (!PRIME) {
+        // Clockwise rotation
+        for (size_t row = 0; row < N_ROWS; row++) {
+            for (size_t col = 0; col < N_COLS; col++) {
+                cube[UP][row][col] = temp_cube[LEFT][2 - col][row];
+                cube[RIGHT][row][col] = temp_cube[UP][row][col];
+                cube[DOWN][row][col] = temp_cube[RIGHT][row][col];
+                cube[LEFT][row][col] = temp_cube[DOWN][2 - col][row];
+            }
+        }
+
+        rotateFaceClockwise(cube[FRONT]);
+        rotateFaceCounterClockwise(cube[BACK]);
+    } else {
+        // Counterclockwise rotation (3 clockwise rotations)
+        move_z(false);
+        move_z(false);
+        move_z(false);
+    }
 }
+
 
 // Face moves
 void moveU() {
