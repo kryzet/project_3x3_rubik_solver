@@ -149,6 +149,64 @@ void rightySequence();
 void reverseRightySequence();
 void sledgehammerSequence();
 
+static void clear_console() {
+    /* The definition of `clear_screen()` below is courtesy of
+    https://stackoverflow.com/a/42500322. Please note that the answer has been
+    licensed under CC BY-SA 3.0, and the code has been originally adapted from
+    https://cplusplus.com/articles/4z18T05o/#OSSpecificWays and modified such
+    that it can be cross-compiled and have consistent behavior on all
+    mainstream operating systems. The original licensing from
+    https://cplusplus.com is unknown. */
+#ifdef _WIN32
+    HANDLE                     h_std_out;
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    DWORD                      count;
+    DWORD                      cell_count;
+    COORD                      home_coords = { 0, 0 };
+
+    h_std_out = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (h_std_out == INVALID_HANDLE_VALUE) return;
+
+    /* Get the number of cells in the current buffer */
+    if (!GetConsoleScreenBufferInfo(h_std_out, &csbi)) return;
+    cell_count = csbi.dwSize.X * csbi.dwSize.Y;
+
+    /* Fill the entire buffer with spaces */
+    if (!FillConsoleOutputCharacter(
+        h_std_out,
+        (TCHAR)' ',
+        cell_count,
+        home_coords,
+        &count
+    )) return;
+
+    /* Fill the entire buffer with the current colors and attributes */
+    if (!FillConsoleOutputAttribute(
+        h_std_out,
+        csbi.wAttributes,
+        cell_count,
+        home_coords,
+        &count
+    )) return;
+
+    /* Move the cursor home */
+    SetConsoleCursorPosition(h_std_out, home_coords);
+#else
+/* Hassan: Not _WIN32. This assumes that it indicates a POSIX-compatible
+build environment */
+    if (!cur_term)
+    {
+        int result;
+        setupterm(NULL, STDOUT_FILENO, &result);
+        if (result <= 0) return;
+    }
+
+    char action[] = "clear";  /* This was added in order to comply with ISO
+                               * C++11
+                               */
+    putp(tigetstr(action));
+#endif
+}
 
 int main()
 {
@@ -178,6 +236,9 @@ int main()
             continue;  // Will reshow the menu
         }
 
+        /* This program only expects to be used interactively, so buffer
+        cleanliness is important */
+        clear_console();
         // Handle user input
         switch (choice) {
         case 1:
