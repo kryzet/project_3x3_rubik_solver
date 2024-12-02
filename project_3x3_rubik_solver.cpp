@@ -92,8 +92,8 @@ typedef struct color_coords {
     size_t face, row, col;
 } color_coords;
 /* Operator overload for allowing the comparison of two instances of the new
-datatype */
-bool operator==(const color_coords& lhs, const color_coords& rhs) {
+`color_coords` */
+bool operator==(const color_coords &lhs, const color_coords &rhs) {
     return lhs.face == rhs.face &&
         lhs.row == rhs.row &&
         lhs.col == rhs.col;
@@ -101,7 +101,6 @@ bool operator==(const color_coords& lhs, const color_coords& rhs) {
 
 // functions
 void printFace(array<array<char, N_COLS>, N_ROWS> face);
-void rotateTopFaceEdges();
 
 // Define valid moves
 enum Move { U, U_, D, D_, L, L_, R, R_, F, F_, B, B_ };
@@ -113,7 +112,6 @@ void rotateFaceClockwise(array<array<char, N_COLS>, N_ROWS>& face);
 void rotateFaceCounterClockwise(array<array<char, N_COLS>, N_ROWS>& face);
 bool isValidMove(const string& move);
 void applyMove(const string& move);
-void parseAndApplyMoves(const string& moves);
 void displayCube();
 void exterior_face(bool top_face);
 void resetCube();
@@ -136,11 +134,6 @@ bool isYellowLineShape();
 bool isYellowLShape();
 
 
-// Cube moves
-void move_x(const bool);
-void move_y(const bool);
-void move_z(const bool);
-
 // Face moves
 void moveU();
 void moveD();
@@ -151,10 +144,10 @@ void moveL();
 
 void scramble();
 
-// Algorithms
-void rightyAlg();
-void ReverserightyAlg();
-void sledgehammerMove();
+// Move sequences
+void rightySequence();
+void reverseRightySequence();
+void sledgehammerSequence();
 
 
 int main()
@@ -162,7 +155,7 @@ int main()
     unsigned int choice = 0;
     resetCube();
 
-    while (choice != 7) {  // Loop until the user chooses to exit
+    while (choice != 8) {  // Loop until the user chooses to exit
         // Display the menu
         cout << "=== Welcome to Rubik's Cube Solver ===" << endl
             << "1. Display cube" << endl
@@ -241,11 +234,9 @@ void scramble() {
     // Get the scramble moves from the user
     cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear any leftover newline
     cout << "Enter the scramble: ";
-    string moves;
-    getline(cin, moves);
+    string moves, move = ""; getline(cin, moves);
 
     // Parse and apply the moves
-    string move = "";
     for (char c : moves) {
         if (c == ' ') {
             if (!move.empty() && isValidMove(move)) {
@@ -260,24 +251,6 @@ void scramble() {
 
     // Apply the last move if valid
     applyMove(move);
-}
-
-void parseAndApplyMoves(const string& moves) {
-    string move = "";
-    for (char c : moves) {
-        if (c == ' ') {
-            applyMove(move);
-            move = ""; // Reset the move
-        }
-        else {
-            move += c; // Build the move character by character
-        }
-    }
-
-    // Apply the last move if valid
-    if (!move.empty() && isValidMove(move)) {
-        applyMove(move);
-    }
 }
 
 void applyMove(const string& move) {
@@ -304,7 +277,7 @@ void applyMove(const string& move) {
         return times;
         }();
     // Function pointer. Will point to the function that needs to be run.
-    void (*func)() = nullptr;
+    void (*func)(){};
     switch (face) {
     case 'U':
         func = moveU;
@@ -483,7 +456,7 @@ void solveWhiteCross() {
         // White edge correctly positioned and oriented
         if (white_edge.coords == correct_coords)
             continue;
-        else if (cube[][1][1] == white_edge.other_color)
+        //else if (cube[][1][1] == white_edge.other_color)
     }
 
     //bool done = false;
@@ -621,17 +594,17 @@ void displayCube() {
 }
 
 void exterior_face(bool top_face) {
-    size_t face = 0;
-    if (!top_face) face = 5;
-    for (size_t row = 0; row < N_ROWS; ++row) {
+    array<array<char, N_COLS>, N_ROWS> &face = cube[(top_face ? 0 : 5)];
+    for (array<char, N_COLS> &row : face) {
         cout << "      ";
-        for (size_t col = 0; col < N_COLS; ++col) {
-            cout << cube[face][row][col] << ' ';
+        for (char &col : row) {
+            cout << col << ' ';
         }
         cout << endl;
     }
 }
 
+<<<<<<< Updated upstream
 
 // Cube moves
 void move_x(const bool PRIME) {
@@ -718,6 +691,8 @@ void move_z(const bool PRIME) {
 }
 
 
+=======
+>>>>>>> Stashed changes
 // Face moves
 void moveU() {
     array<char, N_COLS> temp;
@@ -822,7 +797,7 @@ void moveL2() { moveL(); moveL(); }
 void moveR2() { moveR(); moveR(); }
 
 // Algorithm sequences
-void rightyAlg() {
+void rightySequence() {
     moveR(); moveU(); moveRPrime(); moveUPrime();
 }
 
@@ -834,7 +809,7 @@ void reverserightyAlg() {
     moveUPrime(); moveRPrime(); moveU(); moveR();
 }
 
-void sledgehammerMove() {
+void sledgehammerSequence() {
     moveRPrime(); moveFPrime(); moveR(); moveF();
 }
 
@@ -939,7 +914,7 @@ void alignYellowCorners() {
         // Repeat until corner is oriented correctly
         while (cube[UP][2][2] != 'Y') {
             // R U R' U' (sexy move)
-            rightyAlg();
+            rightySequence();
         }
         moveD(); // Move to next corner
     }
