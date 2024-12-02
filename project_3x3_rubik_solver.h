@@ -13,3 +13,13 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#ifdef _WIN32
+#define NOMINMAX
+#include <Windows.h>
+#else
+#include <curses.h>  /* Wasn't included in original code
+                      * https://linux.die.net/man/3/setupterm
+                      */
+#include <term.h>
+#include <unistd.h>  // Included before `term.h` in original code
+#endif

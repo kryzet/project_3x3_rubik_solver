@@ -13,6 +13,7 @@ project ("project_3x3_rubik_solver")
 
 # Add source to this project's executable.
 add_executable (project_3x3_rubik_solver "project_3x3_rubik_solver.cpp" "project_3x3_rubik_solver.h")
+target_link_libraries(project_3x3_rubik_solver "curses.h" "term.h" "unistd.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET project_3x3_rubik_solver PROPERTY CXX_STANDARD 20)
