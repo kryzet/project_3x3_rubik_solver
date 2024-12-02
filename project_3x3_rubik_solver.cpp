@@ -604,7 +604,6 @@ void exterior_face(bool top_face) {
     }
 }
 
-<<<<<<< Updated upstream
 
 // Cube moves
 void move_x(const bool PRIME) {
@@ -691,8 +690,6 @@ void move_z(const bool PRIME) {
 }
 
 
-=======
->>>>>>> Stashed changes
 // Face moves
 void moveU() {
     array<char, N_COLS> temp;
@@ -796,16 +793,16 @@ void moveB2() { moveB(); moveB(); }
 void moveL2() { moveL(); moveL(); }
 void moveR2() { moveR(); moveR(); }
 
-// Algorithm sequences
+// Move sequences
 void rightySequence() {
     moveR(); moveU(); moveRPrime(); moveUPrime();
 }
 
-void leftyAlg() {
+void leftySequence() {
     moveL(); moveUPrime(); moveLPrime(); moveU();
 }
 
-void reverserightyAlg() {
+void reverseRightySequence() {
     moveUPrime(); moveRPrime(); moveU(); moveR();
 }
 
