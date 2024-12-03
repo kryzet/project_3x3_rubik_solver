@@ -18,10 +18,6 @@ on:
         - info
         - warning
         - debug
-      environment:
-        description: "Test environment"
-        type: environment
-        required: true
 
 jobs:
   build:
